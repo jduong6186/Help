@@ -1,84 +1,68 @@
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * Singleton class for all resource management. Interfaces with JSON reader/writer classes for pulling and storing data
+ * @author Andrew Eldridge
+ */
+
 public class ResourceManager {
 
-    // default values while not pulling from db
-    private static final User[] DEFAULT_USERS = new User[] {
-            new User("Andrew Eldridge", "8033708127", "eldridga@email.sc.edu", "hashedPass"),
-            new User("Test User", "9999999999", "test@gmail.com", "hashedPass")
-    };
-    private static final Property[] DEFAULT_PROPERTIES = new Property[] {
-            new Property("Cayce Cove", "215 Spencer Place", 10),
-            new Property("Redtail on the River", "500 Alexander Road", 9.5)
-    };
-    private static final Listing[] DEFAULT_LISTINGS = new Listing[] {};
+    private ResourceManager instance;
+    private ArrayList<User> users;
+    private ArrayList<Property> properties;
+    private ArrayList<Listing> listings;
+    private Map<String, String> sessions;
+    private Map<String,User> userMap;
 
-    private static User[] users = DEFAULT_USERS;
-    private static HashMap<String,User> userMap = new HashMap<String,User>();
-    private static Property[] properties = DEFAULT_PROPERTIES;
-    private static Listing[] listings = DEFAULT_LISTINGS;
-    private static Map<String, String> sessions = new HashMap<String,String>();
-
-    static {
-        for (int i=0; i<DEFAULT_USERS.length; i++) {
-            userMap.put(DEFAULT_USERS[i].getEmail(), DEFAULT_USERS[i]);
-        }
+    public ResourceManager() {
+        this.users = RscUser.getUsers();
+        this.properties = RscProperty.getProperties();
+        this.listings = RscListing.getListings();
+        this.sessions = RscSession.getSessions();
+        this.userMap = new HashMap<String, User>();
     }
 
-    protected static User[] getUsers() {
+    protected ResourceManager getInstance() {
+        if (this.instance == null) {
+            this.instance = new ResourceManager();
+        }
+        return this.instance;
+    }
+
+    protected ArrayList<User> getUsers() {
         return users;
     }
 
-    protected static Property[] getProperties() {
+    protected ArrayList<Property> getProperties() {
         return properties;
     }
 
-    protected static Listing[] getListings() {
+    protected ArrayList<Listing> getListings() {
         return listings;
     }
 
-    protected static boolean validateSession(String token) {
+    protected boolean validateSession(String token) {
         return sessions.containsKey(token);
     }
 
-    protected static void addUser(User user) {
-        if (users[users.length-1] != null) {
-            users = growUsers(users);
-        }
-        for (int i=0; i<users.length; i++) {
-            if (users[i] == null) {
-                users[i] = user;
-                return;
-            }
-        }
+    protected void addUser(User user) {
+        users.add(user);
+        RscUser.writeUser(user);
     }
 
-    protected static void addProperty(Property property) {
-        if (properties[properties.length-1] != null) {
-            properties = growProperties(properties);
-        }
-        for (int i=0; i<properties.length; i++) {
-            if (properties[i] == null) {
-                properties[i] = property;
-                return;
-            }
-        }
+    protected void addProperty(Property property) {
+        properties.add(property);
+        RscProperty.writeProperty(property);
     }
 
-    protected static void addListing(Listing listing) {
-        if (listings[listings.length-1] != null) {
-            listings = growListings(listings);
-        }
-        for (int i=0; i<listings.length; i++) {
-            if (listings[i] == null) {
-                listings[i] = listing;
-                return;
-            }
-        }
+    protected void addListing(Listing listing) {
+        listings.add(listing);
+        RscListing.writeListing(listing);
     }
 
-    protected static Session login(String email, String password) {
+    protected Session login(String email, String password) {
         boolean loginValid = userMap.get(email).validateLogin(email, password);
         if (loginValid) {
             Session newSession = new Session(userMap.get(email));
@@ -90,31 +74,7 @@ public class ResourceManager {
         }
     }
 
-    protected static void addSession(Session session) {
+    protected void addSession(Session session) {
         sessions.put(session.getToken(), session.getUser().getEmail());
-    }
-
-    private static User[] growUsers(User[] users) {
-        User[] newUsers = new User[users.length*2];
-        for (int i=0; i<users.length; i++) {
-            newUsers[i] = users[i];
-        }
-        return newUsers;
-    }
-
-    private static Property[] growProperties(Property[] properties) {
-        Property[] newProperties = new Property[properties.length*2];
-        for (int i=0; i<properties.length; i++) {
-            newProperties[i] = properties[i];
-        }
-        return newProperties;
-    }
-
-    private static Listing[] growListings(Listing[] listings) {
-        Listing[] newListings = new Listing[listings.length*2];
-        for (int i=0; i<listings.length; i++) {
-            newListings[i] = listings[i];
-        }
-        return newListings;
     }
 }
