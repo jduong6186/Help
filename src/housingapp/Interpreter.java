@@ -1,3 +1,5 @@
+package housingapp;
+
 public class Interpreter {
 
     private Session currSession;

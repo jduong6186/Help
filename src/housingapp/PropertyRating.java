@@ -1,3 +1,5 @@
+package housingapp;
+
 public class PropertyRating extends Rating {
 
     private int valueStars;

@@ -1,3 +1,5 @@
+package housingapp;
+
 public class Apartment extends Listing {
 
     private String apartmentNumber;

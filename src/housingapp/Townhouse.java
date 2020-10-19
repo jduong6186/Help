@@ -1,3 +1,5 @@
+package housingapp;
+
 public class Townhouse extends Listing {
 
     private boolean hasGarage;

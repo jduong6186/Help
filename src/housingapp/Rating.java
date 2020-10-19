@@ -1,3 +1,5 @@
+package housingapp;
+
 public class Rating {
 
     private int stars;

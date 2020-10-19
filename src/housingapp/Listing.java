@@ -1,5 +1,10 @@
+package housingapp;
+
+import java.util.UUID;
+
 public class Listing {
 
+    private final UUID id;
     private Property property;
     private String description;
     private double price;
@@ -21,6 +26,7 @@ public class Listing {
                    boolean petsAllowed, boolean hasGas, boolean hasElectric, boolean hasWater, boolean hasTrash,
                    boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms, boolean hasShuttle,
                    boolean available) {
+        this.id = UUID.randomUUID();
         this.property = property;
         this.description = description;
         this.price = price;
@@ -39,67 +45,94 @@ public class Listing {
         this.available = available;
     }
 
-    protected Property getProperty() {
+    public Listing(UUID id, Property property, String description, double price, int leaseMonths, double squareFootage,
+                   boolean petsAllowed, boolean hasGas, boolean hasElectric, boolean hasWater, boolean hasTrash,
+                   boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms, boolean hasShuttle,
+                   boolean available) {
+        this.id = id;
+        this.property = property;
+        this.description = description;
+        this.price = price;
+        this.leaseMonths = leaseMonths;
+        this.squareFootage = squareFootage;
+        this.petsAllowed = petsAllowed;
+        this.hasGas = hasGas;
+        this.hasElectric = hasElectric;
+        this.hasWater = hasWater;
+        this.hasTrash = hasTrash;
+        this.isSublease = isSublease;
+        this.utilitiesIncluded = utilitiesIncluded;
+        this.numBedrooms = numBedrooms;
+        this.numBathrooms = numBathrooms;
+        this.hasShuttle = hasShuttle;
+        this.available = available;
+    }
+
+    public UUID getId() {
+        return this.id;
+    }
+
+    public Property getProperty() {
         return this.property;
     }
 
-    protected String getDescription() {
+    public String getDescription() {
         return this.description;
     }
 
-    protected double getPrice() {
+    public double getPrice() {
         return this.price;
     }
 
-    protected int getLeaseMonths() {
+    public int getLeaseMonths() {
         return this.leaseMonths;
     }
 
-    protected double getSquareFootage() {
+    public double getSquareFootage() {
         return this.squareFootage;
     }
 
-    protected boolean petsAllowed() {
+    public boolean petsAllowed() {
         return this.petsAllowed;
     }
 
-    protected boolean hasGas() {
+    public boolean hasGas() {
         return this.hasGas;
     }
 
-    protected boolean hasElectric() {
+    public boolean hasElectric() {
         return this.hasElectric;
     }
 
-    protected boolean hasWater() {
+    public boolean hasWater() {
         return this.hasWater;
     }
 
-    protected boolean hasTrash() {
+    public boolean hasTrash() {
         return this.hasTrash;
     }
 
-    protected boolean isSublease() {
+    public boolean isSublease() {
         return this.isSublease;
     }
 
-    protected boolean utilitiesIncluded() {
+    public boolean utilitiesIncluded() {
         return this.utilitiesIncluded;
     }
 
-    protected int getNumBedrooms() {
+    public int getNumBedrooms() {
         return this.numBedrooms;
     }
 
-    protected int getNumBathrooms() {
+    public int getNumBathrooms() {
         return this.numBathrooms;
     }
 
-    protected boolean hasShuttle() {
+    public boolean hasShuttle() {
         return this.hasShuttle;
     }
 
-    protected boolean isAvailable() {
+    public boolean isAvailable() {
         return this.available;
     }
 }

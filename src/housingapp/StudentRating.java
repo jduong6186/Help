@@ -1,3 +1,5 @@
+package housingapp;
+
 public class StudentRating extends Rating {
 
     private int numLatePayments;

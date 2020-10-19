@@ -1,4 +1,5 @@
-import javax.swing.*;
+package housingapp;
+
 import java.util.Scanner;
 
 public class HousingAppDriver {

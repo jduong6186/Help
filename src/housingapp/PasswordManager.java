@@ -1,3 +1,5 @@
+package housingapp;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.AlgorithmParameters;
