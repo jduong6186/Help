@@ -14,7 +14,6 @@ public class User {
     private String email;
     private String password;
     private ArrayList<UUID> listings;
-    private ResourceManager rm;
 
     /**
      * constructor with base properties
@@ -31,7 +30,7 @@ public class User {
         this.phone = phone;
         this.email = email;
         this.password = BCrypt.withDefaults().hashToString(6, password.toCharArray());
-        this.rm = ResourceManager.getInstance();
+        this.listings = new ArrayList<UUID>();
     }
 
     /**
@@ -44,7 +43,8 @@ public class User {
      * @param password bcrypt hash of user's password
      * @param listings ArrayList of listings associated with user
      */
-    public User(UUID id, String firstName, String lastName, String phone, String email, String password, ArrayList<UUID> listings) {
+    public User(UUID id, String firstName, String lastName, String phone, String email, String password,
+                ArrayList<UUID> listings) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,7 +52,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.listings = listings;
-        this.rm = ResourceManager.getInstance();
     }
 
     public UUID getId() {
@@ -103,7 +102,7 @@ public class User {
         this.listings.add(listingId);
     }
 
-    protected boolean validateLogin(String email, String password) {
-        return this.email.toLowerCase().equals(email.toLowerCase()) && PasswordManager.equals(this.password, password);
+    protected void removeListing(UUID listingId) {
+        this.listings.remove(listingId);
     }
 }
