@@ -22,9 +22,8 @@ public class User {
      * @param lastName user's last name
      * @param phone user's phone number
      * @param email user's email address
-     * @param password user's raw password (hashed in constructor)
      */
-    public User(String firstName, String lastName, String phone, String email, String password) {
+    public User(String firstName, String lastName, String phone, String email) {
         this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;

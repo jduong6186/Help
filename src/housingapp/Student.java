@@ -1,5 +1,8 @@
 package housingapp;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class Student extends User {
 
 	private boolean hasPets;
@@ -8,7 +11,7 @@ public class Student extends User {
 	private double maxTravelDistance;
 	private int minRoommates;
 	private int maxRoommates;
-	private Rating[] ratings;
+	private ArrayList<Rating> ratings;
 	
 	public Student(String name, String phone, String email, String password, boolean hasPets, double priceRangeLower,
 					double priceRangeUpper, double maxTravelDistance, int minRoommates, int maxRoommates) {
@@ -45,20 +48,25 @@ public class Student extends User {
 		return this.maxRoommates;
 	}
 
-	public Rating[] getRatings() {
+	public ArrayList<Rating> getRatings() {
 		return this.ratings;
 	}
 	
 	public double getRatingAverage() {
-		double ratingAverage = 0;
-		return ratingAverage;
+		
+		double ratingAverage = 0.0;
+		int counter = 0;
+		for( Rating rating : ratings) {
+			ratingAverage += rating.getStars();
+		}
+		return ratingAverage/ratings.size();
 	}
 	
 	protected void addRating(Rating ratings) {
-		//add a rating
+		this.ratings.add(ratings);
 	}
 	
 	protected void removeRating(String ratingId) {
-		//remove a rating
+		this.ratings.remove(ratingId);
 	}
 }

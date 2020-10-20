@@ -59,6 +59,19 @@ public class ResourceManager {
     public ArrayList<Session> getSessions() {
         return sessions;
     }
+    /**
+     * Gets the Ratings array from the user by their UUID
+     * @param ratingId the UUID of the user to find
+     * @return ArrayList of Ratings for the specified user
+     */
+    public ArrayList<Rating> getRatingById(UUID ratingId) {
+		for(User user : users) {
+			if(user.getId()==ratingId && user instanceof Student) { //checking to make sure the user is a student before casting since user doesn't have ratings
+				return ((Student)user).getRatings(); //returns an array list of ratings
+			}
+		}
+    	return null;
+    }
 
     public boolean validateSession(UUID token, UUID userId) {
         for (int i=0 ;i<sessions.size(); i++) {

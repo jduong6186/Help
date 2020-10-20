@@ -1,12 +1,15 @@
 package housingapp;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class PropertyManager extends User{
 	
 	private String officeAddress;
-	private Property[] properties;
+	private ArrayList<UUID> properties;
 	
 	public PropertyManager(String name, String phone, String email, String password, String officeAddress) {
-		super(name, phone, email, password);
+		super(name, phone, email, password, officeAddress);
 		this.officeAddress = officeAddress;
 	}
 	
@@ -14,15 +17,15 @@ public class PropertyManager extends User{
 		return this.officeAddress;
 	}
 	
-	public Property[] getProperties() {
+	public ArrayList<UUID> getProperties() {
 		return this.properties;
 	}
 	
-	protected void addProperty(Property properties) {
-		//add a property
+	protected void addProperty(UUID properties) {
+		this.properties.add(properties);
 	}
 	
 	protected void removeRating(String propertyId) {
-		//remove a property
+		this.properties.remove(propertyId);
 	}
 }
