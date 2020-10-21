@@ -5,5 +5,14 @@
     "phone": "8033708127",
     "email": "eldridga@email.sc.edu",
     "password": "$2y$12$cqOEWOu9JDg9iJJp4Y.VqOeWQJYh//BotWElY7kcnlglosk/rZFAm"
-  }
+  },
+
+  {
+    "id": "641836516581354",
+    "firstName": "Johnathon",
+    "lastName": "Duong",
+    "phone": "7047131063",
+    "email": "jduong@email.sc.edu",
+    "password": "$2y$12$cqOEWOu9JDg9iJJp4Y.VqOeWQJYh//BotWElY7kcnlglosk/rZFAm"
+    "listings": [{"84513616484653136", "62986516384635", "8697465135468465"}]
 ]
