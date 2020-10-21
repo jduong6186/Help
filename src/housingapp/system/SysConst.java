@@ -46,4 +46,19 @@ public class SysConst {
     public static final String SESSION_TOKEN = "token";
     public static final String SESSION_USER_ID = "userId";
     public static final String SESSION_EXPIRATION = "expiration";
+
+    // user input commands
+    public static final String CMD_SEARCH_LISTINGS = "search_listings";
+    public static final String CMD_VIEW_FAVORITES = "view_favorites";
+    public static final String CMD_VIEW_MY_LISTINGS = "view_my_listings";
+    public static final String CMD_VIEW_MY_REVIEWS = "view_my_reviews";
+    public static final String CMD_CREATE_LISTING = "create_listing";
+    public static final String CMD_CREATE_REVIEW = "create_review";
+    public static final String CMD_VIEW_PROFILE = "view_profile";
+    public static final String CMD_REGISTER_PROPERTY = "register_property";
+
+    // error messages
+    public static final String ERR_INVALID_INPUT = "Invalid input. Please choose one of the listed options.";
+    public static final String ERR_INVALID_LOGIN = "Invalid email or password. Please try again.";
+    public static final String ERR_INVALID_PERMISSION = "Your account doesn't have permission to access that feature.";
 }

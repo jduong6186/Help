@@ -1,11 +1,11 @@
 package housingapp;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-
+import housingapp.system.UserType;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class User {
+public abstract class User {
 
     private final UUID id;
     private String firstName;
@@ -53,6 +53,8 @@ public class User {
         this.password = password;
         this.listings = listings;
     }
+
+    public abstract UserType getUserType();
 
     public UUID getId() {
         return this.id;

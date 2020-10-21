@@ -27,13 +27,19 @@ public class ResourceManager {
         this.properties = RscProperty.getProperties();
         this.listings = RscListing.getListings();
         this.sessions = RscSession.getSessions();
+        this.userMap = new HashMap<String, User>();
+        this.sessionMap = new HashMap<UUID, Session>();
 
         // populate user and session maps with initial values
-        for (int i=0; i<this.users.size(); i++) {
-            userMap.put(users.get(i).getEmail(), users.get(i));
+        if (users != null) {
+            for (User user : users) {
+                userMap.put(user.getEmail(), user);
+            }
         }
-        for (int i=0; i<this.sessions.size(); i++) {
-            sessionMap.put(sessions.get(i).getToken(), sessions.get(i));
+        if (sessions != null) {
+            for (Session session : sessions) {
+                sessionMap.put(session.getToken(), session);
+            }
         }
     }
 
@@ -60,14 +66,51 @@ public class ResourceManager {
         return sessions;
     }
 
-    public boolean validateSession(UUID token, UUID userId) {
-        for (int i=0 ;i<sessions.size(); i++) {
-            Session currSession = sessions.get(i);
-            if (currSession.getToken().equals(token) && currSession.getUserId().equals(userId)) {
-                return true;
+    public User getUserById(UUID userId) {
+        for (User user : users) {
+            if (user.getId().equals(userId)) {
+                return user;
             }
         }
-        return false;
+        return null;
+    }
+
+    public Property getPropertyById(UUID propertyId) {
+        for (Property property : properties) {
+            if (property.getId().equals(propertyId)) {
+                return property;
+            }
+        }
+        return null;
+    }
+
+    public Listing getListingById(UUID listingId) {
+        for (Listing listing : listings) {
+            if (listing.getId().equals(listingId)) {
+                return listing;
+            }
+        }
+        return null;
+    }
+
+    public Session getSessionById(UUID token) {
+        if (sessionMap.containsKey(token)) {
+            return sessionMap.get(token);
+        }
+        return null;
+    }
+
+    public boolean validateSession(Session session) {
+        if (session == null) {
+            return false;
+        }
+        UUID token = session.getToken();
+        UUID userId = session.getUserId();
+        if (sessionMap.containsKey(token)) {
+            return sessionMap.get(token).getUserId().equals(userId);
+        } else {
+            return false;
+        }
     }
 
     protected void addUser(User user) {
@@ -95,7 +138,6 @@ public class ResourceManager {
                     addSession(newSession);
                     return newSession;
                 } else {
-                    System.out.println("Invalid login attempt.");
                     return null;
                 }
             }

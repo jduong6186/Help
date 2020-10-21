@@ -1,5 +1,6 @@
 package housingapp;
 
+import housingapp.system.UserType;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -21,6 +22,10 @@ public class PropertyManager extends User {
 	    this.officeAddress = officeAddress;
 	    this.properties = properties;
     }
+
+	public UserType getUserType() {
+		return UserType.PROPERTY_MANAGER;
+	}
 
     public UUID getId() {
 	    return super.getId();

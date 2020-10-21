@@ -1,5 +1,6 @@
 package housingapp;
 
+import housingapp.system.UserType;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -37,6 +38,10 @@ public class Student extends User {
         this.minRoommates = minRoommates;
         this.maxRoommates = maxRoommates;
         this.ratings = ratings;
+    }
+
+    public UserType getUserType() {
+        return UserType.STUDENT;
     }
 
     public UUID getId() {
