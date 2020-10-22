@@ -47,7 +47,23 @@ public class HousingAppDriver {
                         System.out.println(SysConst.ERR_INVALID_LOGIN);
                     }
                 case SIGN_UP:
+                    System.out.print("First name: ");
+                    String firstName = keyboardInput.next();
+                    keyboardInput.nextLine();
+                    System.out.print("Last name: ");
+                    String lastName = keyboardInput.next();
+                    keyboardInput.nextLine();
+                    System.out.print("Phone number: ");
+                    String phoneNumber = keyboardInput.next();
+                    keyboardInput.nextLine();
                     System.out.print("Email: ");
+                    String newEmail = keyboardInput.next();
+                    keyboardInput.nextLine();
+                    System.out.print("Password: ");
+                    String newPassword = keyboardInput.next();
+                    keyboardInput.nextLine();
+                    User newUser = new User(firstName, lastName, phoneNumber, newEmail, newPassword);
+                    rm.addUser(newUser);
                 case DASHBOARD:
                     System.out.println("-----\nDashboard\n-----");
                     // validate user session
