@@ -24,12 +24,45 @@ public class ListingQuery {
     }
 
     /**
+     * returns listings which satisfy all recommendation settings on student profile
+     * @param studentUser student object to retrieve query preferences from
+     */
+    public ArrayList<Listing> getListingsByRecommended(Student studentUser) {
+        // track most recent filtered values and most recent non-null filtered values
+        ArrayList<Listing> ret = getListingsByAvailable(rm.getListings());
+        ArrayList<Listing> nonNullRet = ret;
+
+        // cascade filters until either all filters are applied or a null list is returned
+        ret = getListingsByPrice(ret, studentUser.getPriceRangeLower(), studentUser.getPriceRangeUpper());
+        if (ret != null) {
+            nonNullRet = ret;
+            ret = getListingsByMaxTravelDistance(ret, studentUser.getMaxTravelDistance());
+            if (ret != null) {
+                nonNullRet = ret;
+                ret = getListingsByNumBedrooms(ret, studentUser.getMinRoommates()+1, studentUser.getMaxRoommates()+1);
+                if (ret != null) {
+                    nonNullRet = ret;
+                    if (studentUser.hasPets()) {
+                        ret = getListingsByPetsAllowed(ret, true);
+                        if (ret != null) {
+                            // all filters applied successfully, return listings
+                            return ret;
+                        }
+                    }
+                }
+            }
+        }
+        // failed to apply all filters, return last non-null filtered results
+        return nonNullRet;
+    }
+
+    /**
      * filters listings by property
      * @param propertyId UUID of property to filter by
      */
-    public ArrayList<Listing> getListingsByProperty(UUID propertyId) {
+    public ArrayList<Listing> getListingsByProperty(ArrayList<Listing> listings, UUID propertyId) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
+        for (Listing listing : listings) {
             if (listing.getProperty().getId().equals(propertyId)) {
                 ret.add(listing);
             }
@@ -41,43 +74,58 @@ public class ListingQuery {
      * filters listings by description substr
      * @param substr string to search for in description
      */
-    public ArrayList<Listing> getListingsByDescription(String substr) {
+    public ArrayList<Listing> getListingsByDescription(ArrayList<Listing> listings, String substr) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         // TODO: implement regex search for substr in listing description
         return ret;
     }
 
-    // todo: implement
-    public ArrayList<Listing> getListingsByPrice(double priceLower, double priceUpper) {
+    public ArrayList<Listing> getListingsByPrice(ArrayList<Listing> listings, double priceLower, double priceUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        return ret;
-    }
-
-    // todo: implement
-    public ArrayList<Listing> getListingsByLeaseMonths(int leaseMonthsLower, int leaseMonthsUpper) {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        return ret;
-    }
-
-    // todo: implement
-    public ArrayList<Listing> getListingsBySquareFootage(double squareFootageLower, double squareFootageUpper) {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        return ret;
-    }
-
-    public ArrayList<Listing> getListingsByPetsAllowed() {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
-            if (listing.petsAllowed()) {
+        for (Listing listing : listings) {
+            double listingPrice = listing.getPrice();
+            if (listingPrice >= priceLower && listingPrice <= priceUpper) {
                 ret.add(listing);
             }
         }
         return ret;
     }
 
-    public ArrayList<Listing> getListingsByHasGas() {
+    public ArrayList<Listing> getListingsByMaxTravelDistance(ArrayList<Listing> listings, double maxTravelDistance) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
+        for (Listing listing : listings) {
+            if (maxTravelDistance >= listing.getProperty().getDistanceToCampus()) {
+                ret.add(listing);
+            }
+        }
+        return ret;
+    }
+
+    // todo: implement
+    public ArrayList<Listing> getListingsByLeaseMonths(ArrayList<Listing> listings, int leaseMonthsLower, int leaseMonthsUpper) {
+        ArrayList<Listing> ret = new ArrayList<Listing>();
+        return ret;
+    }
+
+    // todo: implement
+    public ArrayList<Listing> getListingsBySquareFootage(ArrayList<Listing> listings, double squareFootageLower, double squareFootageUpper) {
+        ArrayList<Listing> ret = new ArrayList<Listing>();
+        return ret;
+    }
+
+    public ArrayList<Listing> getListingsByPetsAllowed(ArrayList<Listing> listings, boolean petsAllowed) {
+        ArrayList<Listing> ret = new ArrayList<Listing>();
+        for (Listing listing : listings) {
+            if (listing.petsAllowed() == petsAllowed) {
+                ret.add(listing);
+            }
+        }
+        return ret;
+    }
+
+    public ArrayList<Listing> getListingsByHasGas(ArrayList<Listing> listings) {
+        ArrayList<Listing> ret = new ArrayList<Listing>();
+        for (Listing listing : listings) {
             if (listing.hasGas()) {
                 ret.add(listing);
             }
@@ -85,9 +133,9 @@ public class ListingQuery {
         return ret;
     }
 
-    public ArrayList<Listing> getListingsByHasElectric() {
+    public ArrayList<Listing> getListingsByHasElectric(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
+        for (Listing listing : listings) {
             if (listing.hasElectric()) {
                 ret.add(listing);
             }
@@ -95,9 +143,9 @@ public class ListingQuery {
         return ret;
     }
 
-    public ArrayList<Listing> getListingsByHasWater() {
+    public ArrayList<Listing> getListingsByHasWater(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
+        for (Listing listing : listings) {
             if (listing.hasWater()) {
                 ret.add(listing);
             }
@@ -105,9 +153,9 @@ public class ListingQuery {
         return ret;
     }
 
-    public ArrayList<Listing> getListingsByHasTrash() {
+    public ArrayList<Listing> getListingsByHasTrash(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
+        for (Listing listing : listings) {
             if (listing.hasTrash()) {
                 ret.add(listing);
             }
@@ -115,9 +163,9 @@ public class ListingQuery {
         return ret;
     }
 
-    public ArrayList<Listing> getListingsByIsSublease() {
+    public ArrayList<Listing> getListingsByIsSublease(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
+        for (Listing listing : listings) {
             if (listing.isSublease()) {
                 ret.add(listing);
             }
@@ -125,10 +173,21 @@ public class ListingQuery {
         return ret;
     }
 
-    public ArrayList<Listing> getListingsByUtilitiesIncluded() {
+    public ArrayList<Listing> getListingsByUtilitiesIncluded(ArrayList<Listing> listings, boolean utilitiesIncluded) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
-            if (listing.utilitiesIncluded()) {
+        for (Listing listing : listings) {
+            if (listing.utilitiesIncluded() == utilitiesIncluded) {
+                ret.add(listing);
+            }
+        }
+        return ret;
+    }
+
+    public ArrayList<Listing> getListingsByNumBedrooms(ArrayList<Listing> listings, int numBedroomsLower, int numBedroomsUpper) {
+        ArrayList<Listing> ret = new ArrayList<Listing>();
+        for (Listing listing : listings) {
+            int listingNumBedrooms = listing.getNumBedrooms();
+            if (numBedroomsLower <= listingNumBedrooms && numBedroomsUpper >= listingNumBedrooms) {
                 ret.add(listing);
             }
         }
@@ -136,30 +195,24 @@ public class ListingQuery {
     }
 
     // todo: implement
-    public ArrayList<Listing> getListingsByNumBedrooms(int numBedroomsLower, int numBedroomsUpper) {
+    public ArrayList<Listing> getListingsByNumBathrooms(ArrayList<Listing> listings, int numBathroomsLower, int numBathroomsUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         return ret;
     }
 
-    // todo: implement
-    public ArrayList<Listing> getListingsByNumBathrooms(int numBathroomsLower, int numBathroomsUpper) {
+    public ArrayList<Listing> getListingsByHasShuttle(ArrayList<Listing> listings, boolean hasShuttle) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        return ret;
-    }
-
-    public ArrayList<Listing> getListingsByHasShuttle() {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
-            if (listing.hasShuttle()) {
+        for (Listing listing : listings) {
+            if (listing.hasShuttle() == hasShuttle) {
                 ret.add(listing);
             }
         }
         return ret;
     }
 
-    public ArrayList<Listing> getListingsByAvailable() {
+    public ArrayList<Listing> getListingsByAvailable(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : rm.getListings()) {
+        for (Listing listing : listings) {
             if (listing.isAvailable()) {
                 ret.add(listing);
             }

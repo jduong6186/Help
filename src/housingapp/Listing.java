@@ -135,4 +135,14 @@ public class Listing {
     public boolean isAvailable() {
         return this.available;
     }
+
+    public String getDetails() {
+        // todo: construct details str
+        return "";
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Listing at %s | $%f | %d bedrooms | %d bathrooms", this.property, this.price, this.numBedrooms, this.numBathrooms);
+    }
 }

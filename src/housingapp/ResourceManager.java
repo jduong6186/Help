@@ -84,6 +84,16 @@ public class ResourceManager {
         return null;
     }
 
+    // todo: implement regex search for property name
+    public Property getPropertyByName(String propertyName) {
+        for (Property property : properties) {
+            if (property.getName().toLowerCase().equals(propertyName.toLowerCase())) {
+                return property;
+            }
+        }
+        return null;
+    }
+
     public Listing getListingById(UUID listingId) {
         for (Listing listing : listings) {
             if (listing.getId().equals(listingId)) {

@@ -48,6 +48,7 @@ public class SysConst {
     public static final String SESSION_EXPIRATION = "expiration";
 
     // user input commands
+    public static final String CMD_ENTER = "";
     public static final String CMD_SEARCH_LISTINGS = "search_listings";
     public static final String CMD_VIEW_FAVORITES = "view_favorites";
     public static final String CMD_VIEW_MY_LISTINGS = "view_my_listings";
@@ -56,6 +57,17 @@ public class SysConst {
     public static final String CMD_CREATE_REVIEW = "create_review";
     public static final String CMD_VIEW_PROFILE = "view_profile";
     public static final String CMD_REGISTER_PROPERTY = "register_property";
+    public static final String CMD_SEARCH_LISTINGS_BY_RECOMMENDED = "search_by_recommended";
+    public static final String CMD_SEARCH_LISTINGS_BY_PROPERTY = "search_by_property";
+    public static final String CMD_SEARCH_LISTINGS_BY_PARAMETERS = "search_by_parameters";
+    public static final String CMD_SET_SEARCH_PARAM_PRICE = "set_search_param_price";
+    public static final String CMD_SET_SEARCH_PARAM_LEASE_DURATION = "set_search_param_lease_duration";
+    public static final String CMD_SET_SEARCH_PARAM_SQUARE_FOOTAGE = "set_search_param_square_footage";
+    public static final String CMD_SET_SEARCH_PARAM_PET_POLICY = "set_search_param_pet_policy";
+    public static final String CMD_SET_SEARCH_PARAM_UTILITIES = "set_search_param_utilities";
+    public static final String CMD_SET_SEARCH_PARAM_NUM_BEDROOMS = "set_search_param_num_bedrooms";
+    public static final String CMD_SET_SEARCH_PARAM_NUM_BATHROOMS = "set_search_param_num_bathrooms";
+    public static final String CMD_SET_SEARCH_PARAM_SHUTTLE_SERVICE = "set_search_param_shuttle_service";
 
     // error messages
     public static final String ERR_INVALID_INPUT = "Invalid input. Please choose one of the listed options.";
