@@ -2,14 +2,13 @@ package housingapp;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Singleton class which queries listings using given search params
- * @author Andrew Eldridge
+ * @authors Andrew Eldridge, John Michael Falzarano
  */
-
-// TODO: support chaining multiple filters (pass ArrayList<Listing> as param rather than pulling from rm)
-// TODO: implement result prioritizing (ordering by relevance according to params)
 
 public class ListingQuery {
 
@@ -76,7 +75,14 @@ public class ListingQuery {
      */
     public ArrayList<Listing> getListingsByDescription(ArrayList<Listing> listings, String substr) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
-        // TODO: implement regex search for substr in listing description
+        for (Listing listing : listings) {
+        	String listingsByDescription = listing.getDescription();
+        	Pattern description = Pattern.compile(listingsByDescription);
+        	Matcher filter = description.matcher(substr);
+        	if (filter.find()) {
+        		ret.add(listing);
+        	}
+        }
         return ret;
     }
 
@@ -101,15 +107,27 @@ public class ListingQuery {
         return ret;
     }
 
-    // todo: implement
+
     public ArrayList<Listing> getListingsByLeaseMonths(ArrayList<Listing> listings, int leaseMonthsLower, int leaseMonthsUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
+        for (Listing listing : listings) {
+        	int listingMonth = listing.getLeaseMonths();
+        	if (listingMonth >= leaseMonthsLower && listingMonth <= leaseMonthsUpper) {
+                ret.add(listing);
+        	}
+        }
         return ret;
     }
 
-    // todo: implement
+
     public ArrayList<Listing> getListingsBySquareFootage(ArrayList<Listing> listings, double squareFootageLower, double squareFootageUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
+        for (Listing listing : listings) {
+        	int listingFootage = listing.getLeaseMonths();
+        	if (listingFootage >= squareFootageLower && listingFootage <= squareFootageUpper) {
+                ret.add(listing);
+        	}
+        }
         return ret;
     }
 
@@ -186,7 +204,7 @@ public class ListingQuery {
     public ArrayList<Listing> getListingsByNumBedrooms(ArrayList<Listing> listings, int numBedroomsLower, int numBedroomsUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
-            int listingNumBedrooms = listing.getNumBedrooms();
+        	int listingNumBedrooms = listing.getNumBedrooms();
             if (numBedroomsLower <= listingNumBedrooms && numBedroomsUpper >= listingNumBedrooms) {
                 ret.add(listing);
             }
@@ -194,9 +212,14 @@ public class ListingQuery {
         return ret;
     }
 
-    // todo: implement
     public ArrayList<Listing> getListingsByNumBathrooms(ArrayList<Listing> listings, int numBathroomsLower, int numBathroomsUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
+    	for (Listing listing : listings) {
+    		int listingNumBathrooms = listing.getNumBathrooms();
+    		if (numBathroomsLower <= listingNumBathrooms && numBathroomsUpper >= listingNumBathrooms) {
+    			ret.add(listing);
+    		}
+    	}
         return ret;
     }
 
