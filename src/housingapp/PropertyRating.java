@@ -1,6 +1,7 @@
 package housingapp;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 public class PropertyRating extends Rating {
 
@@ -14,8 +15,15 @@ public class PropertyRating extends Rating {
         setManagementStars(managementStars);
         setNeighborhoodStars(neighborhoodStars);
     }
+
+    public PropertyRating(UUID id, int stars, String comment, int valueStars, int managementStars, int neighborhoodStars) {
+        super(id, stars, comment);
+        setValueStars(valueStars);
+        setManagementStars(managementStars);
+        setNeighborhoodStars(neighborhoodStars);
+    }
     
-    protected void setValueStars(int valueStars) {
+    public void setValueStars(int valueStars) {
     	
     	Scanner keyboard = new Scanner(System.in);
     	this.valueStars = valueStars;
@@ -28,7 +36,7 @@ public class PropertyRating extends Rating {
     	
     }
     
-protected void setManagementStars(int managementStars) {
+    public void setManagementStars(int managementStars) {
     	
     	Scanner keyboard = new Scanner(System.in);
     	this.managementStars = managementStars;
@@ -41,28 +49,28 @@ protected void setManagementStars(int managementStars) {
     	
     }
 
-protected void setNeighborhoodStars(int neighborhoodStars) {
+    public void setNeighborhoodStars(int neighborhoodStars) {
 	
-	Scanner keyboard = new Scanner(System.in);
-	this.neighborhoodStars = neighborhoodStars;
-	
-	while(this.neighborhoodStars < 0 || this.neighborhoodStars > 5) {
-		
-		System.out.print("Please enter in a valid star amount (0-5): ");
-		this.neighborhoodStars = keyboard.nextInt();
-	}
-	
-}
+        Scanner keyboard = new Scanner(System.in);
+        this.neighborhoodStars = neighborhoodStars;
 
-    protected int getValueStars() {
+        while(this.neighborhoodStars < 0 || this.neighborhoodStars > 5) {
+
+            System.out.print("Please enter in a valid star amount (0-5): ");
+            this.neighborhoodStars = keyboard.nextInt();
+        }
+
+    }
+
+    public int getValueStars() {
     	return this.valueStars;
     }
 
-    protected int getManagementStars() {
+    public int getManagementStars() {
         return this.managementStars;
     }
 
-    protected int getNeighborhoodStars() {
+    public int getNeighborhoodStars() {
         return this.neighborhoodStars;
     }
 }

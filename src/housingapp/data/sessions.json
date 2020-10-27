@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "token": "e6eaa882-c680-43b0-955c-0f72d567c800",
+    "userId": "8316bf45-1cf2-4bd7-a559-61cb36ff0e47",
+    "expiration": "2020-10-27 23:59:59"
+  },
+  {
+    "token": "b7ba680b-0cd2-45ed-bda7-e714ba8a3927",
+    "userId": "839b887e-d40f-477b-a374-4c134da4e66c",
+    "expiration": "2020-10-27 22:49:10"
+  }
+]

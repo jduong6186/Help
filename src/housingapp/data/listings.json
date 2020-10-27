@@ -1,9 +1,23 @@
 [
 	{
 		"id": "cef0cbf3-6458-4f13-a418-ee4d7e7505dd",
-		"property":{"name":"Rowan", "address":"1051 Southern Dr.", "distanceToCampus":9 }
-		"description":"Not so nice. Has a roach infestation.",
-		"price":551.25,
+		"property": {
+			"id": "bdfa2d32-b217-485e-a19a-5460ae2c2d65",
+			"name": "Cayce Cove",
+			"address": "215 Spencer Pl, Cayce, SC 29033",
+			"distanceToCampus": 10.2,
+			"ratings": [
+				"72c7b436-6643-48d5-8afd-117782547fa7",
+				"5d5c4d31-c299-43a2-b5f5-9e0e197fa15f"
+			],
+			"listings": [
+				"cef0cbf3-6458-4f13-a418-ee4d7e7505dd",
+				"100e2e28-675a-4d46-ac8f-a4fa97e88ba9",
+				"39a1cffe-6522-44df-b9c6-3ff5d833a386"
+			]
+		},
+		"description":"Student housing apartment on Congaree river.",
+		"price": 640.00,
 		"leaseMonths":12,
 		"squareFootage":471,
 		"petsAllowed":true,
@@ -17,7 +31,5 @@
 		"numBathrooms":4,
 		"hasShuttle":true,
 		"available":true
-
 	}
-
 ]
