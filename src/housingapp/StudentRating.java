@@ -1,6 +1,7 @@
 package housingapp;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 public class StudentRating extends Rating {
 
@@ -12,8 +13,14 @@ public class StudentRating extends Rating {
         setNumLatePayments(numLatePayments);
         setDamagesValue(damagesValue);
     }
+
+    public StudentRating(UUID id, int stars, String comment, int numLatePayments, double damagesValue) {
+        super (id, stars, comment);
+        setNumLatePayments(numLatePayments);
+        setDamagesValue(damagesValue);
+    }
     
-    protected void setNumLatePayments(int numLatePayments) {
+    public void setNumLatePayments(int numLatePayments) {
     	
     	Scanner keyboard = new Scanner(System.in);
     	this.numLatePayments = numLatePayments;
@@ -25,7 +32,7 @@ public class StudentRating extends Rating {
     	}
     }
     
-    protected void setDamagesValue(double damagesValue) {
+    public void setDamagesValue(double damagesValue) {
     	
     	Scanner keyboard = new Scanner(System.in);
     	this.damagesValue = damagesValue;
@@ -37,11 +44,11 @@ public class StudentRating extends Rating {
     	}
     }
 
-    protected int getNumLatePayments() {
+    public int getNumLatePayments() {
         return this.numLatePayments;
     }
 
-    protected double getDamagesValue() {
+    public double getDamagesValue() {
         return this.damagesValue;
     }
 }

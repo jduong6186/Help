@@ -1,13 +1,21 @@
 package housingapp;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Rating {
 
+    private UUID id;
     private int stars;
     private String comment;
 
     public Rating(int stars, String comment) {
+        setStars(stars);
+        this.comment = comment;
+    }
+
+    public Rating(UUID id, int stars, String comment) {
+        this.id = id;
         setStars(stars);
         this.comment = comment;
     }
@@ -24,12 +32,16 @@ public class Rating {
     	}
     	
     }
+
+    public UUID getId() {
+        return this.id;
+    }
     
-    protected int getStars() {
+    public int getStars() {
         return this.stars;
     }
 
-    protected String getComment() {
+    public String getComment() {
         return this.comment;
     }
 }

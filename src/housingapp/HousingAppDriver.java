@@ -290,7 +290,62 @@ public class HousingAppDriver {
                     case VIEW_MY_REVIEWS:
                         return;
                     case CREATE_LISTING:
-                        return;
+                        System.out.println("-----\nFill in the following listing details\n-----");
+                        System.out.print("Location (property) name: ");
+                        String propertyName = keyboardInput.next();
+                        keyboardInput.nextLine();
+                        Property property = rm.getPropertyByName(propertyName);
+
+                        System.out.print("Short description: ");
+                        String description = keyboardInput.nextLine();
+
+                        System.out.print("Price: $");
+                        double price = keyboardInput.nextDouble();
+                        keyboardInput.nextLine();
+
+                        System.out.print("Lease duration (months): ");
+                        int leaseMonths = keyboardInput.nextInt();
+                        keyboardInput.nextLine();
+
+                        System.out.print("Square footage: ");
+                        double squareFootage = keyboardInput.nextDouble();
+                        keyboardInput.nextLine();
+
+                        System.out.print("Pets allowed (y/n): ");
+                        boolean petsAllowed = keyboardInput.next().toLowerCase().equals("y");
+                        keyboardInput.nextLine();
+
+                        // todo: either prompt for utilities details here, or remove utilities from listing attributes
+
+                        System.out.print("Is sublease (y/n): ");
+                        boolean isSublease = keyboardInput.next().toLowerCase().equals("y");
+                        keyboardInput.nextLine();
+
+                        System.out.print("Utilities included (y/n): ");
+                        boolean utilitiesIncluded = keyboardInput.next().toLowerCase().equals("y");
+                        keyboardInput.nextLine();
+
+                        System.out.print("Number of bedrooms: ");
+                        int numBedrooms = keyboardInput.nextInt();
+                        keyboardInput.nextLine();
+
+                        System.out.print("Number of bathrooms: ");
+                        int numBathrooms = keyboardInput.nextInt();
+                        keyboardInput.nextLine();
+
+                        System.out.print("Has shuttle service (y/n): ");
+                        boolean hasShuttle = keyboardInput.next().toLowerCase().equals("y");
+                        keyboardInput.nextLine();
+
+                        System.out.print("Currently active listing (y/n): ");
+                        boolean available = keyboardInput.next().toLowerCase().equals("y");
+                        keyboardInput.nextLine();
+
+                        Listing newListing = new Listing(property, description, price, leaseMonths, squareFootage, petsAllowed,
+                                true, true, true, true, isSublease, utilitiesIncluded, numBedrooms, numBathrooms, hasShuttle,
+                                available);
+                        rm.addListing(newListing);
+                        currFlow = Flow.DASHBOARD;
                     case CREATE_REVIEW:
                         return;
                     case VIEW_PROFILE:

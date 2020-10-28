@@ -1,5 +1,6 @@
 [
   {
+    "id": "8316bf45-1cf2-4bd7-a559-61cb36ff0e47",
     "firstName": "Andrew",
     "lastName": "Eldridge",
     "phone": "8033708127",
@@ -8,12 +9,12 @@
   },
 
   {
-    "id": "641836516581354",
+    "id": "839b887e-d40f-477b-a374-4c134da4e66c",
     "firstName": "Johnathon",
     "lastName": "Duong",
     "phone": "7047131063",
     "email": "jduong@email.sc.edu",
-    "password": "$2y$12$cqOEWOu9JDg9iJJp4Y.VqOeWQJYh//BotWElY7kcnlglosk/rZFAm"
-    "listings": [{"84513616484653136", "62986516384635", "8697465135468465"}]
+    "password": "$2y$12$cqOEWOu9JDg9iJJp4Y.VqOeWQJYh//BotWElY7kcnlglosk/rZFAm",
+    "listings": ["cef0cbf3-6458-4f13-a418-ee4d7e7505dd"]
   }
 ]
