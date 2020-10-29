@@ -212,6 +212,20 @@ public class HousingAppDriver {
                                         } else {
                                             int listingIndex = Integer.parseInt(input) - 1;
                                             System.out.println(currListingSearchResults.get(listingIndex).getDetails());
+                                            System.out.print("Would you like to add this listing to your favorites (\"yes\"/\"no\")?");
+                                            String userResponse;
+                                            userResponse = keyboardInput.next();
+                                            keyboardInput.nextLine();
+                                            if (userResponse.equalsIgnoreCase("yes")) {
+                                            	Student currStudent = rm.getUserById(currSession.getUserId());
+                                            	//student class needs to have a favorites arraylist and addfavorite method
+                                            	currStudent.addFavorite(currListingSearchResults.get(listingIndex));
+                                            	System.out.println("The listing has been added to your favorites");
+                                            	//need to add flow to go back to list of search results
+                                            }
+                                            else {
+                                            	currFlow = Flow.SEARCH_LISTINGS;
+                                            }
                                         }
                                     case SysConst.CMD_SET_SEARCH_PARAM_PRICE:
                                         double[] priceRange = promptPriceRange();
@@ -286,6 +300,17 @@ public class HousingAppDriver {
                                 throw new InvalidInputException();
                         }
                     case VIEW_MY_LISTINGS:
+                    	int listingIndex;
+                    	System.out.println("Would you like to remove this listing (yes or no)? ");
+                    	String userResponse = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	if (userResponse.equalsIgnoreCase("yes")) {
+                    		PropertyManager currPropertyManager = rm.getUserById(currSession.getUserId());
+                    		currPropertyManager.removeListing(currPropertyManager.getListings().get(listingIndex));
+                    	}
+                    	else {
+                    		currFlow = Flow.VIEW_MY_LISTINGS;
+                    	}
                         return;
                     case VIEW_MY_REVIEWS:
                         return;
@@ -353,6 +378,22 @@ public class HousingAppDriver {
                     case VIEW_FAVORITES:
                         return;
                     case REGISTER_PROPERTY:
+                    	String newPropertyName;
+                    	String newPropertyAddress;
+                    	double newDistanceToCampus;
+                    	
+                    	System.out.print("Please enter name of the property: ");
+                    	newPropertyName = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	System.out.print("Please enter the address of the property: ");
+                    	newPropertyAddress = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	System.out.print("Please enter the distance of the property from campus: ");
+                    	newDistanceToCampus = keyboardInput.nextDouble();
+                    	Property newProperty = new Property(newPropertyName, newPropertyAddress, newDistanceToCampus);
+                    	rm.addProperty(newProperty);
+                    	PropertyManager currPropertyManager = rm.getUserById(currSession.getUserId());
+                    	currPropertyManager.associateProperty(newProperty.getId());
                         return;
                 }
             } catch (Exception e) {
