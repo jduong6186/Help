@@ -1,7 +1,6 @@
 package housingapp.user;
 
 import housingapp.system.UserType;
-import housingapp.user.User;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -13,25 +12,25 @@ public class PropertyManager extends User {
 	
 	public PropertyManager(String firstName, String lastName, String phone, String email, String password,
                            String officeAddress) {
-		super(firstName, lastName, phone, email, password);
+		super(UserType.PROPERTY_MANAGER, firstName, lastName, phone, email, password);
 		this.officeAddress = officeAddress;
 		this.properties = new ArrayList<UUID>();
 	}
 
 	public PropertyManager(UUID id, String firstName, String lastName, String phone, String email, String password,
                            String officeAddress, ArrayList<UUID> listings, ArrayList<UUID> properties) {
-	    super(id, firstName, lastName, phone, email, password, listings);
+	    super(id, UserType.PROPERTY_MANAGER, firstName, lastName, phone, email, password, listings);
 	    this.officeAddress = officeAddress;
 	    this.properties = properties;
     }
 
-	public UserType getUserType() {
-		return UserType.PROPERTY_MANAGER;
-	}
-
     public UUID getId() {
 	    return super.getId();
     }
+
+    public UserType getType() {
+		return super.getType();
+	}
 
     public String getFirstName() {
 	    return super.getFirstName();

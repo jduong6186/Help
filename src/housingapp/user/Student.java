@@ -1,7 +1,6 @@
 package housingapp.user;
 
 import housingapp.system.UserType;
-import housingapp.user.User;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -19,7 +18,7 @@ public class Student extends User {
     public Student(String firstName, String lastName, String phone, String email, String password, boolean hasPets,
                    double priceRangeLower, double priceRangeUpper, double maxTravelDistance, int minRoommates,
                    int maxRoommates) {
-        super(firstName, lastName, phone, email, password);
+        super(UserType.STUDENT, firstName, lastName, phone, email, password);
         this.hasPets = hasPets;
         this.priceRangeLower = priceRangeLower;
         this.priceRangeUpper = priceRangeUpper;
@@ -32,7 +31,7 @@ public class Student extends User {
     public Student(UUID id, String firstName, String lastName, String phone, String email, String password, boolean hasPets,
                    double priceRangeLower, double priceRangeUpper, double maxTravelDistance, int minRoommates,
                    int maxRoommates, ArrayList<UUID> ratings, ArrayList<UUID> listings) {
-        super(id, firstName, lastName, phone, email, password, listings);
+        super(id,UserType.PROPERTY_MANAGER, firstName, lastName, phone, email, password, listings);
         this.hasPets = hasPets;
         this.priceRangeLower = priceRangeLower;
         this.priceRangeUpper = priceRangeUpper;
@@ -42,12 +41,12 @@ public class Student extends User {
         this.ratings = ratings;
     }
 
-    public UserType getUserType() {
-        return UserType.STUDENT;
-    }
-
     public UUID getId() {
         return super.getId();
+    }
+
+    public UserType getType() {
+        return super.getType();
     }
 
     public String getFirstName() {

@@ -8,6 +8,7 @@ import java.util.UUID;
 public abstract class User {
 
     private final UUID id;
+    private final UserType type;
     private String firstName;
     private String lastName;
     private String phone;
@@ -17,14 +18,16 @@ public abstract class User {
 
     /**
      * constructor with base properties
+     * @param type user type (student/property manager)
      * @param firstName user's first name
      * @param lastName user's last name
      * @param phone user's phone number
      * @param email user's email address
      * @param password user's raw password (hashed in constructor)
      */
-    public User(String firstName, String lastName, String phone, String email, String password) {
+    public User(UserType type, String firstName, String lastName, String phone, String email, String password) {
         this.id = UUID.randomUUID();
+        this.type = type;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -36,6 +39,7 @@ public abstract class User {
     /**
      * constructor with id, listings, and base properties (used on startup when pulling users from JSON storage)
      * @param id user's UUID
+     * @param type user type (student/property manager)
      * @param firstName user's first name
      * @param lastName user's last name
      * @param phone user's phone number
@@ -43,9 +47,10 @@ public abstract class User {
      * @param password bcrypt hash of user's password
      * @param listings ArrayList of listings associated with user
      */
-    public User(UUID id, String firstName, String lastName, String phone, String email, String password,
+    public User(UUID id, UserType type, String firstName, String lastName, String phone, String email, String password,
                 ArrayList<UUID> listings) {
         this.id = id;
+        this.type = type;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -54,10 +59,12 @@ public abstract class User {
         this.listings = listings;
     }
 
-    public abstract UserType getUserType();
-
     public UUID getId() {
         return this.id;
+    }
+
+    public UserType getType() {
+        return this.type;
     }
 
     public String getFirstName() {

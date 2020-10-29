@@ -8,6 +8,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import housingapp.Session;
 import housingapp.housing.Listing;
 import housingapp.housing.Property;
+import housingapp.rating.Rating;
 import housingapp.resources.*;
 import housingapp.user.User;
 
@@ -23,6 +24,7 @@ public class ResourceManager {
     private ArrayList<Property> properties;
     private ArrayList<Listing> listings;
     private ArrayList<Session> sessions;
+    private ArrayList<Rating> ratings;
     private Map<String, User> userMap;
     private Map<UUID, Session> sessionMap;
 
@@ -70,6 +72,10 @@ public class ResourceManager {
         return sessions;
     }
 
+    public ArrayList<Rating> getRatings() {
+        return ratings;
+    }
+
     public User getUserById(UUID userId) {
         for (User user : users) {
             if (user.getId().equals(userId)) {
@@ -107,9 +113,18 @@ public class ResourceManager {
         return null;
     }
 
-    public Session getSessionById(UUID token) {
+    public Session getSessionByToken(UUID token) {
         if (sessionMap.containsKey(token)) {
             return sessionMap.get(token);
+        }
+        return null;
+    }
+
+    public Rating getRatingById(UUID ratingId) {
+        for (Rating rating : ratings) {
+            if (rating.getId().equals(ratingId)) {
+                return rating;
+            }
         }
         return null;
     }
@@ -163,5 +178,10 @@ public class ResourceManager {
         sessions.add(session);
         sessionMap.put(session.getToken(), session);
         RscSession.writeSessions();
+    }
+
+    public void addRating(Rating rating) {
+        ratings.add(rating);
+        RscRating.writeRatings();
     }
 }

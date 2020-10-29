@@ -5,6 +5,8 @@ import housingapp.housing.Listing;
 import housingapp.housing.Property;
 import housingapp.query.ListingQuery;
 import housingapp.query.ResourceManager;
+import housingapp.rating.PropertyRating;
+import housingapp.rating.Rating;
 import housingapp.system.Flow;
 import housingapp.system.SysConst;
 import housingapp.system.UserType;
@@ -28,6 +30,7 @@ public class HousingAppDriver {
         ResourceManager rm = ResourceManager.getInstance();
         boolean running = true;
         ArrayList<Listing> currListingSearchResults = null;
+        UUID currTarget = null;
 
         System.out.println("-----\nUofSC Off-Campus Housing App\n-----");
 
@@ -348,7 +351,41 @@ public class HousingAppDriver {
                                 isSublease, utilitiesIncluded, numBedrooms, numBathrooms, hasShuttle, available);
                         rm.addListing(newListing);
                         currFlow = Flow.DASHBOARD;
+                    case EDIT_LISTING:
+                        return;
                     case CREATE_REVIEW:
+                        if (currUserType == UserType.STUDENT) {
+                            Property propertyToReview = rm.getPropertyById(currTarget);
+                            String propertyToReviewName = propertyToReview.getName();
+
+                            System.out.print(String.format("Overall rating for %s (1-5): ", propertyToReviewName));
+                            int stars = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+
+                            System.out.print("Enter a short comment for your review: ");
+                            String comment = keyboardInput.nextLine();
+
+                            System.out.print(String.format("Rate the value of %s (1-5): ", propertyToReviewName));
+                            int valueStars = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+
+                            System.out.print(String.format("Rate the management of %s (1-5): ", propertyToReviewName));
+                            int managementStars = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+
+                            System.out.print(String.format("Rate the neighborhood of %s (1-5): ", propertyToReviewName));
+                            int neighborhoodStars = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+
+                            Rating propertyRating = new PropertyRating(stars, comment, valueStars, managementStars, neighborhoodStars);
+                            rm.addRating(propertyRating);
+                        } else if (currUserType == UserType.PROPERTY_MANAGER) {
+                            // todo: prompt for student review details
+                        } else {
+                            currFlow = Flow.HOME;
+                            throw new InvalidPermissionException();
+                        }
+                    case EDIT_REVIEW:
                         return;
                     case VIEW_PROFILE:
                         return;

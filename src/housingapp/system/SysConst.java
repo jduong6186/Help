@@ -5,12 +5,28 @@ public class SysConst {
     // user constants
     public static final String USERS_DATA_FILE = "src/data/users.json";
     public static final String USER_ID = "id";
+    public static final String USER_TYPE = "type";
     public static final String USER_FIRST_NAME = "firstName";
     public static final String USER_LAST_NAME = "lastName";
     public static final String USER_PHONE = "phone";
     public static final String USER_EMAIL = "email";
     public static final String USER_PASSWORD = "password";
     public static final String USER_LISTINGS = "listings";
+
+    // student user constants
+    public static final String STUDENT_USERS = "students";
+    public static final String STUDENT_USER_HAS_PETS = "id";
+    public static final String STUDENT_USER_PRICE_RANGE_LOWER = "priceRangeLower";
+    public static final String STUDENT_USER_PRICE_RANGE_UPPER = "priceRangeUpper";
+    public static final String STUDENT_USER_MAX_TRAVEL_DISTANCE = "maxTravelDistance";
+    public static final String STUDENT_USER_MIN_ROOMMATES = "minRoommates";
+    public static final String STUDENT_USER_MAX_ROOMMATES = "maxRoommates";
+    public static final String STUDENT_USER_RATINGS = "ratings";
+
+    // property manager user constants
+    public static final String PROPERTY_MANAGER_USERS = "propertyManagers";
+    public static final String PROPERTY_MANAGER_USER_OFFICE_ADDRESS = "officeAddress";
+    public static final String PROPERTY_MANAGER_USER_PROPERTIES = "properties";
 
     // property constants
     public static final String PROPERTIES_DATA_FILE = "src/data/properties.json";
@@ -46,6 +62,16 @@ public class SysConst {
     public static final String SESSION_TOKEN = "token";
     public static final String SESSION_USER_ID = "userId";
     public static final String SESSION_EXPIRATION = "expiration";
+
+    // rating constants
+    public static final String RATINGS_DATA_FILE = "src/data/ratings.json";
+    public static final String RATING_ID = "id";
+    public static final String RATING_TYPE = "type";
+    public static final String RATING_STARS = "stars";
+    public static final String RATING_COMMENT = "comment";
+    public static final String RATING_VALUE_STARS = "valueStars";
+    public static final String RATING_MANAGEMENT_STARS = "managementStars";
+    public static final String RATING_NEIGHBORHOOD_STARS = "neighborhoodStars";
 
     // user input commands
     public static final String CMD_ENTER = "";
