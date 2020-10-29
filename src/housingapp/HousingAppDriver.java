@@ -7,6 +7,7 @@ import housingapp.query.ListingQuery;
 import housingapp.query.ResourceManager;
 import housingapp.rating.PropertyRating;
 import housingapp.rating.Rating;
+import housingapp.rating.StudentRating;
 import housingapp.system.Flow;
 import housingapp.system.SysConst;
 import housingapp.system.UserType;
@@ -296,6 +297,21 @@ public class HousingAppDriver {
                     	}
                         return;
                     case VIEW_MY_REVIEWS:
+                    	int reviewIndex = 0;
+                    	System.out.println("Would you like to remove this review (yes or no)? ");
+                    	String response = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	if (response.equalsIgnoreCase("yes") && currUserType == UserType.PROPERTY_MANAGER) {
+                    		PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
+                    		currPropertyManager.removeRating(currPropertyManager.getRatings().get(listingIndex));
+                    	}
+                    	else if (response.equalsIgnoreCase("yes") && currUserType == UserType.STUDENT) {
+                    		Student currStudent = (Student) rm.getUserById(currSession.getUserId());
+                    		currStudent.removeRating(currStudent.getRatings().get(reviewIndex));
+                    	}
+                    	else {
+                    		currFlow = Flow.VIEW_MY_REVIEWS;
+                    	}
                         return;
                     case CREATE_LISTING:
                         System.out.println("-----\nFill in the following listing details\n-----");
@@ -380,7 +396,26 @@ public class HousingAppDriver {
                             Rating propertyRating = new PropertyRating(stars, comment, valueStars, managementStars, neighborhoodStars);
                             rm.addRating(propertyRating);
                         } else if (currUserType == UserType.PROPERTY_MANAGER) {
-                            // todo: prompt for student review details
+                        	User studentToReview = rm.getUserById(currTarget);
+                            String studentToReviewName = studentToReview.getLastName();
+
+                            System.out.print(String.format("Overall rating for %s (1-5): ", studentToReviewName));
+                            int stars = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+                            
+                            System.out.print("Enter a short comment for your review: ");
+                            String comment = keyboardInput.nextLine();
+                            
+                            System.out.print(String.format("Number of late payments (Any postitive num): ", studentToReviewName));
+                            int numLatePayments = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+                            
+                            System.out.print(String.format("Value of damages caused by %s (Any positive num): ", studentToReviewName));
+                            int damagesValue = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+                            
+                            Rating studentRating = new StudentRating(stars, comment, numLatePayments,  damagesValue);
+                            rm.addRating(studentRating);
                         } else {
                             currFlow = Flow.HOME;
                             throw new InvalidPermissionException();
@@ -408,6 +443,21 @@ public class HousingAppDriver {
                     	rm.addProperty(newProperty);
                     	PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
                     	currPropertyManager.associateProperty(newProperty.getId());
+                        return;
+                    case UNREGISTER_PROPERTY:
+                    	String oldPropertyAddress;
+                    	String oldPropertyName;
+                    	double oldDistanceToCampus;
+                    	
+                    	System.out.print("Please enter name of the property: ");
+                    	oldPropertyName = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	System.out.print("Please enter the address of the property: ");
+                    	oldPropertyAddress = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	System.out.print("Please enter the distance of the property from campus: ");
+                    	oldDistanceToCampus = keyboardInput.nextDouble();
+                    	//display properties by list and select like reviews/listings
                         return;
                 }
             } catch (Exception e) {

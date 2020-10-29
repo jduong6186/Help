@@ -28,7 +28,7 @@ public abstract class Rating {
         this.comment = comment;
     }
 
-    public UUID getId() {
+    public  UUID getId() {
         return this.id;
     }
     

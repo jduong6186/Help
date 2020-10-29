@@ -1,5 +1,6 @@
 package housingapp.user;
 
+import housingapp.housing.Listing;
 import housingapp.system.UserType;
 
 import java.util.ArrayList;
@@ -95,4 +96,14 @@ public class PropertyManager extends User {
 	public void removeProperty(UUID propertyId) {
 	    this.properties.remove(propertyId);
     }
+
+	public ArrayList<Listing> getRatings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void removeRating(Listing listing) {
+		// TODO Auto-generated method stub
+		
+	}
 }

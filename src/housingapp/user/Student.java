@@ -121,7 +121,7 @@ public class Student extends User {
         super.associateListing(listingId);
     }
 
-    protected void removeListing(UUID listingId) {
+    public void removeListing(UUID listingId) {
         super.removeListing(listingId);
     }
 
@@ -153,7 +153,7 @@ public class Student extends User {
         this.ratings.add(ratingId);
     }
 
-    protected void removeRating(UUID ratingId) {
+    public void removeRating(UUID ratingId) {
         this.ratings.remove(ratingId);
     }
 }
