@@ -65,35 +65,35 @@ public class PropertyManager extends User {
 		return this.properties;
 	}
 
-	protected void updateFirstName(String firstName) {
+	public void updateFirstName(String firstName) {
 	    super.updateFirstName(firstName);
     }
 
-    protected void updateLastName(String lastName) {
+	public void updateLastName(String lastName) {
 	    super.updateLastName(lastName);
     }
 
-    protected void updatePhone(String phone) {
+	public void updatePhone(String phone) {
 	    super.updatePhone(phone);
     }
 
-    protected void updateEmail(String email) {
+	public void updateEmail(String email) {
 	    super.updateEmail(email);
     }
 
-	protected void associateListing(UUID listingId) {
+	public void associateListing(UUID listingId) {
 	    super.associateListing(listingId);
     }
 
-    protected void removeListing(UUID listingId) {
+	public void removeListing(UUID listingId) {
 	    super.removeListing(listingId);
     }
 
-	protected void associateProperty(UUID propertyId) {
+	public void associateProperty(UUID propertyId) {
 	    this.properties.add(propertyId);
 	}
 
-	protected void removeProperty(UUID propertyId) {
+	public void removeProperty(UUID propertyId) {
 	    this.properties.remove(propertyId);
     }
 }

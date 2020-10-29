@@ -280,6 +280,17 @@ public class HousingAppDriver {
                                 throw new InvalidInputException();
                         }
                     case VIEW_MY_LISTINGS:
+                    	int listingIndex = 0;
+                    	System.out.println("Would you like to remove this listing (yes or no)? ");
+                    	String userResponse = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	if (userResponse.equalsIgnoreCase("yes")) {
+                    		PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
+                    		currPropertyManager.removeListing(currPropertyManager.getListings().get(listingIndex));
+                    	}
+                    	else {
+                    		currFlow = Flow.VIEW_MY_LISTINGS;
+                    	}
                         return;
                     case VIEW_MY_REVIEWS:
                         return;
@@ -344,6 +355,22 @@ public class HousingAppDriver {
                     case VIEW_FAVORITES:
                         return;
                     case REGISTER_PROPERTY:
+                    	String newPropertyName;
+                    	String newPropertyAddress;
+                    	double newDistanceToCampus;
+                    	
+                    	System.out.print("Please enter name of the property: ");
+                    	newPropertyName = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	System.out.print("Please enter the address of the property: ");
+                    	newPropertyAddress = keyboardInput.next();
+                    	keyboardInput.nextLine();
+                    	System.out.print("Please enter the distance of the property from campus: ");
+                    	newDistanceToCampus = keyboardInput.nextDouble();
+                    	Property newProperty = new Property(newPropertyName, newPropertyAddress, newDistanceToCampus);
+                    	rm.addProperty(newProperty);
+                    	PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
+                    	currPropertyManager.associateProperty(newProperty.getId());
                         return;
                 }
             } catch (Exception e) {
