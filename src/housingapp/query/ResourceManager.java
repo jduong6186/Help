@@ -8,8 +8,13 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import housingapp.Session;
 import housingapp.housing.Listing;
 import housingapp.housing.Property;
+import housingapp.rating.PropertyRating;
 import housingapp.rating.Rating;
+import housingapp.rating.StudentRating;
 import housingapp.resources.*;
+import housingapp.system.SysConst;
+import housingapp.user.PropertyManager;
+import housingapp.user.Student;
 import housingapp.user.User;
 
 /**
@@ -20,26 +25,55 @@ import housingapp.user.User;
 public class ResourceManager {
 
     private static ResourceManager instance;
+
+    // user attributes
+    private Map<String, ArrayList<User>> userMap;
+    private ArrayList<User> students;
+    private ArrayList<User> propertyManagers;
     private ArrayList<User> users;
+
     private ArrayList<Property> properties;
     private ArrayList<Listing> listings;
     private ArrayList<Session> sessions;
+
+    // rating attributes
+    private Map<String, ArrayList<Rating>> ratingMap;
+    private ArrayList<Rating> propertyRatings;
+    private ArrayList<Rating> studentRatings;
     private ArrayList<Rating> ratings;
-    private Map<String, User> userMap;
+
+    private Map<String, User> userEmailMap;
     private Map<UUID, Session> sessionMap;
 
     public ResourceManager() {
-        this.users = RscUser.getUsers();
+        this.userMap = RscUser.getUsers();
+        this.students = userMap.get(SysConst.STUDENT_USERS);
+        this.propertyManagers = userMap.get(SysConst.PROPERTY_MANAGER_USERS);
+        this.users = this.students;
+        this.users.addAll(propertyManagers);
+
         this.properties = RscProperty.getProperties();
         this.listings = RscListing.getListings();
         this.sessions = RscSession.getSessions();
-        this.userMap = new HashMap<String, User>();
+
+        this.ratingMap = RscRating.getRatings();
+        this.propertyRatings = ratingMap.get(SysConst.PROPERTY_RATINGS);
+        this.studentRatings = ratingMap.get(SysConst.STUDENT_USER_RATINGS);
+        this.ratings = this.propertyRatings;
+        this.ratings.addAll(studentRatings);
+
+        this.userEmailMap = new HashMap<String, User>();
         this.sessionMap = new HashMap<UUID, Session>();
 
         // populate user and session maps with initial values
-        if (users != null) {
-            for (User user : users) {
-                userMap.put(user.getEmail(), user);
+        if (students != null) {
+            for (User student : students) {
+                userEmailMap.put(student.getEmail(), student);
+            }
+        }
+        if (propertyManagers != null) {
+            for (User propertyManager : propertyManagers) {
+                userEmailMap.put(propertyManager.getEmail(), propertyManager);
             }
         }
         if (sessions != null) {
@@ -56,8 +90,16 @@ public class ResourceManager {
         return instance;
     }
 
-    public ArrayList<User> getUsers() {
-        return users;
+    public Map<String, ArrayList<User>> getUserMap() {
+        return userMap;
+    }
+
+    public ArrayList<User> getStudents() {
+        return students;
+    }
+
+    public ArrayList<User> getPropertyManagers() {
+        return propertyManagers;
     }
 
     public ArrayList<Property> getProperties() {
@@ -72,14 +114,43 @@ public class ResourceManager {
         return sessions;
     }
 
+    public Map<String, ArrayList<Rating>> getRatingMap() {
+        return ratingMap;
+    }
+
+    public ArrayList<Rating> getPropertyRatings() {
+        return propertyRatings;
+    }
+
+    public ArrayList<Rating> getStudentRatings() {
+        return studentRatings;
+    }
+
     public ArrayList<Rating> getRatings() {
         return ratings;
     }
 
     public User getUserById(UUID userId) {
-        for (User user : users) {
-            if (user.getId().equals(userId)) {
-                return user;
+        User ret = getStudentById(userId);
+        if (ret == null) {
+            ret = getPropertyManagerById(userId);
+        }
+        return ret;
+    }
+
+    public Student getStudentById(UUID studentId) {
+        for (User student : students) {
+            if (student.getId().equals(studentId)) {
+                return (Student) student;
+            }
+        }
+        return null;
+    }
+
+    public PropertyManager getPropertyManagerById(UUID propertyManagerId) {
+        for (User propertyManager : propertyManagers) {
+            if (propertyManager.getId().equals(propertyManagerId)) {
+                return (PropertyManager) propertyManager;
             }
         }
         return null;
@@ -142,9 +213,17 @@ public class ResourceManager {
         }
     }
 
-    public void addUser(User user) {
-        users.add(user);
-        userMap.put(user.getEmail(), user);
+    public void addStudent(Student student) {
+        students.add(student);
+        users.add(student);
+        userMap.put(SysConst.STUDENT_USERS, students);
+        RscUser.writeUsers();
+    }
+
+    public void addPropertyManager(PropertyManager propertyManager) {
+        propertyManagers.add(propertyManager);
+        users.add(propertyManager);
+        userMap.put(SysConst.PROPERTY_MANAGER_USERS, propertyManagers);
         RscUser.writeUsers();
     }
 
@@ -163,7 +242,7 @@ public class ResourceManager {
             User currUser = users.get(i);
             if (currUser.getEmail().equals(email)) {
                 if (BCrypt.verifyer().verify(password.toCharArray(), currUser.getPassword()).verified) {
-                    Session newSession = new Session(userMap.get(email).getId());
+                    Session newSession = new Session(userEmailMap.get(email).getId());
                     addSession(newSession);
                     return newSession;
                 } else {
@@ -180,8 +259,17 @@ public class ResourceManager {
         RscSession.writeSessions();
     }
 
-    public void addRating(Rating rating) {
-        ratings.add(rating);
+    public void addPropertyRating(PropertyRating propertyRating) {
+        propertyRatings.add(propertyRating);
+        ratings.add(propertyRating);
+        ratingMap.put(SysConst.PROPERTY_RATINGS, propertyRatings);
+        RscRating.writeRatings();
+    }
+
+    public void addStudentRating(StudentRating studentRating) {
+        studentRatings.add(studentRating);
+        ratings.add(studentRating);
+        ratingMap.put(SysConst.STUDENT_USER_RATINGS, studentRatings);
         RscRating.writeRatings();
     }
 }

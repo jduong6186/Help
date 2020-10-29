@@ -6,13 +6,12 @@ import housingapp.housing.Property;
 import housingapp.query.ListingQuery;
 import housingapp.query.ResourceManager;
 import housingapp.rating.PropertyRating;
-import housingapp.rating.Rating;
+import housingapp.rating.StudentRating;
 import housingapp.system.Flow;
 import housingapp.system.SysConst;
 import housingapp.system.UserType;
 import housingapp.user.PropertyManager;
 import housingapp.user.Student;
-import housingapp.user.User;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -58,7 +57,7 @@ public class HousingAppDriver {
                         currSession = rm.login(email, password);
                         if (currSession != null) {
                             rm.getUserById(currSession.getUserId());
-                            currUserType = rm.getUserById(currSession.getUserId()).getUserType();
+                            currUserType = rm.getUserById(currSession.getUserId()).getType();
                             currFlow = Flow.DASHBOARD;
                         } else {
                             throw new InvalidLoginException();
@@ -88,7 +87,6 @@ public class HousingAppDriver {
                         String newPassword = String.valueOf(System.console().readPassword());
                         keyboardInput.nextLine();
 
-                        User newUser;
                         if (accountType.toLowerCase().equals("student")) {
                             System.out.print("Do you have pets (y/n): ");
                             boolean hasPets = keyboardInput.next().toLowerCase().equals("y");
@@ -110,18 +108,18 @@ public class HousingAppDriver {
                             int maxRoommates = Integer.parseInt(keyboardInput.next());
                             keyboardInput.nextLine();
 
-                            newUser = new Student(firstName, lastName, phone, newEmail, newPassword, hasPets,
-                                    priceRangeLower, priceRangeUpper, maxTravelDistance, minRoommates, maxRoommates);
+                            rm.addStudent(new Student(firstName, lastName, phone, newEmail, newPassword, hasPets,
+                                    priceRangeLower, priceRangeUpper, maxTravelDistance, minRoommates, maxRoommates));
                         } else if (accountType.toLowerCase().equals("property manager")) {
                             System.out.print("Office address: ");
                             String officeAddress = keyboardInput.next();
                             keyboardInput.nextLine();
 
-                            newUser = new PropertyManager(firstName, lastName, phone, newEmail, newPassword, officeAddress);
+                            rm.addPropertyManager(new PropertyManager(firstName, lastName, phone, newEmail, newPassword,
+                                    officeAddress));
                         } else {
                             throw new InvalidInputException();
                         }
-                        rm.addUser(newUser);
                     case DASHBOARD:
                         System.out.println("-----\nDashboard\n-----");
                         // validate user session
@@ -354,6 +352,7 @@ public class HousingAppDriver {
                     case EDIT_LISTING:
                         return;
                     case CREATE_REVIEW:
+                        // todo: set currTarget UUID in preceding flow (likely 'view listing details' or 'view student details'?)
                         if (currUserType == UserType.STUDENT) {
                             Property propertyToReview = rm.getPropertyById(currTarget);
                             String propertyToReviewName = propertyToReview.getName();
@@ -377,10 +376,27 @@ public class HousingAppDriver {
                             int neighborhoodStars = keyboardInput.nextInt();
                             keyboardInput.nextLine();
 
-                            Rating propertyRating = new PropertyRating(stars, comment, valueStars, managementStars, neighborhoodStars);
-                            rm.addRating(propertyRating);
+                            rm.addPropertyRating(new PropertyRating(stars, comment, valueStars, managementStars, neighborhoodStars));
                         } else if (currUserType == UserType.PROPERTY_MANAGER) {
-                            // todo: prompt for student review details
+                            Student studentToReview = rm.getStudentById(currTarget);
+                            String studentToReviewName = studentToReview.getFirstName() + " " + studentToReview.getLastName();
+
+                            System.out.print(String.format("Overall rating for %s (1-5): ", studentToReviewName));
+                            int stars = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+
+                            System.out.print("Enter a short comment for your review: ");
+                            String comment = keyboardInput.nextLine();
+
+                            System.out.print(String.format("Number of late payments made by %s: ", studentToReviewName));
+                            int numLatePayments = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+
+                            System.out.print(String.format("Value of damages caused by %s: ", studentToReviewName));
+                            int damagesValue = keyboardInput.nextInt();
+                            keyboardInput.nextLine();
+
+                            rm.addStudentRating(new StudentRating(stars, comment, numLatePayments, damagesValue));
                         } else {
                             currFlow = Flow.HOME;
                             throw new InvalidPermissionException();

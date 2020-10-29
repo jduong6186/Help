@@ -69,9 +69,11 @@ public class SysConst {
     public static final String RATING_TYPE = "type";
     public static final String RATING_STARS = "stars";
     public static final String RATING_COMMENT = "comment";
-    public static final String RATING_VALUE_STARS = "valueStars";
-    public static final String RATING_MANAGEMENT_STARS = "managementStars";
-    public static final String RATING_NEIGHBORHOOD_STARS = "neighborhoodStars";
+    public static final String PROPERTY_RATING_VALUE_STARS = "valueStars";
+    public static final String PROPERTY_RATING_MANAGEMENT_STARS = "managementStars";
+    public static final String PROPERTY_RATING_NEIGHBORHOOD_STARS = "neighborhoodStars";
+    public static final String STUDENT_RATING_NUM_LATE_PAYMENTS = "numLatePayments";
+    public static final String STUDENT_RATING_DAMAGES_VALUE = "damagesValue";
 
     // user input commands
     public static final String CMD_ENTER = "";
