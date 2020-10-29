@@ -1,11 +1,15 @@
-package housingapp;
+package housingapp.query;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.UUID;
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import housingapp.Session;
+import housingapp.housing.Listing;
+import housingapp.housing.Property;
 import housingapp.resources.*;
+import housingapp.user.User;
 
 /**
  * Singleton class for all resource management. Interfaces with JSON reader/writer classes for pulling and storing housingapp.data
@@ -123,23 +127,23 @@ public class ResourceManager {
         }
     }
 
-    protected void addUser(User user) {
+    public void addUser(User user) {
         users.add(user);
         userMap.put(user.getEmail(), user);
         RscUser.writeUsers();
     }
 
-    protected void addProperty(Property property) {
+    public void addProperty(Property property) {
         properties.add(property);
         RscProperty.writeProperties();
     }
 
-    protected void addListing(Listing listing) {
+    public void addListing(Listing listing) {
         listings.add(listing);
         RscListing.writeListings();
     }
 
-    protected Session login(String email, String password) {
+    public Session login(String email, String password) {
         for (int i=0; i<users.size(); i++) {
             User currUser = users.get(i);
             if (currUser.getEmail().equals(email)) {

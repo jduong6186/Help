@@ -1,4 +1,7 @@
-package housingapp;
+package housingapp.query;
+
+import housingapp.housing.Listing;
+import housingapp.user.Student;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -135,46 +138,6 @@ public class ListingQuery {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
             if (listing.petsAllowed() == petsAllowed) {
-                ret.add(listing);
-            }
-        }
-        return ret;
-    }
-
-    public ArrayList<Listing> getListingsByHasGas(ArrayList<Listing> listings) {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : listings) {
-            if (listing.hasGas()) {
-                ret.add(listing);
-            }
-        }
-        return ret;
-    }
-
-    public ArrayList<Listing> getListingsByHasElectric(ArrayList<Listing> listings) {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : listings) {
-            if (listing.hasElectric()) {
-                ret.add(listing);
-            }
-        }
-        return ret;
-    }
-
-    public ArrayList<Listing> getListingsByHasWater(ArrayList<Listing> listings) {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : listings) {
-            if (listing.hasWater()) {
-                ret.add(listing);
-            }
-        }
-        return ret;
-    }
-
-    public ArrayList<Listing> getListingsByHasTrash(ArrayList<Listing> listings) {
-        ArrayList<Listing> ret = new ArrayList<Listing>();
-        for (Listing listing : listings) {
-            if (listing.hasTrash()) {
                 ret.add(listing);
             }
         }

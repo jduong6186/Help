@@ -1,4 +1,7 @@
-package housingapp;
+package housingapp.housing;
+
+import housingapp.housing.Listing;
+import housingapp.housing.Property;
 
 public class Townhouse extends Listing {
 
@@ -8,12 +11,11 @@ public class Townhouse extends Listing {
     private boolean hasFence;
 
     public Townhouse(Property property, String description, double price, int leaseMonths, double squareFootage,
-                     boolean petsAllowed, boolean hasGas, boolean hasElectric, boolean hasWater, boolean hasTrash,
-                     boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                     boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
                      boolean hasShuttle, boolean available, boolean hasGarage, boolean hasDriveway, boolean hasYard,
                      boolean hasFence) {
-        super(property, description, price, leaseMonths, squareFootage, petsAllowed, hasGas, hasElectric, hasWater,
-                hasTrash, isSublease, utilitiesIncluded, numBedrooms, numBathrooms, hasShuttle, available);
+        super(property, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
+                numBedrooms, numBathrooms, hasShuttle, available);
         this.hasGarage = hasGarage;
         this.hasDriveway = hasDriveway;
         this.hasYard = hasYard;

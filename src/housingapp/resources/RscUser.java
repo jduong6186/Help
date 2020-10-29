@@ -1,7 +1,7 @@
 package housingapp.resources;
 
-import housingapp.ResourceManager;
-import housingapp.User;
+import housingapp.query.ResourceManager;
+import housingapp.user.User;
 import housingapp.system.SysConst;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
