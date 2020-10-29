@@ -303,7 +303,7 @@ public class HousingAppDriver {
                     	keyboardInput.nextLine();
                     	if (response.equalsIgnoreCase("yes") && currUserType == UserType.PROPERTY_MANAGER) {
                     		PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
-                    		currPropertyManager.removeRating(currPropertyManager.getRatings().get(listingIndex));
+                    		currPropertyManager.removeRating(currPropertyManager.getRatings().get(reviewIndex));
                     	}
                     	else if (response.equalsIgnoreCase("yes") && currUserType == UserType.STUDENT) {
                     		Student currStudent = (Student) rm.getUserById(currSession.getUserId());
