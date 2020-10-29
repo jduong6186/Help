@@ -1,4 +1,4 @@
-package housingapp;
+package housingapp.housing;
 
 import java.util.UUID;
 
@@ -11,10 +11,6 @@ public class Listing {
     private int leaseMonths;
     private double squareFootage;
     private boolean petsAllowed;
-    private boolean hasGas;
-    private boolean hasElectric;
-    private boolean hasWater;
-    private boolean hasTrash;
     private boolean isSublease;
     private boolean utilitiesIncluded;
     private int numBedrooms;
@@ -23,9 +19,8 @@ public class Listing {
     private boolean available;
 
     public Listing(Property property, String description, double price, int leaseMonths, double squareFootage,
-                   boolean petsAllowed, boolean hasGas, boolean hasElectric, boolean hasWater, boolean hasTrash,
-                   boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms, boolean hasShuttle,
-                   boolean available) {
+                   boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                   boolean hasShuttle, boolean available) {
         this.id = UUID.randomUUID();
         this.property = property;
         this.description = description;
@@ -33,10 +28,6 @@ public class Listing {
         this.leaseMonths = leaseMonths;
         this.squareFootage = squareFootage;
         this.petsAllowed = petsAllowed;
-        this.hasGas = hasGas;
-        this.hasElectric = hasElectric;
-        this.hasWater = hasWater;
-        this.hasTrash = hasTrash;
         this.isSublease = isSublease;
         this.utilitiesIncluded = utilitiesIncluded;
         this.numBedrooms = numBedrooms;
@@ -46,9 +37,8 @@ public class Listing {
     }
 
     public Listing(UUID id, Property property, String description, double price, int leaseMonths, double squareFootage,
-                   boolean petsAllowed, boolean hasGas, boolean hasElectric, boolean hasWater, boolean hasTrash,
-                   boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms, boolean hasShuttle,
-                   boolean available) {
+                   boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                   boolean hasShuttle, boolean available) {
         this.id = id;
         this.property = property;
         this.description = description;
@@ -56,10 +46,6 @@ public class Listing {
         this.leaseMonths = leaseMonths;
         this.squareFootage = squareFootage;
         this.petsAllowed = petsAllowed;
-        this.hasGas = hasGas;
-        this.hasElectric = hasElectric;
-        this.hasWater = hasWater;
-        this.hasTrash = hasTrash;
         this.isSublease = isSublease;
         this.utilitiesIncluded = utilitiesIncluded;
         this.numBedrooms = numBedrooms;
@@ -96,22 +82,6 @@ public class Listing {
         return this.petsAllowed;
     }
 
-    public boolean hasGas() {
-        return this.hasGas;
-    }
-
-    public boolean hasElectric() {
-        return this.hasElectric;
-    }
-
-    public boolean hasWater() {
-        return this.hasWater;
-    }
-
-    public boolean hasTrash() {
-        return this.hasTrash;
-    }
-
     public boolean isSublease() {
         return this.isSublease;
     }
@@ -137,8 +107,30 @@ public class Listing {
     }
 
     public String getDetails() {
-        // todo: construct details str
-        return "";
+        String detailsStr = String.format("-----\nListing at %s\n-----", this.property);
+        detailsStr += "Price: $" + this.price + "\n";
+        detailsStr += this.numBedrooms + " bedrooms, " + this.numBathrooms + " bathrooms\n";
+        detailsStr += this.leaseMonths + " month lease\n";
+        detailsStr += this.squareFootage + " square feet\n";
+        if (this.petsAllowed) {
+            detailsStr += "Pets *are* allowed\n";
+        } else {
+            detailsStr += "Pets *are not* allowed\n";
+        }
+        if (this.isSublease) {
+            detailsStr += "Sublease*\n";
+        }
+        if (this.utilitiesIncluded) {
+            detailsStr += "Utilities *are* included\n";
+        } else {
+            detailsStr += "Utilities *are not* included\n";
+        }
+        if (this.hasShuttle) {
+            detailsStr += "Shuttle service offered\n";
+        } else {
+            detailsStr += "No shuttle service offered\n";
+        }
+        return detailsStr;
     }
 
     @Override

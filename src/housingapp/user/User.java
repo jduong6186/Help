@@ -1,4 +1,4 @@
-package housingapp;
+package housingapp.user;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import housingapp.system.UserType;

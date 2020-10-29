@@ -1,6 +1,6 @@
 package housingapp.resources;
 
-import housingapp.ResourceManager;
+import housingapp.query.ResourceManager;
 import housingapp.Session;
 import housingapp.system.SysConst;
 import org.json.simple.JSONArray;

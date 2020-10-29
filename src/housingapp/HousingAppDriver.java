@@ -1,9 +1,16 @@
 package housingapp;
 
 import housingapp.errors.*;
+import housingapp.housing.Listing;
+import housingapp.housing.Property;
+import housingapp.query.ListingQuery;
+import housingapp.query.ResourceManager;
 import housingapp.system.Flow;
 import housingapp.system.SysConst;
 import housingapp.system.UserType;
+import housingapp.user.PropertyManager;
+import housingapp.user.Student;
+import housingapp.user.User;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -15,11 +22,11 @@ public class HousingAppDriver {
     private static Flow currFlow = Flow.HOME;
     private static UserType currUserType;
     private static Session currSession;
+    private static String input;
 
     public static void main(String[] args) {
         ResourceManager rm = ResourceManager.getInstance();
         boolean running = true;
-        String input;
         ArrayList<Listing> currListingSearchResults = null;
 
         System.out.println("-----\nUofSC Off-Campus Housing App\n-----");
@@ -175,10 +182,10 @@ public class HousingAppDriver {
                             currListingSearchResults = rm.getListings();
                         }
                         switch (input.toLowerCase()) {
-                            // todo: use results of query
                             case SysConst.CMD_SEARCH_LISTINGS_BY_RECOMMENDED:
                                 if (currUserType == UserType.STUDENT) {
                                     currListingSearchResults = query.getListingsByRecommended((Student) rm.getUserById(currSession.getUserId()));
+                                    printSearchResults(currListingSearchResults);
                                 } else {
                                     throw new InvalidPermissionException();
                                 }
@@ -189,6 +196,7 @@ public class HousingAppDriver {
                                 UUID propertyId = rm.getPropertyByName(propertyName).getId();
 
                                 currListingSearchResults = query.getListingsByProperty(currListingSearchResults, propertyId);
+                                printSearchResults(currListingSearchResults);
                             case SysConst.CMD_SEARCH_LISTINGS_BY_PARAMETERS:
                                 System.out.println("Select a parameter to set, or press ENTER to search using current parameters:");
                                 System.out.println(String.format("(%s) Price\n(%s) Lease duration\n(%s) Square footage\n(%s) Pet policy\n(%s) Utilities\n(%s) Number of bedrooms\n(%s) Number of bathrooms\n(%s) Shuttle service",
@@ -198,35 +206,7 @@ public class HousingAppDriver {
                                 // cases for query parameter selections to update
                                 switch (input.toLowerCase()) {
                                     case SysConst.CMD_ENTER:
-                                        // print each listing that fits given search params
-                                        System.out.println("-----\nSearch Results\n-----");
-                                        for (int i=0; i<currListingSearchResults.size(); i++) {
-                                            int resultNum = i+1;
-                                            System.out.println(String.format("(%d) %s", resultNum, currListingSearchResults.get(i).toString()));
-                                        }
-                                        // todo: move this segment to separate flow
-                                        System.out.println("Enter a listing number to view details, or press ENTER to return to dashboard.");
-                                        input = keyboardInput.nextLine();
-                                        if (input.equals(SysConst.CMD_ENTER)) {
-                                            currFlow = Flow.DASHBOARD;
-                                        } else {
-                                            int listingIndex = Integer.parseInt(input) - 1;
-                                            System.out.println(currListingSearchResults.get(listingIndex).getDetails());
-                                            System.out.print("Would you like to add this listing to your favorites (\"yes\"/\"no\")?");
-                                            String userResponse;
-                                            userResponse = keyboardInput.next();
-                                            keyboardInput.nextLine();
-                                            if (userResponse.equalsIgnoreCase("yes")) {
-                                            	Student currStudent = rm.getUserById(currSession.getUserId());
-                                            	//student class needs to have a favorites arraylist and addfavorite method
-                                            	currStudent.addFavorite(currListingSearchResults.get(listingIndex));
-                                            	System.out.println("The listing has been added to your favorites");
-                                            	//need to add flow to go back to list of search results
-                                            }
-                                            else {
-                                            	currFlow = Flow.SEARCH_LISTINGS;
-                                            }
-                                        }
+                                        printSearchResults(currListingSearchResults);
                                     case SysConst.CMD_SET_SEARCH_PARAM_PRICE:
                                         double[] priceRange = promptPriceRange();
                                         double priceRangeLower = priceRange[0];
@@ -300,12 +280,12 @@ public class HousingAppDriver {
                                 throw new InvalidInputException();
                         }
                     case VIEW_MY_LISTINGS:
-                    	int listingIndex;
+                    	int listingIndex = 0;
                     	System.out.println("Would you like to remove this listing (yes or no)? ");
                     	String userResponse = keyboardInput.next();
                     	keyboardInput.nextLine();
                     	if (userResponse.equalsIgnoreCase("yes")) {
-                    		PropertyManager currPropertyManager = rm.getUserById(currSession.getUserId());
+                    		PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
                     		currPropertyManager.removeListing(currPropertyManager.getListings().get(listingIndex));
                     	}
                     	else {
@@ -340,8 +320,6 @@ public class HousingAppDriver {
                         boolean petsAllowed = keyboardInput.next().toLowerCase().equals("y");
                         keyboardInput.nextLine();
 
-                        // todo: either prompt for utilities details here, or remove utilities from listing attributes
-
                         System.out.print("Is sublease (y/n): ");
                         boolean isSublease = keyboardInput.next().toLowerCase().equals("y");
                         keyboardInput.nextLine();
@@ -367,8 +345,7 @@ public class HousingAppDriver {
                         keyboardInput.nextLine();
 
                         Listing newListing = new Listing(property, description, price, leaseMonths, squareFootage, petsAllowed,
-                                true, true, true, true, isSublease, utilitiesIncluded, numBedrooms, numBathrooms, hasShuttle,
-                                available);
+                                isSublease, utilitiesIncluded, numBedrooms, numBathrooms, hasShuttle, available);
                         rm.addListing(newListing);
                         currFlow = Flow.DASHBOARD;
                     case CREATE_REVIEW:
@@ -392,7 +369,7 @@ public class HousingAppDriver {
                     	newDistanceToCampus = keyboardInput.nextDouble();
                     	Property newProperty = new Property(newPropertyName, newPropertyAddress, newDistanceToCampus);
                     	rm.addProperty(newProperty);
-                    	PropertyManager currPropertyManager = rm.getUserById(currSession.getUserId());
+                    	PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
                     	currPropertyManager.associateProperty(newProperty.getId());
                         return;
                 }
@@ -412,5 +389,29 @@ public class HousingAppDriver {
         keyboardInput.nextLine();
 
         return new double[] {priceRangeLower, priceRangeUpper};
+    }
+
+    private static void printSearchResults(ArrayList<Listing> searchResults) {
+        // print each listing that fits given search params
+        System.out.println("-----\nSearch Results\n-----");
+        for (int i=0; i<searchResults.size(); i++) {
+            int resultNum = i+1;
+            System.out.println(String.format("(%d) %s", resultNum, searchResults.get(i).toString()));
+        }
+
+        // prompt user to either return to dashboard or view listing details
+        boolean showingSearchResults = true;
+        while (showingSearchResults) {
+            System.out.print("Enter a listing number to view details, or press ENTER to return to dashboard: ");
+            input = keyboardInput.next();
+            keyboardInput.nextLine();
+            if (input.equals(SysConst.CMD_ENTER)) {
+                currFlow = Flow.DASHBOARD;
+                showingSearchResults = false;
+            } else {
+                int listingIndex = Integer.parseInt(input) - 1;
+                System.out.println(searchResults.get(listingIndex).getDetails());
+            }
+        }
     }
 }

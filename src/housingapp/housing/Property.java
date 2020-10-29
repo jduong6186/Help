@@ -1,4 +1,4 @@
-package housingapp;
+package housingapp.housing;
 
 import java.util.ArrayList;
 import java.util.UUID;

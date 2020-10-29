@@ -1,4 +1,6 @@
-package housingapp;
+package housingapp.rating;
+
+import housingapp.rating.Rating;
 
 import java.util.Scanner;
 import java.util.UUID;
