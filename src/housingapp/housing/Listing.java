@@ -106,6 +106,54 @@ public class Listing {
         return this.available;
     }
 
+    public void setProperty(Property property) {
+        this.property = property;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setLeaseMonths(int leaseMonths) {
+        this.leaseMonths = leaseMonths;
+    }
+
+    public void setSquareFootage(double squareFootage) {
+        this.squareFootage = squareFootage;
+    }
+
+    public void setPetsAllowed(boolean petsAllowed) {
+        this.petsAllowed = petsAllowed;
+    }
+
+    public void setIsSublease(boolean isSublease) {
+        this.isSublease = isSublease;
+    }
+
+    public void setUtilitiesIncluded(boolean utilitiesIncluded) {
+        this.utilitiesIncluded = utilitiesIncluded;
+    }
+
+    public void setNumBedrooms(int numBedrooms) {
+        this.numBedrooms = numBedrooms;
+    }
+
+    public void setNumBathrooms(int numBathrooms) {
+        this.numBathrooms = numBathrooms;
+    }
+
+    public void setHasShuttle(boolean hasShuttle) {
+        this.hasShuttle = hasShuttle;
+    }
+
+    public void setAvailable(boolean isAvailable) {
+        this.available = isAvailable;
+    }
+
     public String getDetails() {
         String detailsStr = String.format("-----\nListing at %s\n-----", this.property);
         detailsStr += "Price: $" + this.price + "\n";
