@@ -101,4 +101,5 @@ public class SysConst {
     public static final String ERR_INVALID_INPUT = "Invalid input. Please choose one of the listed options.";
     public static final String ERR_INVALID_LOGIN = "Invalid email or password. Please try again.";
     public static final String ERR_INVALID_PERMISSION = "Your account doesn't have permission to access that feature.";
+    public static final String ERR_INVALID_SESSION_DETAILS = "Invalid session details found.";
 }

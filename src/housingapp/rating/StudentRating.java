@@ -1,6 +1,7 @@
 package housingapp.rating;
 
-import java.util.Scanner;
+import housingapp.system.RatingType;
+
 import java.util.UUID;
 
 public class StudentRating extends Rating {
@@ -9,39 +10,31 @@ public class StudentRating extends Rating {
     private double damagesValue;
 
     public StudentRating(int stars, String comment, int numLatePayments, double damagesValue) {
-        super(stars, comment);
+        super(RatingType.STUDENT_RATING, stars, comment);
         setNumLatePayments(numLatePayments);
         setDamagesValue(damagesValue);
     }
 
     public StudentRating(UUID id, int stars, String comment, int numLatePayments, double damagesValue) {
-        super (id, stars, comment);
+        super (id, RatingType.STUDENT_RATING, stars, comment);
         setNumLatePayments(numLatePayments);
         setDamagesValue(damagesValue);
     }
-    
-    public void setNumLatePayments(int numLatePayments) {
-    	
-    	Scanner keyboard = new Scanner(System.in);
-    	this.numLatePayments = numLatePayments;
-    	
-    	while(this.numLatePayments < 0 ) {
-    		
-    		System.out.print("Please enter in a positive amount: ");
-    		this.numLatePayments = keyboard.nextInt();
-    	}
+
+    public UUID getId() {
+        return super.getId();
     }
-    
-    public void setDamagesValue(double damagesValue) {
-    	
-    	Scanner keyboard = new Scanner(System.in);
-    	this.damagesValue = damagesValue;
-    	
-    	while(this.damagesValue < 0 ) {
-    		
-    		System.out.print("Please enter in a positive amount: ");
-    		this.damagesValue = keyboard.nextInt();
-    	}
+
+    public RatingType getType() {
+        return super.getType();
+    }
+
+    public int getStars() {
+        return super.getStars();
+    }
+
+    public String getComment() {
+        return super.getComment();
     }
 
     public int getNumLatePayments() {
@@ -50,5 +43,21 @@ public class StudentRating extends Rating {
 
     public double getDamagesValue() {
         return this.damagesValue;
+    }
+
+    public void setStars(int stars) {
+        super.setStars(stars);
+    }
+
+    public void setComment(String comment) {
+        super.setComment(comment);
+    }
+    
+    public void setNumLatePayments(int numLatePayments) {
+    	this.numLatePayments = numLatePayments;
+    }
+    
+    public void setDamagesValue(double damagesValue) {
+    	this.damagesValue = damagesValue;
     }
 }

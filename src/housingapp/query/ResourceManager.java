@@ -90,6 +90,7 @@ public class ResourceManager {
         return instance;
     }
 
+    // general accessors
     public Map<String, ArrayList<User>> getUserMap() {
         return userMap;
     }
@@ -130,6 +131,7 @@ public class ResourceManager {
         return ratings;
     }
 
+    // target accessors
     public User getUserById(UUID userId) {
         User ret = getStudentById(userId);
         if (ret == null) {
@@ -168,7 +170,7 @@ public class ResourceManager {
     // todo: implement regex search for property name
     public Property getPropertyByName(String propertyName) {
         for (Property property : properties) {
-            if (property.getName().toLowerCase().equals(propertyName.toLowerCase())) {
+            if (property.getName().equalsIgnoreCase(propertyName)) {
                 return property;
             }
         }
@@ -213,6 +215,7 @@ public class ResourceManager {
         }
     }
 
+    // add methods
     public void addStudent(Student student) {
         students.add(student);
         users.add(student);
@@ -271,5 +274,102 @@ public class ResourceManager {
         ratings.add(studentRating);
         ratingMap.put(SysConst.STUDENT_USER_RATINGS, studentRatings);
         RscRating.writeRatings();
+    }
+
+    // update methods
+    public void updateStudent(UUID studentId, Student modifiedStudent) {
+        removeStudent(studentId);
+        addStudent(modifiedStudent);
+    }
+
+    public void updatePropertyManager(UUID propertyManagerId, PropertyManager modifiedPropertyManager) {
+        removePropertyManager(propertyManagerId);
+        addPropertyManager(modifiedPropertyManager);
+    }
+
+    public void updateProperty(UUID propertyId, Property modifiedProperty) {
+        removeProperty(propertyId);
+        addProperty(modifiedProperty);
+    }
+
+    public void updateListing(UUID listingId, Listing modifiedListing) {
+        removeListing(listingId);
+        addListing(modifiedListing);
+    }
+
+    public void updatePropertyRating(UUID propertyRatingId, PropertyRating modifiedPropertyRating) {
+        removePropertyRating(propertyRatingId);
+        addPropertyRating(modifiedPropertyRating);
+    }
+
+    public void updateStudentRating(UUID studentRatingId, StudentRating modifiedStudentRating) {
+        removeStudentRating(studentRatingId);
+        addStudentRating(modifiedStudentRating);
+    }
+
+    public void removeStudent(UUID studentId) {
+        for (int i=0; i<students.size(); i++) {
+            User curr = students.get(i);
+            if (curr.getId().equals(studentId)) {
+                userMap.get(SysConst.STUDENT_USERS).remove(curr);
+                users.remove(curr);
+                students.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void removePropertyManager(UUID propertyManagerId) {
+        for (int i=0; i<propertyManagers.size(); i++) {
+            User curr = propertyManagers.get(i);
+            if (curr.getId().equals(propertyManagerId)) {
+                userMap.get(SysConst.PROPERTY_MANAGER_USERS).remove(curr);
+                users.remove(curr);
+                propertyManagers.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void removeProperty(UUID propertyId) {
+        for (int i=0; i<properties.size(); i++) {
+            if (properties.get(i).getId().equals(propertyId)) {
+                properties.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void removeListing(UUID listingId) {
+        for (int i=0; i<listings.size(); i++) {
+            if (listings.get(i).getId().equals(listingId)) {
+                listings.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void removePropertyRating(UUID propertyRatingId) {
+        for (int i=0; i<propertyRatings.size(); i++) {
+            Rating curr = propertyRatings.get(i);
+            if (curr.getId().equals(propertyRatingId)) {
+                ratingMap.get(SysConst.PROPERTY_RATINGS).remove(curr);
+                ratings.remove(curr);
+                propertyRatings.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void removeStudentRating(UUID studentRatingId) {
+        for (int i=0; i<studentRatings.size(); i++) {
+            Rating curr = studentRatings.get(i);
+            if (curr.getId().equals(studentRatingId)) {
+                ratingMap.get(SysConst.STUDENT_USER_RATINGS).remove(curr);
+                ratings.remove(curr);
+                studentRatings.remove(i);
+                return;
+            }
+        }
     }
 }

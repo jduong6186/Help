@@ -1,6 +1,7 @@
 package housingapp.rating;
 
-import java.util.Scanner;
+import housingapp.system.RatingType;
+
 import java.util.UUID;
 
 public class PropertyRating extends Rating {
@@ -10,60 +11,37 @@ public class PropertyRating extends Rating {
     private int neighborhoodStars;
 
     public PropertyRating(int stars, String comment, int valueStars, int managementStars, int neighborhoodStars) {
-        super(stars, comment);
+        super(RatingType.PROPERTY_RATING, stars, comment);
         setValueStars(valueStars);
         setManagementStars(managementStars);
         setNeighborhoodStars(neighborhoodStars);
     }
 
     public PropertyRating(UUID id, int stars, String comment, int valueStars, int managementStars, int neighborhoodStars) {
-        super(id, stars, comment);
+        super(id, RatingType.PROPERTY_RATING, stars, comment);
         setValueStars(valueStars);
         setManagementStars(managementStars);
         setNeighborhoodStars(neighborhoodStars);
     }
-    
-    public void setValueStars(int valueStars) {
-    	
-    	Scanner keyboard = new Scanner(System.in);
-    	this.valueStars = valueStars;
-    	
-    	while(this.valueStars < 0 || this.valueStars > 5) {
-    		
-    		System.out.print("Please enter in a valid star amount (0-5): ");
-    		this.valueStars = keyboard.nextInt();
-    	}
-    	
-    }
-    
-    public void setManagementStars(int managementStars) {
-    	
-    	Scanner keyboard = new Scanner(System.in);
-    	this.managementStars = managementStars;
-    	
-    	while(this.managementStars < 0 || this.managementStars > 5) {
-    		
-    		System.out.print("Please enter in a valid star amount (0-5): ");
-    		this.managementStars = keyboard.nextInt();
-    	}
-    	
+
+    public UUID getId() {
+        return super.getId();
     }
 
-    public void setNeighborhoodStars(int neighborhoodStars) {
-	
-        Scanner keyboard = new Scanner(System.in);
-        this.neighborhoodStars = neighborhoodStars;
+    public RatingType getType() {
+        return super.getType();
+    }
 
-        while(this.neighborhoodStars < 0 || this.neighborhoodStars > 5) {
+    public int getStars() {
+        return super.getStars();
+    }
 
-            System.out.print("Please enter in a valid star amount (0-5): ");
-            this.neighborhoodStars = keyboard.nextInt();
-        }
-
+    public String getComment() {
+        return super.getComment();
     }
 
     public int getValueStars() {
-    	return this.valueStars;
+        return this.valueStars;
     }
 
     public int getManagementStars() {
@@ -72,5 +50,25 @@ public class PropertyRating extends Rating {
 
     public int getNeighborhoodStars() {
         return this.neighborhoodStars;
+    }
+
+    public void setStars(int stars) {
+        super.setStars(stars);
+    }
+
+    public void setComment(String comment) {
+        super.setComment(comment);
+    }
+    
+    public void setValueStars(int valueStars) {
+    	this.valueStars = valueStars;
+    }
+    
+    public void setManagementStars(int managementStars) {
+    	this.managementStars = managementStars;
+    }
+
+    public void setNeighborhoodStars(int neighborhoodStars) {
+        this.neighborhoodStars = neighborhoodStars;
     }
 }
