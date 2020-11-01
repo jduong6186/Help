@@ -4,7 +4,7 @@ import housingapp.query.ResourceManager;
 import housingapp.user.PropertyManager;
 import housingapp.user.Student;
 import housingapp.user.User;
-import housingapp.system.SysConst;
+import housingapp.SysConst;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -35,8 +35,7 @@ public class RscUser {
             // parse students list
             for (int i=0; i<studentsJSON.size(); i++) {
                 JSONObject studentJSON = (JSONObject) studentsJSON.get(i);
-                UUID userId = (UUID) studentJSON.get(SysConst.USER_ID);
-                String typeStr = (String) studentJSON.get(SysConst.USER_TYPE);
+                UUID userId = UUID.fromString((String) studentJSON.get(SysConst.USER_ID));
                 String firstName = (String) studentJSON.get(SysConst.USER_FIRST_NAME);
                 String lastName = (String) studentJSON.get(SysConst.USER_LAST_NAME);
                 String phone = (String) studentJSON.get(SysConst.USER_PHONE);
@@ -48,8 +47,8 @@ public class RscUser {
                 double priceRangeLower = (double) studentJSON.get(SysConst.STUDENT_USER_PRICE_RANGE_LOWER);
                 double priceRangeUpper = (double) studentJSON.get(SysConst.STUDENT_USER_PRICE_RANGE_UPPER);
                 double maxTravelDistance = (double) studentJSON.get(SysConst.STUDENT_USER_MAX_TRAVEL_DISTANCE);
-                int minRoommates = (int) studentJSON.get(SysConst.STUDENT_USER_MIN_ROOMMATES);
-                int maxRoommates = (int) studentJSON.get(SysConst.STUDENT_USER_MAX_ROOMMATES);
+                int minRoommates = ((Long) studentJSON.get(SysConst.STUDENT_USER_MIN_ROOMMATES)).intValue();
+                int maxRoommates = ((Long) studentJSON.get(SysConst.STUDENT_USER_MAX_ROOMMATES)).intValue();
 
                 // parse ratings UUID array
                 JSONArray ratingsJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_RATINGS);
@@ -58,23 +57,30 @@ public class RscUser {
                     ratings.add((UUID) ratingsJSON.get(j));
                 }
 
+                // parse listing favorites UUID array
+                JSONArray listingFavoritesJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_LISTING_FAVORITES);
+                ArrayList<UUID> listingFavorites = new ArrayList<UUID>();
+                for (int j=0; j<listingFavoritesJSON.size(); j++) {
+                    listingFavorites.add(UUID.fromString((String) listingFavoritesJSON.get(j)));
+                }
+
                 // get listing ids from attribute
                 JSONArray listingsJSON = (JSONArray) studentJSON.get(SysConst.USER_LISTINGS);
                 ArrayList<UUID> listings = new ArrayList<UUID>();
                 for (int j=0; j<listingsJSON.size(); j++) {
-                    listings.add((UUID) listingsJSON.get(j));
+                    listings.add(UUID.fromString((String) listingsJSON.get(j)));
                 }
 
                 // add student to students list;
                 students.add(new Student(userId, firstName, lastName, phone, email, password, hasPets, priceRangeLower,
-                        priceRangeUpper, maxTravelDistance, minRoommates, maxRoommates, ratings, listings));
+                        priceRangeUpper, maxTravelDistance, minRoommates, maxRoommates, ratings, listingFavorites, listings));
             }
             users.put(SysConst.STUDENT_USERS, students);
 
             // parse property managers list
             for (int i=0; i<propertyManagersJSON.size(); i++) {
                 JSONObject propertyManagerJSON = (JSONObject) propertyManagersJSON.get(i);
-                UUID userId = (UUID) propertyManagerJSON.get(SysConst.USER_ID);
+                UUID userId = UUID.fromString((String) propertyManagerJSON.get(SysConst.USER_ID));
                 String firstName = (String) propertyManagerJSON.get(SysConst.USER_FIRST_NAME);
                 String lastName = (String) propertyManagerJSON.get(SysConst.USER_LAST_NAME);
                 String phone = (String) propertyManagerJSON.get(SysConst.USER_PHONE);
@@ -167,6 +173,13 @@ public class RscUser {
             ratingsJSON.add(ratings.get(i));
         }
         studentJSON.put(SysConst.STUDENT_USER_RATINGS, ratings);
+
+        // array of listing favorite UUIDs
+        JSONArray listingFavoritesJSON = new JSONArray();
+        ArrayList<UUID> listingFavorites = student.getListingFavorites();
+        for (int i=0; i<listingFavorites.size(); i++) {
+            listingFavoritesJSON.add(listingFavorites.get(i));
+        }
 
         // array of listings UUIDs
         JSONArray listingsJSON = new JSONArray();

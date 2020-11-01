@@ -1,6 +1,6 @@
 package housingapp.rating;
 
-import housingapp.system.RatingType;
+import housingapp.RatingType;
 
 import java.security.InvalidParameterException;
 import java.util.UUID;

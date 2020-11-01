@@ -65,7 +65,7 @@ public class ListingQuery {
     public ArrayList<Listing> getListingsByProperty(ArrayList<Listing> listings, UUID propertyId) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
-            if (listing.getProperty().getId().equals(propertyId)) {
+            if (listing.getPropertyId().equals(propertyId)) {
                 ret.add(listing);
             }
         }
@@ -103,7 +103,7 @@ public class ListingQuery {
     public ArrayList<Listing> getListingsByMaxTravelDistance(ArrayList<Listing> listings, double maxTravelDistance) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
-            if (maxTravelDistance >= listing.getProperty().getDistanceToCampus()) {
+            if (maxTravelDistance >= rm.getPropertyById(listing.getPropertyId()).getDistanceToCampus()) {
                 ret.add(listing);
             }
         }

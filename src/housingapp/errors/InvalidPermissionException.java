@@ -1,6 +1,6 @@
 package housingapp.errors;
 
-import housingapp.system.SysConst;
+import housingapp.SysConst;
 
 public class InvalidPermissionException extends Exception {
 

@@ -1,7 +1,8 @@
 package housingapp.housing;
 
-import housingapp.housing.Listing;
-import housingapp.housing.Property;
+import housingapp.ListingType;
+
+import java.util.UUID;
 
 public class Townhouse extends Listing {
 
@@ -10,11 +11,11 @@ public class Townhouse extends Listing {
     private boolean hasYard;
     private boolean hasFence;
 
-    public Townhouse(Property property, String description, double price, int leaseMonths, double squareFootage,
+    public Townhouse(UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
                      boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
                      boolean hasShuttle, boolean available, boolean hasGarage, boolean hasDriveway, boolean hasYard,
                      boolean hasFence) {
-        super(property, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
+        super(ListingType.TOWNHOUSE, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
                 numBedrooms, numBathrooms, hasShuttle, available);
         this.hasGarage = hasGarage;
         this.hasDriveway = hasDriveway;
@@ -22,19 +23,73 @@ public class Townhouse extends Listing {
         this.hasFence = hasFence;
     }
 
-    protected boolean hasGarage() {
+    public Townhouse(UUID id, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
+                     boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                     boolean hasShuttle, boolean available, boolean hasGarage, boolean hasDriveway, boolean hasYard,
+                     boolean hasFence) {
+        super(id, ListingType.TOWNHOUSE, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
+                numBedrooms, numBathrooms, hasShuttle, available);
+        this.hasGarage = hasGarage;
+        this.hasDriveway = hasDriveway;
+        this.hasYard = hasYard;
+        this.hasFence = hasFence;
+    }
+
+    public boolean hasGarage() {
         return this.hasGarage;
     }
 
-    protected boolean hasDriveway() {
+    public boolean hasDriveway() {
         return this.hasDriveway;
     }
 
-    protected boolean hasYard() {
+    public boolean hasYard() {
         return this.hasYard;
     }
 
-    protected boolean hasFence() {
+    public boolean hasFence() {
         return this.hasFence;
+    }
+
+    public void updateHasGarage(boolean hasGarage) {
+        this.hasGarage = hasGarage;
+    }
+
+    public void updateHasDriveway(boolean hasDriveway) {
+        this.hasDriveway = hasDriveway;
+    }
+
+    public void updateHasYard(boolean hasYard) {
+        this.hasYard = hasYard;
+    }
+
+    public void updateHasFence(boolean hasFence) {
+        this.hasFence = hasFence;
+    }
+
+    @Override
+    public String getDetails() {
+        String details = super.getDetails();
+        if (this.hasGarage) {
+            details += "Townhouse *has* a garage\n";
+        } else {
+            details += "Townhouse *does not have* a garage\n";
+        }
+        if (this.hasDriveway) {
+            details += "Townhouse *has* a driveway\n";
+        } else {
+            details += "Townhouse *does not have* a driveway\n";
+        }
+        if (this.hasYard) {
+            details += "Townhouse *has* a yard\n";
+        } else {
+            details += "Townhouse *does not have* a yard\n";
+        }
+        if (this.hasFence) {
+            details += "Townhouse *has* a fence\n";
+        } else {
+            details += "Townhouse *does not have* a fence\n";
+        }
+        return details;
     }
 }

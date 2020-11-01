@@ -1,6 +1,6 @@
 package housingapp.user;
 
-import housingapp.system.UserType;
+import housingapp.UserType;
 
 import java.util.ArrayList;
 import java.util.UUID;

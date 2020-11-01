@@ -1,27 +1,57 @@
 package housingapp.housing;
 
-import housingapp.housing.Listing;
-import housingapp.housing.Property;
+import housingapp.ListingType;
+
+import java.util.UUID;
 
 public class Apartment extends Listing {
 
     private String apartmentNumber;
     private boolean hasParking;
 
-    public Apartment(Property property, String description, double price, int leaseMonths, double squareFootage,
+    public Apartment(UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
                      boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
                      boolean hasShuttle, boolean available, String apartmentNumber, boolean hasParking) {
-        super(property, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
+        super(ListingType.APARTMENT, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
                 numBedrooms, numBathrooms, hasShuttle, available);
         this.apartmentNumber = apartmentNumber;
         this.hasParking = hasParking;
     }
 
-    protected String getApartmentNumber() {
+    public Apartment(UUID id, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
+                     boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                     boolean hasShuttle, boolean available, String apartmentNumber, boolean hasParking) {
+        super(id, ListingType.APARTMENT, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
+                numBedrooms, numBathrooms, hasShuttle, available);
+        this.apartmentNumber = apartmentNumber;
+        this.hasParking = hasParking;
+    }
+
+    public String getApartmentNumber() {
         return this.apartmentNumber;
     }
 
-    protected boolean hasParking() {
+    public boolean hasParking() {
         return this.hasParking;
+    }
+
+    public void updateApartmentNumber(String apartmentNumber) {
+        this.apartmentNumber = apartmentNumber;
+    }
+
+    public void updateHasParking(boolean hasParking) {
+        this.hasParking = hasParking;
+    }
+
+    @Override
+    public String getDetails() {
+        String details = super.getDetails();
+        details += String.format("Apartment number: %s\n", this.apartmentNumber);
+        if (this.hasParking) {
+            details += "Apartment *has* parking\n";
+        } else {
+            details += "Apartment *does not have* parking\n";
+        }
+        return details;
     }
 }

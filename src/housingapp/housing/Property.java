@@ -20,7 +20,7 @@ public class Property {
     }
 
     public Property(UUID id, String name, String address, double distanceToCampus, ArrayList<UUID> ratings, ArrayList<UUID> listings) {
-        this.id = UUID.randomUUID();
+        this.id = id;
         this.name = name;
         this.address = address;
         this.distanceToCampus = distanceToCampus;

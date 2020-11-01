@@ -1,6 +1,6 @@
 package housingapp.user;
 
-import housingapp.system.UserType;
+import housingapp.UserType;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -14,6 +14,7 @@ public class Student extends User {
 	private int minRoommates;
 	private int maxRoommates;
 	private ArrayList<UUID> ratings;
+	private ArrayList<UUID> listingFavorites;
 
     public Student(String firstName, String lastName, String phone, String email, String password, boolean hasPets,
                    double priceRangeLower, double priceRangeUpper, double maxTravelDistance, int minRoommates,
@@ -26,11 +27,12 @@ public class Student extends User {
         this.minRoommates = minRoommates;
         this.maxRoommates = maxRoommates;
         this.ratings = new ArrayList<UUID>();
+        this.listingFavorites = new ArrayList<UUID>();
     }
 
     public Student(UUID id, String firstName, String lastName, String phone, String email, String password, boolean hasPets,
                    double priceRangeLower, double priceRangeUpper, double maxTravelDistance, int minRoommates,
-                   int maxRoommates, ArrayList<UUID> ratings, ArrayList<UUID> listings) {
+                   int maxRoommates, ArrayList<UUID> ratings, ArrayList<UUID> listingFavorites, ArrayList<UUID> listings) {
         super(id,UserType.PROPERTY_MANAGER, firstName, lastName, phone, email, password, listings);
         this.hasPets = hasPets;
         this.priceRangeLower = priceRangeLower;
@@ -39,6 +41,7 @@ public class Student extends User {
         this.minRoommates = minRoommates;
         this.maxRoommates = maxRoommates;
         this.ratings = ratings;
+        this.listingFavorites = listingFavorites;
     }
 
     public UUID getId() {
@@ -101,59 +104,71 @@ public class Student extends User {
         return this.ratings;
     }
 
-    protected void updateFirstName(String firstName) {
+    public ArrayList<UUID> getListingFavorites() {
+        return this.listingFavorites;
+    }
+
+    public void updateFirstName(String firstName) {
         super.updateFirstName(firstName);
     }
 
-    protected void updateLastName(String lastName) {
+    public void updateLastName(String lastName) {
         super.updateLastName(lastName);
     }
 
-    protected void updatePhone(String phone) {
+    public void updatePhone(String phone) {
         super.updatePhone(phone);
     }
 
-    protected void updateEmail(String email) {
+    public void updateEmail(String email) {
         super.updateEmail(email);
     }
 
-    protected void associateListing(UUID listingId) {
-        super.associateListing(listingId);
-    }
-
-    protected void removeListing(UUID listingId) {
-        super.removeListing(listingId);
-    }
-
-    protected void updateHasPets(boolean hasPets) {
+    public void updateHasPets(boolean hasPets) {
         this.hasPets = hasPets;
     }
 
-    protected void updatePriceRangeLower(double priceRangeLower) {
+    public void updatePriceRangeLower(double priceRangeLower) {
         this.priceRangeLower = priceRangeLower;
     }
 
-    protected void updatePriceRangeUpper(double priceRangeUpper) {
+    public void updatePriceRangeUpper(double priceRangeUpper) {
         this.priceRangeUpper = priceRangeUpper;
     }
 
-    protected void updateMaxTravelDistance(double maxTravelDistance) {
+    public void updateMaxTravelDistance(double maxTravelDistance) {
         this.maxTravelDistance = maxTravelDistance;
     }
 
-    protected void updateMinRoommates(int minRoommates) {
+    public void updateMinRoommates(int minRoommates) {
         this.minRoommates = minRoommates;
     }
 
-    protected void updateMaxRoommates(int maxRoommates) {
+    public void updateMaxRoommates(int maxRoommates) {
         this.maxRoommates = maxRoommates;
     }
 
-    protected void associateRating(UUID ratingId) {
+    public void associateRating(UUID ratingId) {
         this.ratings.add(ratingId);
     }
 
-    protected void removeRating(UUID ratingId) {
+    public void removeRating(UUID ratingId) {
         this.ratings.remove(ratingId);
+    }
+    
+    public void associateListingFavorite(UUID listingId) {
+        this.listingFavorites.add(listingId);
+    }
+
+    public void removeListingFavorite(UUID listingId) {
+        this.listingFavorites.remove(listingId);
+    }
+
+    public void associateListing(UUID listingId) {
+        super.associateListing(listingId);
+    }
+
+    public void removeListing(UUID listingId) {
+        super.removeListing(listingId);
     }
 }

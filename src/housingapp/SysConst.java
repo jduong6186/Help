@@ -1,11 +1,10 @@
-package housingapp.system;
+package housingapp;
 
 public class SysConst {
 
     // user constants
-    public static final String USERS_DATA_FILE = "src/data/users.json";
+    public static final String USERS_DATA_FILE = "src/housingapp/data/users.json";
     public static final String USER_ID = "id";
-    public static final String USER_TYPE = "type";
     public static final String USER_FIRST_NAME = "firstName";
     public static final String USER_LAST_NAME = "lastName";
     public static final String USER_PHONE = "phone";
@@ -15,13 +14,14 @@ public class SysConst {
 
     // student user constants
     public static final String STUDENT_USERS = "students";
-    public static final String STUDENT_USER_HAS_PETS = "id";
+    public static final String STUDENT_USER_HAS_PETS = "hasPets";
     public static final String STUDENT_USER_PRICE_RANGE_LOWER = "priceRangeLower";
     public static final String STUDENT_USER_PRICE_RANGE_UPPER = "priceRangeUpper";
     public static final String STUDENT_USER_MAX_TRAVEL_DISTANCE = "maxTravelDistance";
     public static final String STUDENT_USER_MIN_ROOMMATES = "minRoommates";
     public static final String STUDENT_USER_MAX_ROOMMATES = "maxRoommates";
     public static final String STUDENT_USER_RATINGS = "ratings";
+    public static final String STUDENT_USER_LISTING_FAVORITES = "listingFavorites";
 
     // property manager user constants
     public static final String PROPERTY_MANAGER_USERS = "propertyManagers";
@@ -29,7 +29,7 @@ public class SysConst {
     public static final String PROPERTY_MANAGER_USER_PROPERTIES = "properties";
 
     // property constants
-    public static final String PROPERTIES_DATA_FILE = "src/data/properties.json";
+    public static final String PROPERTIES_DATA_FILE = "src/housingapp/data/properties.json";
     public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_ADDRESS = "address";
@@ -38,18 +38,14 @@ public class SysConst {
     public static final String PROPERTY_LISTINGS = "listings";
 
     // listing constants
-    public static final String LISTINGS_DATA_FILE = "src/data/listings.json";
+    public static final String LISTINGS_DATA_FILE = "src/housingapp/data/listings.json";
     public static final String LISTING_ID = "id";
-    public static final String LISTING_PROPERTY = "property";
+    public static final String LISTING_PROPERTY_ID = "propertyId";
     public static final String LISTING_DESCRIPTION = "description";
     public static final String LISTING_PRICE = "price";
     public static final String LISTING_LEASE_MONTHS = "leaseMonths";
     public static final String LISTING_SQUARE_FOOTAGE = "squareFootage";
     public static final String LISTING_PETS_ALLOWED = "petsAllowed";
-    public static final String LISTING_HAS_GAS = "hasGas";
-    public static final String LISTING_HAS_ELECTRIC = "hasElectric";
-    public static final String LISTING_HAS_WATER = "hasWater";
-    public static final String LISTING_HAS_TRASH = "hasTrash";
     public static final String LISTING_IS_SUBLEASE = "isSublease";
     public static final String LISTING_UTILITIES_INCLUDED = "utilitiesIncluded";
     public static final String LISTING_NUM_BEDROOMS = "numBedrooms";
@@ -58,15 +54,14 @@ public class SysConst {
     public static final String LISTING_AVAILABLE = "available";
 
     // session constants
-    public static final String SESSIONS_DATA_FILE = "src/data/sessions.json";
+    public static final String SESSIONS_DATA_FILE = "src/housingapp/data/sessions.json";
     public static final String SESSION_TOKEN = "token";
     public static final String SESSION_USER_ID = "userId";
     public static final String SESSION_EXPIRATION = "expiration";
 
     // rating constants
-    public static final String RATINGS_DATA_FILE = "src/data/ratings.json";
+    public static final String RATINGS_DATA_FILE = "src/housingapp/data/ratings.json";
     public static final String RATING_ID = "id";
-    public static final String RATING_TYPE = "type";
     public static final String RATING_STARS = "stars";
     public static final String RATING_COMMENT = "comment";
     public static final String PROPERTY_RATING_VALUE_STARS = "valueStars";

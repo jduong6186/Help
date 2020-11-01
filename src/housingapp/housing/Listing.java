@@ -1,11 +1,15 @@
 package housingapp.housing;
 
+import housingapp.ListingType;
+import housingapp.query.ResourceManager;
+
 import java.util.UUID;
 
-public class Listing {
+public abstract class Listing {
 
     private final UUID id;
-    private Property property;
+    private final ListingType type;
+    private UUID propertyId;
     private String description;
     private double price;
     private int leaseMonths;
@@ -18,11 +22,12 @@ public class Listing {
     private boolean hasShuttle;
     private boolean available;
 
-    public Listing(Property property, String description, double price, int leaseMonths, double squareFootage,
+    public Listing(ListingType type, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
                    boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
                    boolean hasShuttle, boolean available) {
         this.id = UUID.randomUUID();
-        this.property = property;
+        this.type = type;
+        this.propertyId = propertyId;
         this.description = description;
         this.price = price;
         this.leaseMonths = leaseMonths;
@@ -36,11 +41,12 @@ public class Listing {
         this.available = available;
     }
 
-    public Listing(UUID id, Property property, String description, double price, int leaseMonths, double squareFootage,
+    public Listing(UUID id, ListingType type, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
                    boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
                    boolean hasShuttle, boolean available) {
         this.id = id;
-        this.property = property;
+        this.type = type;
+        this.propertyId = propertyId;
         this.description = description;
         this.price = price;
         this.leaseMonths = leaseMonths;
@@ -58,8 +64,12 @@ public class Listing {
         return this.id;
     }
 
-    public Property getProperty() {
-        return this.property;
+    public ListingType getType() {
+        return this.type;
+    }
+
+    public UUID getPropertyId() {
+        return this.propertyId;
     }
 
     public String getDescription() {
@@ -106,56 +116,57 @@ public class Listing {
         return this.available;
     }
 
-    public void setProperty(Property property) {
-        this.property = property;
+    public void updatePropertyId(UUID propertyId) {
+        this.propertyId = propertyId;
     }
 
-    public void setDescription(String description) {
+    public void updateDescription(String description) {
         this.description = description;
     }
 
-    public void setPrice(double price) {
+    public void updatePrice(double price) {
         this.price = price;
     }
 
-    public void setLeaseMonths(int leaseMonths) {
+    public void updateLeaseMonths(int leaseMonths) {
         this.leaseMonths = leaseMonths;
     }
 
-    public void setSquareFootage(double squareFootage) {
+    public void updateSquareFootage(double squareFootage) {
         this.squareFootage = squareFootage;
     }
 
-    public void setPetsAllowed(boolean petsAllowed) {
+    public void updatePetsAllowed(boolean petsAllowed) {
         this.petsAllowed = petsAllowed;
     }
 
-    public void setIsSublease(boolean isSublease) {
+    public void updateIsSublease(boolean isSublease) {
         this.isSublease = isSublease;
     }
 
-    public void setUtilitiesIncluded(boolean utilitiesIncluded) {
+    public void updateUtilitiesIncluded(boolean utilitiesIncluded) {
         this.utilitiesIncluded = utilitiesIncluded;
     }
 
-    public void setNumBedrooms(int numBedrooms) {
+    public void updateNumBedrooms(int numBedrooms) {
         this.numBedrooms = numBedrooms;
     }
 
-    public void setNumBathrooms(int numBathrooms) {
+    public void updateNumBathrooms(int numBathrooms) {
         this.numBathrooms = numBathrooms;
     }
 
-    public void setHasShuttle(boolean hasShuttle) {
+    public void updateHasShuttle(boolean hasShuttle) {
         this.hasShuttle = hasShuttle;
     }
 
-    public void setAvailable(boolean isAvailable) {
+    public void updateAvailable(boolean isAvailable) {
         this.available = isAvailable;
     }
 
     public String getDetails() {
-        String detailsStr = String.format("-----\nListing at %s\n-----", this.property);
+        ResourceManager rm = ResourceManager.getInstance();
+        String detailsStr = String.format("-----\nListing at %s\n-----", rm.getPropertyById(this.propertyId).getName());
         detailsStr += "Price: $" + this.price + "\n";
         detailsStr += this.numBedrooms + " bedrooms, " + this.numBathrooms + " bathrooms\n";
         detailsStr += this.leaseMonths + " month lease\n";
@@ -183,6 +194,7 @@ public class Listing {
 
     @Override
     public String toString() {
-        return String.format("Listing at %s | $%f | %d bedrooms | %d bathrooms", this.property, this.price, this.numBedrooms, this.numBathrooms);
+        ResourceManager rm = ResourceManager.getInstance();
+        return String.format("Listing at %s | $%f | %d bedrooms | %d bathrooms", rm.getPropertyById(this.propertyId).getName(), this.price, this.numBedrooms, this.numBathrooms);
     }
 }

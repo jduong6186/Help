@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.UUID;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import housingapp.Session;
+import housingapp.housing.Apartment;
 import housingapp.housing.Listing;
 import housingapp.housing.Property;
+import housingapp.housing.Townhouse;
 import housingapp.rating.PropertyRating;
 import housingapp.rating.Rating;
 import housingapp.rating.StudentRating;
 import housingapp.resources.*;
-import housingapp.system.SysConst;
+import housingapp.SysConst;
 import housingapp.user.PropertyManager;
 import housingapp.user.Student;
 import housingapp.user.User;
@@ -31,36 +33,47 @@ public class ResourceManager {
     private ArrayList<User> students;
     private ArrayList<User> propertyManagers;
     private ArrayList<User> users;
+    private Map<String, User> userEmailMap;
 
+    // property attributes
     private ArrayList<Property> properties;
-    private ArrayList<Listing> listings;
+
+    // listing attributes
+    private Map<String, ArrayList<Listing>> listingMap;
+    private ArrayList<Listing> apartments;
+    private ArrayList<Listing> townhouses;
+
+    // session attributes
+    private Map<UUID, Session> sessionMap;
     private ArrayList<Session> sessions;
 
     // rating attributes
     private Map<String, ArrayList<Rating>> ratingMap;
     private ArrayList<Rating> propertyRatings;
     private ArrayList<Rating> studentRatings;
-    private ArrayList<Rating> ratings;
-
-    private Map<String, User> userEmailMap;
-    private Map<UUID, Session> sessionMap;
+    //private ArrayList<Rating> ratings;
 
     public ResourceManager() {
         this.userMap = RscUser.getUsers();
         this.students = userMap.get(SysConst.STUDENT_USERS);
         this.propertyManagers = userMap.get(SysConst.PROPERTY_MANAGER_USERS);
-        this.users = this.students;
+        this.users = new ArrayList<User>();
+        this.users.addAll(students);
         this.users.addAll(propertyManagers);
 
         this.properties = RscProperty.getProperties();
-        this.listings = RscListing.getListings();
+
+        this.listingMap = RscListing.getListings();
+        this.apartments = listingMap.get("apartments");
+        this.townhouses = listingMap.get("townhouses");
+
         this.sessions = RscSession.getSessions();
 
         this.ratingMap = RscRating.getRatings();
         this.propertyRatings = ratingMap.get(SysConst.PROPERTY_RATINGS);
         this.studentRatings = ratingMap.get(SysConst.STUDENT_USER_RATINGS);
-        this.ratings = this.propertyRatings;
-        this.ratings.addAll(studentRatings);
+        //this.ratings = this.propertyRatings;
+        //this.ratings.addAll(studentRatings);
 
         this.userEmailMap = new HashMap<String, User>();
         this.sessionMap = new HashMap<UUID, Session>();
@@ -108,7 +121,24 @@ public class ResourceManager {
     }
 
     public ArrayList<Listing> getListings() {
+        ArrayList<Listing> listings = new ArrayList<Listing>();
+        ArrayList<Listing> apartments = this.apartments;
+        ArrayList<Listing> townhouses = this.townhouses;
+        listings.addAll(apartments);
+        listings.addAll(townhouses);
         return listings;
+    }
+
+    public Map<String, ArrayList<Listing>> getListingMap() {
+        return listingMap;
+    }
+
+    public ArrayList<Listing> getApartments() {
+        return apartments;
+    }
+
+    public ArrayList<Listing> getTownhouses() {
+        return townhouses;
     }
 
     public ArrayList<Session> getSessions() {
@@ -127,9 +157,11 @@ public class ResourceManager {
         return studentRatings;
     }
 
+    /*
     public ArrayList<Rating> getRatings() {
         return ratings;
     }
+     */
 
     // target accessors
     public User getUserById(UUID userId) {
@@ -178,9 +210,26 @@ public class ResourceManager {
     }
 
     public Listing getListingById(UUID listingId) {
-        for (Listing listing : listings) {
-            if (listing.getId().equals(listingId)) {
-                return listing;
+        Listing ret = getApartmentById(listingId);
+        if (ret == null) {
+            ret = getTownhouseById(listingId);
+        }
+        return ret;
+    }
+
+    public Apartment getApartmentById(UUID apartmentId) {
+        for (Listing apartment : apartments) {
+            if (apartment.getId().equals(apartmentId)) {
+                return (Apartment) apartment;
+            }
+        }
+        return null;
+    }
+
+    public Townhouse getTownhouseById(UUID townhouseId) {
+        for (Listing townhouse : townhouses) {
+            if (townhouse.getId().equals(townhouseId)) {
+                return (Townhouse) townhouse;
             }
         }
         return null;
@@ -194,9 +243,26 @@ public class ResourceManager {
     }
 
     public Rating getRatingById(UUID ratingId) {
-        for (Rating rating : ratings) {
-            if (rating.getId().equals(ratingId)) {
-                return rating;
+        Rating ret = getPropertyRatingById(ratingId);
+        if (ret == null) {
+            ret = getStudentRatingById(ratingId);
+        }
+        return ret;
+    }
+
+    public PropertyRating getPropertyRatingById(UUID propertyRatingId) {
+        for (Rating propertyRating : propertyRatings) {
+            if (propertyRating.getId().equals(propertyRatingId)) {
+                return (PropertyRating) propertyRating;
+            }
+        }
+        return null;
+    }
+
+    public StudentRating getStudentRatingById(UUID studentRatingId) {
+        for (Rating studentRating : studentRatings) {
+            if (studentRating.getId().equals(studentRatingId)) {
+                return (StudentRating) studentRating;
             }
         }
         return null;
@@ -235,8 +301,15 @@ public class ResourceManager {
         RscProperty.writeProperties();
     }
 
-    public void addListing(Listing listing) {
-        listings.add(listing);
+    public void addApartment(Apartment apartment) {
+        apartments.add(apartment);
+        listingMap.put("apartments", apartments);
+        RscListing.writeListings();
+    }
+
+    public void addTownhouse(Townhouse townhouse) {
+        townhouses.add(townhouse);
+        listingMap.put("townhouses", townhouses);
         RscListing.writeListings();
     }
 
@@ -264,14 +337,14 @@ public class ResourceManager {
 
     public void addPropertyRating(PropertyRating propertyRating) {
         propertyRatings.add(propertyRating);
-        ratings.add(propertyRating);
+        //ratings.add(propertyRating);
         ratingMap.put(SysConst.PROPERTY_RATINGS, propertyRatings);
         RscRating.writeRatings();
     }
 
     public void addStudentRating(StudentRating studentRating) {
         studentRatings.add(studentRating);
-        ratings.add(studentRating);
+        //ratings.add(studentRating);
         ratingMap.put(SysConst.STUDENT_USER_RATINGS, studentRatings);
         RscRating.writeRatings();
     }
@@ -292,9 +365,14 @@ public class ResourceManager {
         addProperty(modifiedProperty);
     }
 
-    public void updateListing(UUID listingId, Listing modifiedListing) {
-        removeListing(listingId);
-        addListing(modifiedListing);
+    public void updateApartment(UUID apartmentId, Apartment modifiedApartment) {
+        removeApartment(apartmentId);
+        addApartment(modifiedApartment);
+    }
+
+    public void updateTownhouse(UUID townhouseId, Townhouse modifiedTownhouse) {
+        removeTownhouse(townhouseId);
+        addTownhouse(modifiedTownhouse);
     }
 
     public void updatePropertyRating(UUID propertyRatingId, PropertyRating modifiedPropertyRating) {
@@ -340,10 +418,23 @@ public class ResourceManager {
         }
     }
 
-    public void removeListing(UUID listingId) {
-        for (int i=0; i<listings.size(); i++) {
-            if (listings.get(i).getId().equals(listingId)) {
-                listings.remove(i);
+    public void removeApartment(UUID apartmentId) {
+        for (int i=0; i<apartments.size(); i++) {
+            Listing curr = apartments.get(i);
+            if (curr.getId().equals(apartmentId)) {
+                listingMap.get("apartments").remove(curr);
+                apartments.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void removeTownhouse(UUID townhouseId) {
+        for (int i=0; i<townhouses.size(); i++) {
+            Listing curr = townhouses.get(i);
+            if (curr.getId().equals(townhouseId)) {
+                listingMap.get("townhouses").remove(curr);
+                townhouses.remove(i);
                 return;
             }
         }
@@ -354,7 +445,7 @@ public class ResourceManager {
             Rating curr = propertyRatings.get(i);
             if (curr.getId().equals(propertyRatingId)) {
                 ratingMap.get(SysConst.PROPERTY_RATINGS).remove(curr);
-                ratings.remove(curr);
+                //ratings.remove(curr);
                 propertyRatings.remove(i);
                 return;
             }
@@ -366,7 +457,7 @@ public class ResourceManager {
             Rating curr = studentRatings.get(i);
             if (curr.getId().equals(studentRatingId)) {
                 ratingMap.get(SysConst.STUDENT_USER_RATINGS).remove(curr);
-                ratings.remove(curr);
+                //ratings.remove(curr);
                 studentRatings.remove(i);
                 return;
             }

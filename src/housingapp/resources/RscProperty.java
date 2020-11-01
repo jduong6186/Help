@@ -2,7 +2,7 @@ package housingapp.resources;
 
 import housingapp.housing.Property;
 import housingapp.query.ResourceManager;
-import housingapp.system.SysConst;
+import housingapp.SysConst;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,7 +25,7 @@ public class RscProperty {
             // parse individual property objects from JSONArray
             for (int i=0; i<propertiesJSON.size(); i++) {
                 JSONObject propertyJSON = (JSONObject) propertiesJSON.get(i);
-                UUID propertyId = (UUID) propertyJSON.get(SysConst.PROPERTY_ID);
+                UUID propertyId = UUID.fromString((String) propertyJSON.get(SysConst.PROPERTY_ID));
                 String name = (String) propertyJSON.get(SysConst.PROPERTY_NAME);
                 String address = (String) propertyJSON.get(SysConst.PROPERTY_ADDRESS);
                 double distanceToCampus = (double) propertyJSON.get(SysConst.PROPERTY_DISTANCE_TO_CAMPUS);
@@ -34,16 +34,15 @@ public class RscProperty {
                 JSONArray ratingsJSON = (JSONArray) propertyJSON.get(SysConst.PROPERTY_RATINGS);
                 ArrayList<UUID> ratings = new ArrayList<UUID>();
                 for (int j=0; j<ratingsJSON.size(); j++) {
-                    ratings.add((UUID) ratingsJSON.get(j));
+                    ratings.add(UUID.fromString((String) ratingsJSON.get(j)));
                 }
 
                 // get listing ids
                 JSONArray listingsJSON = (JSONArray) propertyJSON.get(SysConst.PROPERTY_LISTINGS);
                 ArrayList<UUID> listings = new ArrayList<UUID>();
                 for (int j=0; j<listingsJSON.size(); j++) {
-                    listings.add((UUID) listingsJSON.get(j));
+                    listings.add(UUID.fromString((String) listingsJSON.get(j)));
                 }
-
 
                 // append property to properties
                 properties.add(new Property(propertyId, name, address, distanceToCampus, ratings, listings));

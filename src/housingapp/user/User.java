@@ -1,7 +1,7 @@
 package housingapp.user;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import housingapp.system.UserType;
+import housingapp.UserType;
 import java.util.ArrayList;
 import java.util.UUID;
 

@@ -1,17 +1,15 @@
 package housingapp;
 
 import housingapp.errors.*;
+import housingapp.housing.Apartment;
 import housingapp.housing.Listing;
 import housingapp.housing.Property;
+import housingapp.housing.Townhouse;
 import housingapp.query.ListingQuery;
 import housingapp.query.ResourceManager;
 import housingapp.rating.PropertyRating;
 import housingapp.rating.Rating;
 import housingapp.rating.StudentRating;
-import housingapp.system.Flow;
-import housingapp.system.RatingType;
-import housingapp.system.SysConst;
-import housingapp.system.UserType;
 import housingapp.user.PropertyManager;
 import housingapp.user.Student;
 
@@ -329,7 +327,11 @@ public class HousingAppDriver {
                     case VIEW_MY_REVIEWS:
                         return;
                     case CREATE_LISTING:
-                        Property property = promptListingProperty();
+                        System.out.print("Enter a type of listing to create (apartment/townhouse): ");
+                        String listingTypeStr = keyboardInput.next();
+                        keyboardInput.nextLine();
+
+                        UUID propertyId = promptListingPropertyId();
                         String description = promptListingDescription();
                         double price = promptListingPrice();
                         int leaseMonths = promptListingLeaseMonths();
@@ -342,71 +344,185 @@ public class HousingAppDriver {
                         boolean hasShuttle = promptListingHasShuttle();
                         boolean available = promptListingAvailable();
 
-                        rm.addListing(new Listing(property, description, price, leaseMonths, squareFootage, petsAllowed,
-                                isSublease, utilitiesIncluded, numBedrooms, numBathrooms, hasShuttle, available));
+                        if (listingTypeStr.equalsIgnoreCase("apartment")) {
+                            String apartmentNumber = promptApartmentNumber();
+                            boolean hasParking = promptApartmentHasParking();
+
+                            rm.addApartment(new Apartment(propertyId, description, price, leaseMonths, squareFootage,
+                                    petsAllowed, isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
+                                    hasShuttle, available, apartmentNumber, hasParking));
+                            System.out.println("Apartment listing created.");
+                        } else if (listingTypeStr.equalsIgnoreCase("townhouse")) {
+                            boolean hasGarage = promptTownhouseHasGarage();
+                            boolean hasDriveway = promptTownhouseHasDriveway();
+                            boolean hasYard = promptTownhouseHasYard();
+                            boolean hasFence = promptTownhouseHasFence();
+
+                            rm.addTownhouse(new Townhouse(propertyId, description, price, leaseMonths, squareFootage,
+                                    petsAllowed, isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
+                                    hasShuttle, available, hasGarage, hasDriveway, hasYard, hasFence));
+                            System.out.println("Townhouse listing created.");
+                        } else {
+                            throw new InvalidInputException();
+                        }
                         currFlow = Flow.DASHBOARD;
                     case EDIT_LISTING:
                         // todo: set currTarget in preceding flow
                         Listing listingToEdit = rm.getListingById(currTarget);
-                        System.out.println(listingToEdit.getDetails());
+                        ListingType listingToEditType = listingToEdit.getType();
 
-                        System.out.println("Select an attribute to edit or press ENTER to return to dashboard:\nProperty\nDescription\nPrice\nLease months\nSquare footage\nPets allowed\nIs sublease\nUtilities included\nNum bedrooms\nNum bathrooms\nHas shuttle\nAvailable");
-                        String attributeToEdit = keyboardInput.nextLine();
+                        if (listingToEditType == ListingType.APARTMENT) {
+                            Apartment apartmentToEdit = (Apartment) listingToEdit;
 
-                        switch (attributeToEdit) {
-                            case SysConst.CMD_ENTER:
-                                rm.updateListing(currTarget, listingToEdit);
-                                currFlow = Flow.DASHBOARD;
-                            case "Property":
-                                Property newListingProperty = promptListingProperty();
-                                listingToEdit.setProperty(newListingProperty);
-                                System.out.println("Property attribute updated.");
-                            case "Description":
-                                String newListingDescription = promptListingDescription();
-                                listingToEdit.setDescription(newListingDescription);
-                                System.out.println("Description attribute updated.");
-                            case "Price":
-                                double newListingPrice = promptListingPrice();
-                                listingToEdit.setPrice(newListingPrice);
-                                System.out.println("Price attribute updated.");
-                            case "Lease months":
-                                int newListingLeaseMonths = promptListingLeaseMonths();
-                                listingToEdit.setLeaseMonths(newListingLeaseMonths);
-                                System.out.println("Lease months attribute updated.");
-                            case "Square footage":
-                                double newListingSquareFootage = promptListingSquareFootage();
-                                listingToEdit.setSquareFootage(newListingSquareFootage);
-                                System.out.println("Square footage attribute updated.");
-                            case "Pets allowed":
-                                boolean newListingPetsAllowed = promptListingPetsAllowed();
-                                listingToEdit.setPetsAllowed(newListingPetsAllowed);
-                                System.out.println("Pets allowed attribute updated.");
-                            case "Is sublease":
-                                boolean newListingIsSublease = promptListingIsSublease();
-                                listingToEdit.setIsSublease(newListingIsSublease);
-                                System.out.println("Is sublease attribute updated.");
-                            case "Utilities included":
-                                boolean newListingUtilitiesIncluded = promptListingUtilitiesIncluded();
-                                listingToEdit.setUtilitiesIncluded(newListingUtilitiesIncluded);
-                                System.out.println("Utilities included attribute updated.");
-                            case "Num bedrooms":
-                                int newListingNumBedrooms = promptListingNumBedrooms();
-                                listingToEdit.setNumBedrooms(newListingNumBedrooms);
-                                System.out.println("Num bedrooms attribute updated.");
-                            case "Num bathrooms":
-                                int newListingNumBathrooms = promptListingNumBathrooms();
-                                listingToEdit.setNumBathrooms(newListingNumBathrooms);
-                                System.out.println("Num bathrooms attribute updated.");
-                            case "Has shuttle":
-                                boolean newListingHasShuttle = promptListingHasShuttle();
-                                listingToEdit.setHasShuttle(newListingHasShuttle);
-                                System.out.println("Has shuttle attribute updated.");
-                            case "Available":
-                                boolean newListingAvailable = promptListingAvailable();
-                                listingToEdit.setAvailable(newListingAvailable);
-                                System.out.println("Available attribute updated.");
-                            default:
-                                throw new InvalidInputException();
+                            System.out.println(apartmentToEdit.getDetails());
+
+                            System.out.println("Select an attribute to edit or press ENTER to return to dashboard:\nProperty\nDescription\nPrice\nLease months\nSquare footage\nPets allowed\nIs sublease\nUtilities included\nNum bedrooms\nNum bathrooms\nHas shuttle\nAvailable\nApartment number\nHas parking");
+                            String attributeToEdit = keyboardInput.nextLine();
+
+                            switch (attributeToEdit) {
+                                case SysConst.CMD_ENTER:
+                                    rm.updateApartment(currTarget, apartmentToEdit);
+                                    currFlow = Flow.DASHBOARD;
+                                case "Property":
+                                    UUID newListingPropertyId = promptListingPropertyId();
+                                    apartmentToEdit.updatePropertyId(newListingPropertyId);
+                                    System.out.println("Property attribute updated.");
+                                case "Description":
+                                    String newListingDescription = promptListingDescription();
+                                    apartmentToEdit.updateDescription(newListingDescription);
+                                    System.out.println("Description attribute updated.");
+                                case "Price":
+                                    double newListingPrice = promptListingPrice();
+                                    apartmentToEdit.updatePrice(newListingPrice);
+                                    System.out.println("Price attribute updated.");
+                                case "Lease months":
+                                    int newListingLeaseMonths = promptListingLeaseMonths();
+                                    apartmentToEdit.updateLeaseMonths(newListingLeaseMonths);
+                                    System.out.println("Lease months attribute updated.");
+                                case "Square footage":
+                                    double newListingSquareFootage = promptListingSquareFootage();
+                                    apartmentToEdit.updateSquareFootage(newListingSquareFootage);
+                                    System.out.println("Square footage attribute updated.");
+                                case "Pets allowed":
+                                    boolean newListingPetsAllowed = promptListingPetsAllowed();
+                                    apartmentToEdit.updatePetsAllowed(newListingPetsAllowed);
+                                    System.out.println("Pets allowed attribute updated.");
+                                case "Is sublease":
+                                    boolean newListingIsSublease = promptListingIsSublease();
+                                    apartmentToEdit.updateIsSublease(newListingIsSublease);
+                                    System.out.println("Is sublease attribute updated.");
+                                case "Utilities included":
+                                    boolean newListingUtilitiesIncluded = promptListingUtilitiesIncluded();
+                                    apartmentToEdit.updateUtilitiesIncluded(newListingUtilitiesIncluded);
+                                    System.out.println("Utilities included attribute updated.");
+                                case "Num bedrooms":
+                                    int newListingNumBedrooms = promptListingNumBedrooms();
+                                    apartmentToEdit.updateNumBedrooms(newListingNumBedrooms);
+                                    System.out.println("Num bedrooms attribute updated.");
+                                case "Num bathrooms":
+                                    int newListingNumBathrooms = promptListingNumBathrooms();
+                                    apartmentToEdit.updateNumBathrooms(newListingNumBathrooms);
+                                    System.out.println("Num bathrooms attribute updated.");
+                                case "Has shuttle":
+                                    boolean newListingHasShuttle = promptListingHasShuttle();
+                                    apartmentToEdit.updateHasShuttle(newListingHasShuttle);
+                                    System.out.println("Has shuttle attribute updated.");
+                                case "Available":
+                                    boolean newListingAvailable = promptListingAvailable();
+                                    apartmentToEdit.updateAvailable(newListingAvailable);
+                                    System.out.println("Available attribute updated.");
+                                case "Apartment number":
+                                    String apartmentNumber = promptApartmentNumber();
+                                    apartmentToEdit.updateApartmentNumber(apartmentNumber);
+                                    System.out.println("Apartment number attribute updated.");
+                                case "Has parking":
+                                    boolean hasParking = promptApartmentHasParking();
+                                    apartmentToEdit.updateHasParking(hasParking);
+                                    System.out.println("Has parking attribute updated.");
+                                default:
+                                    throw new InvalidInputException();
+                            }
+                        } else if (listingToEditType == ListingType.TOWNHOUSE) {
+                            Townhouse townhouseToEdit = (Townhouse) listingToEdit;
+
+                            System.out.println(townhouseToEdit.getDetails());
+
+                            System.out.println("Select an attribute to edit or press ENTER to return to dashboard:\nProperty\nDescription\nPrice\nLease months\nSquare footage\nPets allowed\nIs sublease\nUtilities included\nNum bedrooms\nNum bathrooms\nHas shuttle\nAvailable\nHas garage\nHas driveway\nHas yard\nHas fence");
+                            String attributeToEdit = keyboardInput.nextLine();
+
+                            switch (attributeToEdit) {
+                                case SysConst.CMD_ENTER:
+                                    rm.updateTownhouse(currTarget, townhouseToEdit);
+                                    currFlow = Flow.DASHBOARD;
+                                case "Property":
+                                    UUID newListingPropertyId = promptListingPropertyId();
+                                    townhouseToEdit.updatePropertyId(newListingPropertyId);
+                                    System.out.println("Property attribute updated.");
+                                case "Description":
+                                    String newListingDescription = promptListingDescription();
+                                    townhouseToEdit.updateDescription(newListingDescription);
+                                    System.out.println("Description attribute updated.");
+                                case "Price":
+                                    double newListingPrice = promptListingPrice();
+                                    townhouseToEdit.updatePrice(newListingPrice);
+                                    System.out.println("Price attribute updated.");
+                                case "Lease months":
+                                    int newListingLeaseMonths = promptListingLeaseMonths();
+                                    townhouseToEdit.updateLeaseMonths(newListingLeaseMonths);
+                                    System.out.println("Lease months attribute updated.");
+                                case "Square footage":
+                                    double newListingSquareFootage = promptListingSquareFootage();
+                                    townhouseToEdit.updateSquareFootage(newListingSquareFootage);
+                                    System.out.println("Square footage attribute updated.");
+                                case "Pets allowed":
+                                    boolean newListingPetsAllowed = promptListingPetsAllowed();
+                                    townhouseToEdit.updatePetsAllowed(newListingPetsAllowed);
+                                    System.out.println("Pets allowed attribute updated.");
+                                case "Is sublease":
+                                    boolean newListingIsSublease = promptListingIsSublease();
+                                    townhouseToEdit.updateIsSublease(newListingIsSublease);
+                                    System.out.println("Is sublease attribute updated.");
+                                case "Utilities included":
+                                    boolean newListingUtilitiesIncluded = promptListingUtilitiesIncluded();
+                                    townhouseToEdit.updateUtilitiesIncluded(newListingUtilitiesIncluded);
+                                    System.out.println("Utilities included attribute updated.");
+                                case "Num bedrooms":
+                                    int newListingNumBedrooms = promptListingNumBedrooms();
+                                    townhouseToEdit.updateNumBedrooms(newListingNumBedrooms);
+                                    System.out.println("Num bedrooms attribute updated.");
+                                case "Num bathrooms":
+                                    int newListingNumBathrooms = promptListingNumBathrooms();
+                                    townhouseToEdit.updateNumBathrooms(newListingNumBathrooms);
+                                    System.out.println("Num bathrooms attribute updated.");
+                                case "Has shuttle":
+                                    boolean newListingHasShuttle = promptListingHasShuttle();
+                                    townhouseToEdit.updateHasShuttle(newListingHasShuttle);
+                                    System.out.println("Has shuttle attribute updated.");
+                                case "Available":
+                                    boolean newListingAvailable = promptListingAvailable();
+                                    townhouseToEdit.updateAvailable(newListingAvailable);
+                                    System.out.println("Available attribute updated.");
+                                case "Has garage":
+                                    boolean hasGarage = promptTownhouseHasGarage();
+                                    townhouseToEdit.updateHasGarage(hasGarage);
+                                    System.out.println("Has garage attribute updated.");
+                                case "Has driveway":
+                                    boolean hasDriveway = promptTownhouseHasDriveway();
+                                    townhouseToEdit.updateHasDriveway(hasDriveway);
+                                    System.out.println("Has driveway attribute updated.");
+                                case "Has yard":
+                                    boolean hasYard = promptTownhouseHasYard();
+                                    townhouseToEdit.updateHasYard(hasYard);
+                                    System.out.println("Has yard attribute updated.");
+                                case "Has fence":
+                                    boolean hasFence = promptTownhouseHasFence();
+                                    townhouseToEdit.updateHasFence(hasFence);
+                                    System.out.println("Has fence attribute updated.");
+                                default:
+                                    throw new InvalidInputException();
+                            }
+                        } else {
+                            throw new UnexpectedException("Invalid listing type: " + listingToEditType.name());
                         }
                     case CREATE_REVIEW:
                         // todo: set currTarget UUID in preceding flow (likely 'view listing details' or 'view student details'?)
@@ -497,25 +613,55 @@ public class HousingAppDriver {
                     case VIEW_PROFILE:
                         return;
                     case VIEW_FAVORITES:
-                        return;
+                        if (currUserType == UserType.STUDENT) {
+                            Student currStudent = rm.getStudentById(currSession.getUserId());
+                            ArrayList<UUID> listingFavorites = currStudent.getListingFavorites();
+                            System.out.println("-----\nYour favorites list\n-----");
+                            for (int i=0; i<listingFavorites.size(); i++) {
+                                int lineNum = i+1;
+                                System.out.println(String.format("(%d) %s", lineNum, rm.getListingById(listingFavorites.get(i)).toString()));
+                            }
+
+                            boolean showingFavorites = true;
+                            while (showingFavorites) {
+                                System.out.print("Enter a listing favorite number to view details, or press ENTER to return to dashboard: ");
+                                input = keyboardInput.next();
+                                keyboardInput.nextLine();
+                                if (input.equals(SysConst.CMD_ENTER)) {
+                                    currFlow = Flow.DASHBOARD;
+                                    showingFavorites = false;
+                                } else {
+                                    int listingFavoriteIndex = Integer.parseInt(input) - 1;
+                                    UUID listingId = listingFavorites.get(listingFavoriteIndex);
+                                    System.out.println(rm.getListingById(listingId).getDetails());
+                                }
+                            }
+                        } else {
+                            throw new InvalidPermissionException();
+                        }
                     case REGISTER_PROPERTY:
-                    	String newPropertyName;
-                    	String newPropertyAddress;
-                    	double newDistanceToCampus;
-                    	
                     	System.out.print("Please enter name of the property: ");
-                    	newPropertyName = keyboardInput.next();
+                    	String propertyName = keyboardInput.next();
                     	keyboardInput.nextLine();
+
                     	System.out.print("Please enter the address of the property: ");
-                    	newPropertyAddress = keyboardInput.next();
+                    	String address = keyboardInput.next();
                     	keyboardInput.nextLine();
+
                     	System.out.print("Please enter the distance of the property from campus: ");
-                    	newDistanceToCampus = keyboardInput.nextDouble();
-                    	Property newProperty = new Property(newPropertyName, newPropertyAddress, newDistanceToCampus);
+                    	double distanceToCampus = keyboardInput.nextDouble();
+                    	keyboardInput.nextLine();
+
+                    	// create property and add to resource manager
+                    	Property newProperty = new Property(propertyName, address, distanceToCampus);
                     	rm.addProperty(newProperty);
-                    	PropertyManager currPropertyManager = (PropertyManager) rm.getUserById(currSession.getUserId());
+
+                    	// append property to user and update user in resource manager
+                    	PropertyManager currPropertyManager = rm.getPropertyManagerById(currSession.getUserId());
                     	currPropertyManager.associateProperty(newProperty.getId());
-                        return;
+                    	rm.updatePropertyManager(currPropertyManager.getId(), currPropertyManager);
+
+                    	currFlow = Flow.DASHBOARD;
                 }
             } catch (InvalidSessionDetailsException e) {
                 currFlow = Flow.HOME;
@@ -562,12 +708,12 @@ public class HousingAppDriver {
         }
     }
 
-    private static Property promptListingProperty() {
+    private static UUID promptListingPropertyId() {
         System.out.println("-----\nFill in the following listing details\n-----");
         System.out.print("Location (property) name: ");
         String propertyName = keyboardInput.next();
         keyboardInput.nextLine();
-        return rm.getPropertyByName(propertyName);
+        return rm.getPropertyByName(propertyName).getId();
     }
 
     private static String promptListingDescription() {
@@ -690,5 +836,47 @@ public class HousingAppDriver {
         double damagesValue = keyboardInput.nextDouble();
         keyboardInput.nextLine();
         return damagesValue;
+    }
+
+    private static String promptApartmentNumber() {
+        System.out.print("Apartment number: ");
+        String apartmentNumber = keyboardInput.next();
+        keyboardInput.nextLine();
+        return apartmentNumber;
+    }
+
+    private static boolean promptApartmentHasParking() {
+        System.out.print("Has parking (y/n): ");
+        boolean hasParking = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return hasParking;
+    }
+
+    private static boolean promptTownhouseHasGarage() {
+        System.out.println("Has garage (y/n): ");
+        boolean hasGarage = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return hasGarage;
+    }
+
+    private static boolean promptTownhouseHasDriveway() {
+        System.out.println("Has driveway (y/n): ");
+        boolean hasDriveway = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return hasDriveway;
+    }
+
+    private static boolean promptTownhouseHasYard() {
+        System.out.println("Has yard (y/n): ");
+        boolean hasYard = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return hasYard;
+    }
+
+    private static boolean promptTownhouseHasFence() {
+        System.out.println("Has fence (y/n): ");
+        boolean hasFence = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return hasFence;
     }
 }

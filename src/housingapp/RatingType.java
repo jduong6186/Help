@@ -1,4 +1,4 @@
-package housingapp.system;
+package housingapp;
 
 public enum RatingType {
 
