@@ -2,7 +2,6 @@ package housingapp.resources;
 
 import housingapp.housing.Apartment;
 import housingapp.housing.Listing;
-import housingapp.housing.Property;
 import housingapp.housing.Townhouse;
 import housingapp.query.ResourceManager;
 import housingapp.SysConst;
@@ -65,17 +64,17 @@ public class RscListing {
             // parse townhouses JSON
             for (int i=0; i<townhousesJSON.size(); i++) {
                 JSONObject listingJSON = (JSONObject) townhousesJSON.get(i);
-                UUID listingId = (UUID) listingJSON.get(SysConst.LISTING_ID);
+                UUID listingId = UUID.fromString((String) listingJSON.get(SysConst.LISTING_ID));
                 UUID propertyId = UUID.fromString((String) listingJSON.get(SysConst.LISTING_PROPERTY_ID));
                 String description = (String) listingJSON.get(SysConst.LISTING_DESCRIPTION);
                 double price = (double) listingJSON.get(SysConst.LISTING_PRICE);
-                int leaseMonths = (int) listingJSON.get(SysConst.LISTING_LEASE_MONTHS);
+                int leaseMonths = ((Long) listingJSON.get(SysConst.LISTING_LEASE_MONTHS)).intValue();
                 double squareFootage = (double) listingJSON.get(SysConst.LISTING_SQUARE_FOOTAGE);
                 boolean petsAllowed = (boolean) listingJSON.get(SysConst.LISTING_PETS_ALLOWED);
                 boolean isSublease = (boolean) listingJSON.get(SysConst.LISTING_IS_SUBLEASE);
                 boolean utilitiesIncluded = (boolean) listingJSON.get(SysConst.LISTING_UTILITIES_INCLUDED);
-                int numBedrooms = (int) listingJSON.get(SysConst.LISTING_NUM_BEDROOMS);
-                int numBathrooms = (int) listingJSON.get(SysConst.LISTING_NUM_BATHROOMS);
+                int numBedrooms = ((Long) listingJSON.get(SysConst.LISTING_NUM_BEDROOMS)).intValue();
+                int numBathrooms = ((Long) listingJSON.get(SysConst.LISTING_NUM_BATHROOMS)).intValue();
                 boolean hasShuttle = (boolean) listingJSON.get(SysConst.LISTING_HAS_SHUTTLE);
                 boolean available = (boolean) listingJSON.get(SysConst.LISTING_AVAILABLE);
 
@@ -131,8 +130,8 @@ public class RscListing {
 
     public static JSONObject getApartmentJSON(Apartment listing) {
         JSONObject listingJSON = new JSONObject();
-        listingJSON.put(SysConst.LISTING_ID, listing.getId());
-        listingJSON.put(SysConst.LISTING_PROPERTY_ID, listing.getPropertyId());
+        listingJSON.put(SysConst.LISTING_ID, listing.getId().toString());
+        listingJSON.put(SysConst.LISTING_PROPERTY_ID, listing.getPropertyId().toString());
         listingJSON.put(SysConst.LISTING_DESCRIPTION, listing.getDescription());
         listingJSON.put(SysConst.LISTING_PRICE, listing.getPrice());
         listingJSON.put(SysConst.LISTING_LEASE_MONTHS, listing.getLeaseMonths());
@@ -154,8 +153,8 @@ public class RscListing {
 
     public static JSONObject getTownhouseJSON(Townhouse listing) {
         JSONObject listingJSON = new JSONObject();
-        listingJSON.put(SysConst.LISTING_ID, listing.getId());
-        listingJSON.put(SysConst.LISTING_PROPERTY_ID, listing.getPropertyId());
+        listingJSON.put(SysConst.LISTING_ID, listing.getId().toString());
+        listingJSON.put(SysConst.LISTING_PROPERTY_ID, listing.getPropertyId().toString());
         listingJSON.put(SysConst.LISTING_DESCRIPTION, listing.getDescription());
         listingJSON.put(SysConst.LISTING_PRICE, listing.getPrice());
         listingJSON.put(SysConst.LISTING_LEASE_MONTHS, listing.getLeaseMonths());

@@ -33,7 +33,7 @@ public class Student extends User {
     public Student(UUID id, String firstName, String lastName, String phone, String email, String password, boolean hasPets,
                    double priceRangeLower, double priceRangeUpper, double maxTravelDistance, int minRoommates,
                    int maxRoommates, ArrayList<UUID> ratings, ArrayList<UUID> listingFavorites, ArrayList<UUID> listings) {
-        super(id,UserType.PROPERTY_MANAGER, firstName, lastName, phone, email, password, listings);
+        super(id,UserType.STUDENT, firstName, lastName, phone, email, password, listings);
         this.hasPets = hasPets;
         this.priceRangeLower = priceRangeLower;
         this.priceRangeUpper = priceRangeUpper;

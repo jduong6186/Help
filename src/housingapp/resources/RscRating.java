@@ -36,14 +36,14 @@ public class RscRating {
             if (propertyRatingsJSON != null) {
                 for (int i=0; i<propertyRatingsJSON.size(); i++) {
                     JSONObject propertyRatingJSON = (JSONObject) propertyRatingsJSON.get(i);
-                    UUID ratingId = (UUID) propertyRatingJSON.get(SysConst.RATING_ID);
-                    int stars = (int) propertyRatingJSON.get(SysConst.RATING_STARS);
+                    UUID ratingId = UUID.fromString((String) propertyRatingJSON.get(SysConst.RATING_ID));
+                    int stars = ((Long) propertyRatingJSON.get(SysConst.RATING_STARS)).intValue();
                     String comment = (String) propertyRatingJSON.get(SysConst.RATING_COMMENT);
 
                     // property rating-unique attributes
-                    int valueStars = (int) propertyRatingJSON.get(SysConst.PROPERTY_RATING_VALUE_STARS);
-                    int managementStars = (int) propertyRatingJSON.get(SysConst.PROPERTY_RATING_MANAGEMENT_STARS);
-                    int neighborhoodStars = (int) propertyRatingJSON.get(SysConst.PROPERTY_RATING_NEIGHBORHOOD_STARS);
+                    int valueStars = ((Long) propertyRatingJSON.get(SysConst.PROPERTY_RATING_VALUE_STARS)).intValue();
+                    int managementStars = ((Long) propertyRatingJSON.get(SysConst.PROPERTY_RATING_MANAGEMENT_STARS)).intValue();
+                    int neighborhoodStars = ((Long) propertyRatingJSON.get(SysConst.PROPERTY_RATING_NEIGHBORHOOD_STARS)).intValue();
 
                     // add property rating to propertyRatings list;
                     propertyRatings.add(new PropertyRating(ratingId, stars, comment, valueStars, managementStars, neighborhoodStars));
@@ -55,12 +55,12 @@ public class RscRating {
             if (studentRatingsJSON != null) {
                 for (int i=0; i<studentRatingsJSON.size(); i++) {
                     JSONObject studentRatingJSON = (JSONObject) studentRatingsJSON.get(i);
-                    UUID ratingId = (UUID) studentRatingJSON.get(SysConst.RATING_ID);
-                    int stars = (int) studentRatingJSON.get(SysConst.RATING_STARS);
+                    UUID ratingId = UUID.fromString((String) studentRatingJSON.get(SysConst.RATING_ID));
+                    int stars = ((Long) studentRatingJSON.get(SysConst.RATING_STARS)).intValue();
                     String comment = (String) studentRatingJSON.get(SysConst.RATING_COMMENT);
 
                     // student rating-unique attributes
-                    int numLatePayments = (int) studentRatingJSON.get(SysConst.STUDENT_RATING_NUM_LATE_PAYMENTS);
+                    int numLatePayments = ((Long) studentRatingJSON.get(SysConst.STUDENT_RATING_NUM_LATE_PAYMENTS)).intValue();
                     double damagesValue = (double) studentRatingJSON.get(SysConst.STUDENT_RATING_DAMAGES_VALUE);
 
                     // add student rating to studentRatings list;
@@ -109,6 +109,7 @@ public class RscRating {
 
     public static JSONObject getPropertyRatingJSON(PropertyRating propertyRating) {
         JSONObject propertyRatingJSON = new JSONObject();
+        propertyRatingJSON.put(SysConst.RATING_ID, propertyRating.getId().toString());
         propertyRatingJSON.put(SysConst.RATING_STARS, propertyRating.getStars());
         propertyRatingJSON.put(SysConst.RATING_COMMENT, propertyRating.getComment());
 
@@ -121,6 +122,7 @@ public class RscRating {
 
     public static JSONObject getStudentRatingJSON(StudentRating studentRating) {
         JSONObject studentRatingJSON = new JSONObject();
+        studentRatingJSON.put(SysConst.RATING_ID, studentRating.getId().toString());
         studentRatingJSON.put(SysConst.RATING_STARS, studentRating.getStars());
         studentRatingJSON.put(SysConst.RATING_COMMENT, studentRating.getComment());
 

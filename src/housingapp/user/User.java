@@ -91,27 +91,27 @@ public abstract class User {
         return this.listings;
     }
 
-    protected void updateFirstName(String firstName) {
+    public void updateFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    protected void updateLastName(String lastName) {
+    public void updateLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    protected void updatePhone(String phone) {
+    public void updatePhone(String phone) {
         this.phone = phone;
     }
 
-    protected void updateEmail(String email) {
+    public void updateEmail(String email) {
         this.email = email;
     }
 
-    protected void associateListing(UUID listingId) {
+    public void associateListing(UUID listingId) {
         this.listings.add(listingId);
     }
 
-    protected void removeListing(UUID listingId) {
+    public void removeListing(UUID listingId) {
         this.listings.remove(listingId);
     }
 }

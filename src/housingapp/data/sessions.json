@@ -1,12 +1,1 @@
-[
-  {
-    "token": "e6eaa882-c680-43b0-955c-0f72d567c800",
-    "userId": "8316bf45-1cf2-4bd7-a559-61cb36ff0e47",
-    "expiration": "2020-10-27T23:59:59"
-  },
-  {
-    "token": "b7ba680b-0cd2-45ed-bda7-e714ba8a3927",
-    "userId": "839b887e-d40f-477b-a374-4c134da4e66c",
-    "expiration": "2020-10-27T22:49:10"
-  }
-]
+[{"expiration":"2020-10-27T23:59:59","userId":"8316bf45-1cf2-4bd7-a559-61cb36ff0e47","token":"e6eaa882-c680-43b0-955c-0f72d567c800"},{"expiration":"2020-10-27T22:49:10","userId":"839b887e-d40f-477b-a374-4c134da4e66c","token":"b7ba680b-0cd2-45ed-bda7-e714ba8a3927"},{"expiration":"2020-11-01T15:37:07","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"c2dde786-58f9-4ffb-a716-eb9e9c854b76"},{"expiration":"2020-11-01T15:47:15","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"80ddab35-f38a-4c52-ace6-8091e9f1a299"},{"expiration":"2020-11-01T15:52:09","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"7a914b76-65de-41bd-9ab0-18b68593d267"},{"expiration":"2020-11-01T16:00:15","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"8108fffb-acbc-4310-a5be-af9cb605ecba"},{"expiration":"2020-11-01T16:01:23","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"0d257b1f-1218-4253-af4b-ac8a15afd8a0"},{"expiration":"2020-11-01T16:26:31","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"a19875ac-d7bc-4d80-a63f-3f3f49956964"},{"expiration":"2020-11-01T16:28:37","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"dff5c803-f17c-49d2-bed1-a23dd05f925e"},{"expiration":"2020-11-01T16:29:23","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"19198afa-a713-403a-93ca-0845e3546548"},{"expiration":"2020-11-01T16:30:13.759995","userId":"b6fdc962-a9af-4f33-85bd-823ebf2f22be","token":"36338654-b83e-46e8-b370-755cdd6e79b1"}]

@@ -53,22 +53,28 @@ public class RscUser {
                 // parse ratings UUID array
                 JSONArray ratingsJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_RATINGS);
                 ArrayList<UUID> ratings = new ArrayList<UUID>();
-                for (int j=0; j<ratingsJSON.size(); j++) {
-                    ratings.add((UUID) ratingsJSON.get(j));
+                if (ratingsJSON != null) {
+                    for (int j=0; j<ratingsJSON.size(); j++) {
+                        ratings.add((UUID) ratingsJSON.get(j));
+                    }
                 }
 
                 // parse listing favorites UUID array
                 JSONArray listingFavoritesJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_LISTING_FAVORITES);
                 ArrayList<UUID> listingFavorites = new ArrayList<UUID>();
-                for (int j=0; j<listingFavoritesJSON.size(); j++) {
-                    listingFavorites.add(UUID.fromString((String) listingFavoritesJSON.get(j)));
+                if (listingFavoritesJSON != null) {
+                    for (int j=0; j<listingFavoritesJSON.size(); j++) {
+                        listingFavorites.add(UUID.fromString((String) listingFavoritesJSON.get(j)));
+                    }
                 }
 
                 // get listing ids from attribute
                 JSONArray listingsJSON = (JSONArray) studentJSON.get(SysConst.USER_LISTINGS);
                 ArrayList<UUID> listings = new ArrayList<UUID>();
-                for (int j=0; j<listingsJSON.size(); j++) {
-                    listings.add(UUID.fromString((String) listingsJSON.get(j)));
+                if (listingsJSON != null) {
+                    for (int j=0; j<listingsJSON.size(); j++) {
+                        listings.add(UUID.fromString((String) listingsJSON.get(j)));
+                    }
                 }
 
                 // add student to students list;
@@ -93,15 +99,19 @@ public class RscUser {
                 // get listing ids from attribute
                 JSONArray listingsJSON = (JSONArray) propertyManagerJSON.get(SysConst.USER_LISTINGS);
                 ArrayList<UUID> listings = new ArrayList<UUID>();
-                for (int j=0; j<listingsJSON.size(); j++) {
-                    listings.add((UUID) listingsJSON.get(j));
+                if (listingsJSON != null) {
+                    for (int j=0; j<listingsJSON.size(); j++) {
+                        listings.add((UUID) listingsJSON.get(j));
+                    }
                 }
 
                 // parse properties UUID array
                 JSONArray propertiesJSON = (JSONArray) propertyManagerJSON.get(SysConst.PROPERTY_MANAGER_USER_PROPERTIES);
                 ArrayList<UUID> properties = new ArrayList<UUID>();
-                for (int j=0; j<propertiesJSON.size(); j++) {
-                    properties.add((UUID) propertiesJSON.get(j));
+                if (propertiesJSON != null) {
+                    for (int j=0; j<propertiesJSON.size(); j++) {
+                        properties.add((UUID) propertiesJSON.get(j));
+                    }
                 }
 
                 // add property manager to property managers list;
@@ -123,15 +133,19 @@ public class RscUser {
         // first, populate students JSONArray
         ArrayList<User> students = rm.getStudents();
         JSONArray studentsJSON = new JSONArray();
-        for (int i=0; i<students.size(); i++) {
-            studentsJSON.add(getStudentJSON((Student) students.get(i)));
+        if (students != null) {
+            for (int i=0; i<students.size(); i++) {
+                studentsJSON.add(getStudentJSON((Student) students.get(i)));
+            }
         }
 
         // second, populate propertyManagers JSONArray
         ArrayList<User> propertyManagers = rm.getPropertyManagers();
         JSONArray propertyManagersJSON = new JSONArray();
-        for (int i=0; i<propertyManagers.size(); i++) {
-            propertyManagersJSON.add(getPropertyManagerJSON((PropertyManager) propertyManagers.get(i)));
+        if (propertyManagers != null) {
+            for (int i=0; i<propertyManagers.size(); i++) {
+                propertyManagersJSON.add(getPropertyManagerJSON((PropertyManager) propertyManagers.get(i)));
+            }
         }
 
         // third, create usersJSON object
@@ -151,7 +165,7 @@ public class RscUser {
     public static JSONObject getStudentJSON(Student student) {
         // top-level attributes
         JSONObject studentJSON = new JSONObject();
-        studentJSON.put(SysConst.USER_ID, student.getId());
+        studentJSON.put(SysConst.USER_ID, student.getId().toString());
         studentJSON.put(SysConst.USER_FIRST_NAME, student.getFirstName());
         studentJSON.put(SysConst.USER_LAST_NAME, student.getLastName());
         studentJSON.put(SysConst.USER_PHONE, student.getPhone());
@@ -169,23 +183,30 @@ public class RscUser {
         // array of rating UUIDs
         JSONArray ratingsJSON = new JSONArray();
         ArrayList<UUID> ratings = student.getRatings();
-        for (int i=0; i<ratings.size(); i++) {
-            ratingsJSON.add(ratings.get(i));
+        if (ratings != null) {
+            for (int i=0; i<ratings.size(); i++) {
+                ratingsJSON.add(ratings.get(i).toString());
+            }
         }
-        studentJSON.put(SysConst.STUDENT_USER_RATINGS, ratings);
+        studentJSON.put(SysConst.STUDENT_USER_RATINGS, ratingsJSON);
 
         // array of listing favorite UUIDs
         JSONArray listingFavoritesJSON = new JSONArray();
         ArrayList<UUID> listingFavorites = student.getListingFavorites();
-        for (int i=0; i<listingFavorites.size(); i++) {
-            listingFavoritesJSON.add(listingFavorites.get(i));
+        if (listingFavorites != null) {
+            for (int i=0; i<listingFavorites.size(); i++) {
+                listingFavoritesJSON.add(listingFavorites.get(i).toString());
+            }
         }
+        studentJSON.put(SysConst.STUDENT_USER_LISTING_FAVORITES, listingFavoritesJSON);
 
         // array of listings UUIDs
         JSONArray listingsJSON = new JSONArray();
         ArrayList<UUID> listings = student.getListings();
-        for (int i=0; i<listings.size(); i++) {
-            listingsJSON.add(listings.get(i));
+        if (listings != null) {
+            for (int i=0; i<listings.size(); i++) {
+                listingsJSON.add(listings.get(i).toString());
+            }
         }
         studentJSON.put(SysConst.USER_LISTINGS, listingsJSON);
 
@@ -196,7 +217,7 @@ public class RscUser {
     public static JSONObject getPropertyManagerJSON(PropertyManager propertyManager) {
         // top-level attributes
         JSONObject propertyManagerJSON = new JSONObject();
-        propertyManagerJSON.put(SysConst.USER_ID, propertyManager.getId());
+        propertyManagerJSON.put(SysConst.USER_ID, propertyManager.getId().toString());
         propertyManagerJSON.put(SysConst.USER_FIRST_NAME, propertyManager.getFirstName());
         propertyManagerJSON.put(SysConst.USER_LAST_NAME, propertyManager.getLastName());
         propertyManagerJSON.put(SysConst.USER_PHONE, propertyManager.getPhone());
@@ -209,16 +230,20 @@ public class RscUser {
         // array of property UUIDs
         JSONArray propertiesJSON = new JSONArray();
         ArrayList<UUID> properties = propertyManager.getProperties();
-        for (int i=0; i<properties.size(); i++) {
-            propertiesJSON.add(properties.get(i));
+        if (properties != null) {
+            for (int i=0; i<properties.size(); i++) {
+                propertiesJSON.add(properties.get(i).toString());
+            }
         }
-        propertyManagerJSON.put(SysConst.PROPERTY_MANAGER_USER_PROPERTIES, properties);
+        propertyManagerJSON.put(SysConst.PROPERTY_MANAGER_USER_PROPERTIES, propertiesJSON);
 
         // array of listings UUIDs
         JSONArray listingsJSON = new JSONArray();
         ArrayList<UUID> listings = propertyManager.getListings();
-        for (int i=0; i<listings.size(); i++) {
-            listingsJSON.add(listings.get(i));
+        if (listings != null) {
+            for (int i=0; i<listings.size(); i++) {
+                listingsJSON.add(listings.get(i).toString());
+            }
         }
         propertyManagerJSON.put(SysConst.USER_LISTINGS, listingsJSON);
 

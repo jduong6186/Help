@@ -1,41 +1,21 @@
 {
-  "students": [
+  "students":[
     {
-      "id": "8316bf45-1cf2-4bd7-a559-61cb36ff0e47",
-      "firstName": "Andrew",
-      "lastName": "Eldridge",
-      "phone": "8033708127",
-      "email": "eldridga@email.sc.edu",
-      "password": "$2y$12$cqOEWOu9JDg9iJJp4Y.VqOeWQJYh//BotWElY7kcnlglosk/rZFAm",
-      "listings": [],
-      "hasPets": false,
-      "priceRangeLower": 600.00,
-      "priceRangeUpper": 800.00,
-      "maxTravelDistance": 20.0,
-      "minRoommates": 0,
-      "maxRoommates": 0,
-      "ratings": [],
-      "listingFavorites": ["cef0cbf3-6458-4f13-a418-ee4d7e7505dd"]
-    },
-    {
-      "id": "839b887e-d40f-477b-a374-4c134da4e66c",
-      "firstName": "Johnathon",
-      "lastName": "Duong",
-      "phone": "7047131063",
-      "email": "jduong@email.sc.edu",
-      "password": "$2y$12$cqOEWOu9JDg9iJJp4Y.VqOeWQJYh//BotWElY7kcnlglosk/rZFAm",
-      "listings": ["cef0cbf3-6458-4f13-a418-ee4d7e7505dd"],
-      "hasPets": false,
-      "priceRangeLower": 500.00,
-      "priceRangeUpper": 1000.50,
-      "maxTravelDistance": 10.7,
-      "minRoommates": 0,
-      "maxRoommates": 2,
-      "ratings": [],
-      "listingFavorites": []
+      "lastName":"Doe",
+      "hasPets":false,
+      "maxRoommates":4,
+      "priceRangeLower":540.0,
+      "priceRangeUpper":760.1,
+      "minRoommates":0,
+      "firstName":"John",
+      "listings":["cef0cbf3-6458-4f13-a418-ee4d7e7505dd"],
+      "password":"$2a$06$Gix1OeaAM8Bjp1TsQfjUQOZGg23FU4qaarKOTGn14OWqA.Kk5SACG",
+      "phone":"1234567890",
+      "ratings":[],
+      "id":"b6fdc962-a9af-4f33-85bd-823ebf2f22be",
+      "maxTravelDistance":5.0,
+      "email":"johndoe@gmail.com"
     }
   ],
-  "propertyManagers": [
-
-  ]
+  "propertyManagers":[]
 }

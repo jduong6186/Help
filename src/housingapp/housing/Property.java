@@ -52,11 +52,11 @@ public class Property {
         return this.listings;
     }
 
-    protected void associateRating(UUID ratingId) {
+    public void associateRating(UUID ratingId) {
         this.ratings.add(ratingId);
     }
 
-    protected void associateListing(UUID listingId) {
+    public void associateListing(UUID listingId) {
         this.listings.add(listingId);
     }
 }

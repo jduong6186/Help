@@ -166,7 +166,7 @@ public abstract class Listing {
 
     public String getDetails() {
         ResourceManager rm = ResourceManager.getInstance();
-        String detailsStr = String.format("-----\nListing at %s\n-----", rm.getPropertyById(this.propertyId).getName());
+        String detailsStr = String.format("-----\nListing at %s\n-----\n", rm.getPropertyById(this.propertyId).getName());
         detailsStr += "Price: $" + this.price + "\n";
         detailsStr += this.numBedrooms + " bedrooms, " + this.numBathrooms + " bathrooms\n";
         detailsStr += this.leaseMonths + " month lease\n";

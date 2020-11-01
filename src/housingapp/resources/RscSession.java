@@ -44,7 +44,7 @@ public class RscSession {
                 String[] expirationTimeParts = expirationTimeStr.split(":");
                 int expirationHour = Integer.parseInt(expirationTimeParts[0]);
                 int expirationMinute = Integer.parseInt(expirationTimeParts[1]);
-                int expirationSecond = Integer.parseInt(expirationTimeParts[2]);
+                int expirationSecond = (int) Math.floor(Double.parseDouble(expirationTimeParts[2]));
 
                 LocalDateTime expiration = LocalDateTime.of(LocalDate.of(expirationYear, expirationMonth, expirationDay), LocalTime.of(expirationHour, expirationMinute, expirationSecond));
                 // append session to sessions
@@ -74,8 +74,8 @@ public class RscSession {
 
     public static JSONObject getSessionJSON(Session session) {
         JSONObject sessionJSON = new JSONObject();
-        sessionJSON.put(SysConst.SESSION_TOKEN, session.getToken());
-        sessionJSON.put(SysConst.SESSION_USER_ID, session.getUserId());
+        sessionJSON.put(SysConst.SESSION_TOKEN, session.getToken().toString());
+        sessionJSON.put(SysConst.SESSION_USER_ID, session.getUserId().toString());
         sessionJSON.put(SysConst.SESSION_EXPIRATION, session.getExpiration().toString());
         return sessionJSON;
     }

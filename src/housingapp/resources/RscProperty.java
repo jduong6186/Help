@@ -72,7 +72,7 @@ public class RscProperty {
     public static JSONObject getPropertyJSON(Property property) {
         // top-level attributes
         JSONObject propertyJSON = new JSONObject();
-        propertyJSON.put(SysConst.PROPERTY_ID, property.getId());
+        propertyJSON.put(SysConst.PROPERTY_ID, property.getId().toString());
         propertyJSON.put(SysConst.PROPERTY_NAME, property.getName());
         propertyJSON.put(SysConst.PROPERTY_ADDRESS, property.getAddress());
         propertyJSON.put(SysConst.PROPERTY_DISTANCE_TO_CAMPUS, property.getDistanceToCampus());
@@ -81,7 +81,7 @@ public class RscProperty {
         JSONArray ratingsJSON = new JSONArray();
         ArrayList<UUID> ratings = property.getRatings();
         for (int i=0; i<ratings.size(); i++) {
-            ratingsJSON.add(ratings.get(i));
+            ratingsJSON.add(ratings.get(i).toString());
         }
         propertyJSON.put(SysConst.PROPERTY_RATINGS, ratingsJSON);
 
@@ -89,7 +89,7 @@ public class RscProperty {
         JSONArray listingsJSON = new JSONArray();
         ArrayList<UUID> listings = property.getListings();
         for (int i=0; i<listings.size(); i++) {
-            listingsJSON.add(listings.get(i));
+            listingsJSON.add(listings.get(i).toString());
         }
         propertyJSON.put(SysConst.PROPERTY_LISTINGS, listingsJSON);
 

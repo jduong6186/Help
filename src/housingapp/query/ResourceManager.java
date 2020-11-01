@@ -419,23 +419,27 @@ public class ResourceManager {
     }
 
     public void removeApartment(UUID apartmentId) {
-        for (int i=0; i<apartments.size(); i++) {
-            Listing curr = apartments.get(i);
-            if (curr.getId().equals(apartmentId)) {
-                listingMap.get("apartments").remove(curr);
-                apartments.remove(i);
-                return;
+        if (apartments != null) {
+            for (int i=0; i<apartments.size(); i++) {
+                Listing curr = apartments.get(i);
+                if (curr.getId().equals(apartmentId)) {
+                    apartments.remove(i);
+                    listingMap.put("apartments", apartments);
+                    return;
+                }
             }
         }
     }
 
     public void removeTownhouse(UUID townhouseId) {
-        for (int i=0; i<townhouses.size(); i++) {
-            Listing curr = townhouses.get(i);
-            if (curr.getId().equals(townhouseId)) {
-                listingMap.get("townhouses").remove(curr);
-                townhouses.remove(i);
-                return;
+        if (townhouses != null) {
+            for (int i=0; i<townhouses.size(); i++) {
+                Listing curr = townhouses.get(i);
+                if (curr.getId().equals(townhouseId)) {
+                    townhouses.remove(i);
+                    listingMap.put("townhouses", townhouses);
+                    return;
+                }
             }
         }
     }
@@ -444,9 +448,9 @@ public class ResourceManager {
         for (int i=0; i<propertyRatings.size(); i++) {
             Rating curr = propertyRatings.get(i);
             if (curr.getId().equals(propertyRatingId)) {
-                ratingMap.get(SysConst.PROPERTY_RATINGS).remove(curr);
                 //ratings.remove(curr);
                 propertyRatings.remove(i);
+                ratingMap.put(SysConst.PROPERTY_RATINGS, propertyRatings);
                 return;
             }
         }
@@ -456,9 +460,9 @@ public class ResourceManager {
         for (int i=0; i<studentRatings.size(); i++) {
             Rating curr = studentRatings.get(i);
             if (curr.getId().equals(studentRatingId)) {
-                ratingMap.get(SysConst.STUDENT_USER_RATINGS).remove(curr);
                 //ratings.remove(curr);
                 studentRatings.remove(i);
+                ratingMap.put(SysConst.STUDENT_USER_RATINGS, studentRatings);
                 return;
             }
         }

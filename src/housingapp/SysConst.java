@@ -72,6 +72,7 @@ public class SysConst {
 
     // user input commands
     public static final String CMD_ENTER = "";
+    public static final String CMD_LOG_OUT = "log_out";
     public static final String CMD_SEARCH_LISTINGS = "search_listings";
     public static final String CMD_VIEW_FAVORITES = "view_favorites";
     public static final String CMD_VIEW_MY_LISTINGS = "view_my_listings";
