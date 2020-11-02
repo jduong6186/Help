@@ -58,59 +58,87 @@ public abstract class User {
         this.password = password;
         this.listings = listings;
     }
-
+    /**
+    gets the UUID number
+    */
     public UUID getId() {
         return this.id;
     }
-
+    /**
+    gets the type of the user
+    */
     public UserType getType() {
         return this.type;
     }
-
+    /**
+    gets the first name of the user
+    */
     public String getFirstName() {
         return this.firstName;
     }
-
+    /**
+    gets the last name of the user
+    */
     public String getLastName() {
         return this.lastName;
     }
-
+    /**
+    gets the phone number of the user
+    */
     public String getPhone() {
         return this.phone;
     }
-
+    /**
+    gets the email of the user
+    */
     public String getEmail() {
         return this.email;
     }
-
+    /**
+    gets the password of the user
+    */
     public String getPassword() {
         return this.password;
     }
-
+    /**
+    gets the ArrayList of listings
+    */
     public ArrayList<UUID> getListings() {
         return this.listings;
     }
-
+    /**
+    updates the first name of the user
+    */
     public void updateFirstName(String firstName) {
         this.firstName = firstName;
     }
-
+    /**
+    updates the last name of the user
+    */
     public void updateLastName(String lastName) {
         this.lastName = lastName;
     }
-
+    /**
+    updates the phone number
+    */
     public void updatePhone(String phone) {
         this.phone = phone;
     }
-
+    /**
+    updates the email
+    */
     public void updateEmail(String email) {
         this.email = email;
     }
-
+    /**
+    makes the listing
+    */
     public void associateListing(UUID listingId) {
         this.listings.add(listingId);
     }
-
+    /**
+    removes the specified listing using it's UUID
+    */
     public void removeListing(UUID listingId) {
         this.listings.remove(listingId);
     }
