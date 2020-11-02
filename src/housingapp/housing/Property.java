@@ -20,6 +20,20 @@ public class Property {
     private ArrayList<UUID> ratings;
     private ArrayList<UUID> listings;
 
+    /**
+     * constructor to be used when creating a property at runtime
+     * @param landlordId UUID of property landlord
+     * @param name name of property
+     * @param address address of property
+     * @param zipCode address zip code
+     * @param distanceToCampus distance to UofSC campus in km
+     * @param damagesCost maximum damages cost fee
+     * @param furnished indicates whether property furnishes their listings
+     * @param petsAllowed indicates whether pet-friendly
+     * @param hasPool indicates whether has a pool
+     * @param hasGym indicates whether has a gym
+     * @param hasFreeWifi indicates whether free wifi provided
+     */
     public Property(UUID landlordId, String name, String address, String zipCode, double distanceToCampus, double damagesCost,
                     boolean furnished, boolean petsAllowed, boolean hasPool, boolean hasGym, boolean hasFreeWifi) {
         this.id = UUID.randomUUID();
@@ -36,6 +50,23 @@ public class Property {
         this.hasFreeWifi = hasFreeWifi;
     }
 
+    /**
+     * constructor to be used when pulling data from JSON input file
+     * @param id UUID of property
+     * @param landlordId UUID of property landlord
+     * @param name name of property
+     * @param address address of property
+     * @param zipCode address zip code
+     * @param distanceToCampus distance to UofSC campus in km
+     * @param damagesCost maximum damages cost fee
+     * @param furnished indicates whether property furnishes their listings
+     * @param petsAllowed indicates whether pet-friendly
+     * @param hasPool indicates whether has a pool
+     * @param hasGym indicates whether has a gym
+     * @param hasFreeWifi indicates whether free wifi provided
+     * @param ratings list of rating UUIDs associated with property
+     * @param listings listing of listing UUIDs associated with property
+     */
     public Property(UUID id, UUID landlordId, String name, String address, String zipCode, double distanceToCampus, double damagesCost,
                     boolean furnished, boolean petsAllowed, boolean hasPool, boolean hasGym, boolean hasFreeWifi, ArrayList<UUID> ratings, ArrayList<UUID> listings) {
         this.id = id;
@@ -62,6 +93,9 @@ public class Property {
         }
     }
 
+    /**
+     * accessors
+     */
     public UUID getId() {
         return this.id;
     }
@@ -118,6 +152,9 @@ public class Property {
         return this.listings;
     }
 
+    /**
+     * mutators
+     */
     public void updateDamagesCost(double damagesCost) {
         this.damagesCost = damagesCost;
     }
@@ -142,10 +179,18 @@ public class Property {
         this.hasFreeWifi = hasFreeWifi;
     }
 
+    /**
+     * associates a rating with property
+     * @param ratingId UUID of rating to associate
+     */
     public void associateRating(UUID ratingId) {
         this.ratings.add(ratingId);
     }
 
+    /**
+     * associates a listing with property
+     * @param listingId UUID of listing to associate
+     */
     public void associateListing(UUID listingId) {
         this.listings.add(listingId);
     }

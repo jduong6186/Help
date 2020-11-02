@@ -23,6 +23,23 @@ public abstract class Listing {
     private boolean hasWasher;
     private boolean hasDryer;
 
+    /**
+     * basic constructor for generic Listing, invoked by sub-classes when creating a listing at runtime
+     * @param type type of listing (apartment or townhouse)
+     * @param propertyId UUID of property the listing is on
+     * @param description description of listing
+     * @param price price of rent each month
+     * @param leaseMonths number of months on lease
+     * @param squareFootage square footage of listing
+     * @param isSublease indicates whether listing is a sublease
+     * @param utilitiesIncluded indicates whether utilities are included in rent
+     * @param numBedrooms number of bedrooms in listing
+     * @param numBathrooms number of bathrooms in listing
+     * @param hasShuttle indicates whether a shuttle service is offered
+     * @param available indicates whether listing is currently available
+     * @param hasWasher indicates whether a washer is included
+     * @param hasDryer indicates whether a dryer is included
+     */
     public Listing(ListingType type, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
                    boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
                    boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer) {
@@ -43,6 +60,24 @@ public abstract class Listing {
         this.hasDryer = hasDryer;
     }
 
+    /**
+     * constructor to be used when reading pre-constructed listings from JSON input
+     * @param id UUID of listing object
+     * @param type type of listing (apartment or townhouse)
+     * @param propertyId UUID of property the listing is on
+     * @param description description of listing
+     * @param price price of rent each month
+     * @param leaseMonths number of months on lease
+     * @param squareFootage square footage of listing
+     * @param isSublease indicates whether listing is a sublease
+     * @param utilitiesIncluded indicates whether utilities are included in rent
+     * @param numBedrooms number of bedrooms in listing
+     * @param numBathrooms number of bathrooms in listing
+     * @param hasShuttle indicates whether a shuttle service is offered
+     * @param available indicates whether listing is currently available
+     * @param hasWasher indicates whether a washer is included
+     * @param hasDryer indicates whether a dryer is included
+     */
     public Listing(UUID id, ListingType type, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
                    boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
                    boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer) {
@@ -63,66 +98,114 @@ public abstract class Listing {
         this.hasDryer = hasDryer;
     }
 
+    /**
+     * id accessor
+     */
     public UUID getId() {
         return this.id;
     }
 
+    /**
+     * type accessor
+     */
     public ListingType getType() {
         return this.type;
     }
 
+    /**
+     * propertyId accessor
+     */
     public UUID getPropertyId() {
         return this.propertyId;
     }
 
+    /**
+     * description accessor
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * price accessor
+     */
     public double getPrice() {
         return this.price;
     }
 
+    /**
+     * leaseMonths accessor
+     */
     public int getLeaseMonths() {
         return this.leaseMonths;
     }
 
+    /**
+     * squareFootage accessor
+     */
     public double getSquareFootage() {
         return this.squareFootage;
     }
 
+    /**
+     * isSublease accessor
+     */
     public boolean isSublease() {
         return this.isSublease;
     }
 
+    /**
+     * utilitiesIncluded accessor
+     */
     public boolean utilitiesIncluded() {
         return this.utilitiesIncluded;
     }
 
+    /**
+     * numBedrooms accessor
+     */
     public int getNumBedrooms() {
         return this.numBedrooms;
     }
 
+    /**
+     * numBathrooms accessor
+     */
     public int getNumBathrooms() {
         return this.numBathrooms;
     }
 
+    /**
+     * hasShuttle accessor
+     */
     public boolean hasShuttle() {
         return this.hasShuttle;
     }
 
+    /**
+     * available accessor
+     */
     public boolean isAvailable() {
         return this.available;
     }
 
+    /**
+     * hasWasher accessor
+     */
     public boolean hasWasher() {
         return this.hasWasher;
     }
 
+    /**
+     * hasDryer accessor
+     */
     public boolean hasDryer() {
         return this.hasDryer;
     }
 
+    /**
+     * mutators
+     */
     public void updatePropertyId(UUID propertyId) {
         this.propertyId = propertyId;
     }
@@ -175,6 +258,9 @@ public abstract class Listing {
         this.hasDryer = hasDryer;
     }
 
+    /**
+     * returns generic listing details string (invoked by sub-classes for constructing details str)
+     */
     public String getDetails() {
         ResourceManager rm = ResourceManager.getInstance();
         Property parentProperty = rm.getPropertyById(this.propertyId);
@@ -234,6 +320,9 @@ public abstract class Listing {
         return detailsStr;
     }
 
+    /**
+     * returns minimized information string
+     */
     @Override
     public String toString() {
         ResourceManager rm = ResourceManager.getInstance();
