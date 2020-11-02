@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
+/**
+class that deals with reading and writing JSON files for the ratings
+*/
 public class RscRating {
 
     public static Map<String, ArrayList<Rating>> getRatings() {
@@ -75,7 +77,9 @@ public class RscRating {
             return null;
         }
     }
-
+    /**
+    writes the Ratings ArrayList to a JSON file
+    */
     public static void writeRatings() {
         ResourceManager rm = ResourceManager.getInstance();
 
@@ -110,7 +114,9 @@ public class RscRating {
             e.printStackTrace();
         }
     }
-
+    /**
+    gets Property Rating JSON file and reads it in
+    */
     public static JSONObject getPropertyRatingJSON(PropertyRating propertyRating) {
         JSONObject propertyRatingJSON = new JSONObject();
         propertyRatingJSON.put(SysConst.RATING_ID, propertyRating.getId().toString());
@@ -123,7 +129,9 @@ public class RscRating {
 
         return propertyRatingJSON;
     }
-
+    /**
+    gets Student Rating JSON file and reads it in
+    */
     public static JSONObject getStudentRatingJSON(StudentRating studentRating) {
         JSONObject studentRatingJSON = new JSONObject();
         studentRatingJSON.put(SysConst.RATING_ID, studentRating.getId().toString());
