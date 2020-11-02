@@ -11,23 +11,23 @@ import java.util.Date;
 
 public class Lease {
 	
-	public void generateLease(User landlord, User tenant, int numBed, int numBath, String propertyAddress,
+	public static void generateLease(User landlord, User tenant, int numBed, int numBath, String propertyAddress,
 							  String propertyZip, int leaseMonths, double price, String officeAddress, double damagesCost) {
 		String leaseStr = "";
 		try {
-			File leaseTemplate = new File("Lease Agreement.txt");
-			Scanner myReader = new Scanner(leaseTemplate);
-			while (myReader.hasNextLine()) {
-				String currLine = myReader.nextLine();
+			File leaseTemplate = new File("src/housingapp/data/Lease Agreement.txt");
+			Scanner reader = new Scanner(leaseTemplate);
+			while (reader.hasNextLine()) {
+				String currLine = reader.nextLine();
 				String[] currLineParts = currLine.split(" ");
 				for (int i=0; i<currLineParts.length; i++) {
 					if (currLineParts[i].equals("<DATE>")) {
 						Date date = new Date();
 						DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 						currLineParts[i] = dateFormat.format(date);
-					} else if (currLineParts[i].equals("<LANDLOARD>")) {
+					} else if (currLineParts[i].equals("<LANDLORD>")) {
 						currLineParts[i] = landlord.getFirstName() + " " + landlord.getLastName();
-					} else if (currLineParts[i].equals("<TENANT(s)>.")) {
+					} else if (currLineParts[i].equals("<TENANT(s)>.") || currLineParts[i].equals("<TENANT_1>")) {
 						currLineParts[i] = tenant.getFirstName() + " " + tenant.getLastName();
 					} else if(currLineParts[i].equals("<NUM_BED>")) {
 						currLineParts[i] = String.valueOf(numBed);

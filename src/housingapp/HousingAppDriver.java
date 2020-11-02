@@ -265,7 +265,7 @@ public class HousingAppDriver {
                                 break;
                             case SysConst.CMD_SEARCH_LISTINGS_BY_PARAMETERS:
                                 System.out.println("Select a parameter to set, or press ENTER to search using current parameters:");
-                                System.out.println(String.format("(%s) Price\n(%s) Lease duration\n(%s) Square footage\n(%s) Pet policy\n(%s) Utilities\n(%s) Number of bedrooms\n(%s) Number of bathrooms\n(%s) Shuttle service",
+                                System.out.println(String.format("(%s) Price\n(%s) Lease duration\n(%s) Square footage\n(%s) Pet policy\n(%s) Utilities\n(%s) Number of bedrooms\n(%s) Number of bathrooms\n(%s) Shuttle service\n(cmd_set_search_param_has_washer) Has washer\n(cmd_set_search_param_has_dryer) Has dryer",
                                         SysConst.CMD_SET_SEARCH_PARAM_PRICE, SysConst.CMD_SET_SEARCH_PARAM_LEASE_DURATION, SysConst.CMD_SET_SEARCH_PARAM_SQUARE_FOOTAGE, SysConst.CMD_SET_SEARCH_PARAM_PET_POLICY, SysConst.CMD_SET_SEARCH_PARAM_UTILITIES,
                                         SysConst.CMD_SET_SEARCH_PARAM_NUM_BEDROOMS, SysConst.CMD_SET_SEARCH_PARAM_NUM_BATHROOMS, SysConst.CMD_SET_SEARCH_PARAM_SHUTTLE_SERVICE));
                                 input = keyboardInput.nextLine();
@@ -273,6 +273,7 @@ public class HousingAppDriver {
                                 switch (input.toLowerCase()) {
                                     case SysConst.CMD_ENTER:
                                         printSearchResults(currListingSearchResults);
+                                        currListingSearchResults = null;
                                         break;
                                     case SysConst.CMD_SET_SEARCH_PARAM_PRICE:
                                         double[] priceRange = promptPriceRange();
@@ -348,6 +349,22 @@ public class HousingAppDriver {
                                         keyboardInput.nextLine();
                                         currListingSearchResults = query.getListingsByHasShuttle(currListingSearchResults, hasShuttle);
                                         System.out.println("Shuttle service param updated.");
+                                        currFlow = Flow.SEARCH_LISTINGS;
+                                        break;
+                                    case "cmd_set_search_param_has_washer":
+                                        System.out.print("Has washer (y/n): ");
+                                        boolean hasWasher = keyboardInput.next().equalsIgnoreCase("y");
+                                        keyboardInput.nextLine();
+                                        currListingSearchResults = query.getListingsByHasWasher(currListingSearchResults, hasWasher);
+                                        System.out.println("Has washer param updated.");
+                                        currFlow = Flow.SEARCH_LISTINGS;
+                                        break;
+                                    case "cmd_set_search_param_has_dryer":
+                                        System.out.print("Has dryer (y/n): ");
+                                        boolean hasDryer = keyboardInput.next().equalsIgnoreCase("y");
+                                        keyboardInput.nextLine();
+                                        currListingSearchResults = query.getListingsByHasDryer(currListingSearchResults, hasDryer);
+                                        System.out.println("Has dryer param updated.");
                                         currFlow = Flow.SEARCH_LISTINGS;
                                         break;
                                 }
@@ -785,7 +802,16 @@ public class HousingAppDriver {
                                 } else {
                                     int listingFavoriteIndex = Integer.parseInt(input) - 1;
                                     UUID listingId = listingFavorites.get(listingFavoriteIndex);
-                                    System.out.println(rm.getListingById(listingId).getDetails());
+                                    Listing targetListing = rm.getListingById(listingId);
+                                    System.out.println(targetListing.getDetails());
+                                    boolean generateLease = promptListingGenerateLease();
+                                    if (generateLease) {
+                                        Property parentProperty = rm.getPropertyById(targetListing.getPropertyId());
+                                        PropertyManager landlord = rm.getPropertyManagerById(parentProperty.getLandlordId());
+                                        Lease.generateLease(landlord, rm.getUserById(currSession.getUserId()), targetListing.getNumBedrooms(),
+                                                targetListing.getNumBathrooms(), parentProperty.getAddress(), parentProperty.getZipCode(),
+                                                targetListing.getLeaseMonths(), targetListing.getPrice(), landlord.getOfficeAddress(), parentProperty.getDamagesCost());
+                                    }
                                 }
                             }
                         } else {
@@ -850,7 +876,6 @@ public class HousingAppDriver {
                 currFlow = Flow.HOME;
                 System.out.println(e.getMessage());
             } catch (Exception e) {
-                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
         }
@@ -886,7 +911,20 @@ public class HousingAppDriver {
                 showingSearchResults = false;
             } else {
                 int listingIndex = Integer.parseInt(input) - 1;
-                System.out.println(searchResults.get(listingIndex).getDetails());
+                Listing targetListing = searchResults.get(listingIndex);
+                System.out.println(targetListing.getDetails());
+                boolean generateLease = promptListingGenerateLease();
+                if (generateLease) {
+                    if (currUserType != UserType.GUEST) {
+                        Property parentProperty = rm.getPropertyById(targetListing.getPropertyId());
+                        PropertyManager landlord = rm.getPropertyManagerById(parentProperty.getLandlordId());
+                        Lease.generateLease(landlord, rm.getUserById(currSession.getUserId()), targetListing.getNumBedrooms(),
+                                targetListing.getNumBathrooms(), parentProperty.getAddress(), parentProperty.getZipCode(),
+                                targetListing.getLeaseMonths(), targetListing.getPrice(), landlord.getOfficeAddress(), parentProperty.getDamagesCost());
+                    } else {
+                        System.out.println("You must sign in to generate lease paperwork.");
+                    }
+                }
             }
         }
     }
@@ -927,13 +965,6 @@ public class HousingAppDriver {
         double squareFootage = keyboardInput.nextDouble();
         keyboardInput.nextLine();
         return squareFootage;
-    }
-
-    private static boolean promptListingPetsAllowed() {
-        System.out.print("Pets allowed (y/n): ");
-        boolean petsAllowed = keyboardInput.next().toLowerCase().equals("y");
-        keyboardInput.nextLine();
-        return petsAllowed;
     }
 
     private static boolean promptListingIsSublease() {
@@ -990,6 +1021,13 @@ public class HousingAppDriver {
         boolean hasDryer = keyboardInput.next().equalsIgnoreCase("y");
         keyboardInput.nextLine();
         return hasDryer;
+    }
+
+    private static boolean promptListingGenerateLease() {
+        System.out.print("Would you like to generate a lease document for this listing (y/n)? ");
+        boolean generateLease = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return generateLease;
     }
 
     private static int promptRatingStars() {

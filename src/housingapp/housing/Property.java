@@ -50,8 +50,16 @@ public class Property {
         this.hasPool = hasPool;
         this.hasGym = hasGym;
         this.hasFreeWifi = hasFreeWifi;
-        this.ratings = ratings;
-        this.listings = listings;
+        if (ratings != null) {
+            this.ratings = ratings;
+        } else {
+            this.ratings = new ArrayList<UUID>();
+        }
+        if (listings != null) {
+            this.listings = listings;
+        } else {
+            this.listings = new ArrayList<UUID>();
+        }
     }
 
     public UUID getId() {

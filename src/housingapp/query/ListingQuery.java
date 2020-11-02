@@ -144,6 +144,26 @@ public class ListingQuery {
         return ret;
     }
 
+    public ArrayList<Listing> getListingsByHasWasher(ArrayList<Listing> listings, boolean hasWasher) {
+        ArrayList<Listing> ret = new ArrayList<Listing>();
+        for (Listing listing: listings) {
+            if (listing.hasWasher() == hasWasher) {
+                ret.add(listing);
+            }
+        }
+        return ret;
+    }
+
+    public ArrayList<Listing> getListingsByHasDryer(ArrayList<Listing> listings, boolean hasDryer) {
+        ArrayList<Listing> ret = new ArrayList<Listing>();
+        for (Listing listing: listings) {
+            if (listing.hasDryer() == hasDryer) {
+                ret.add(listing);
+            }
+        }
+        return ret;
+    }
+
     public ArrayList<Listing> getListingsByIsSublease(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
