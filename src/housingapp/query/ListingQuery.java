@@ -89,6 +89,13 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings based on price range inputed
+     * @param listings a list of registered listings
+     * @param priceLower the lower price of the price range
+     * @param priceUpper the upper price of the price range
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByPrice(ArrayList<Listing> listings, double priceLower, double priceUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -100,6 +107,12 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings based on distance from campus
+     * @param listings a list of registered listings
+     * @param maxTravelDistance the distance the user is willing to travel to campus
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByMaxTravelDistance(ArrayList<Listing> listings, double maxTravelDistance) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -110,7 +123,13 @@ public class ListingQuery {
         return ret;
     }
 
-
+    /**
+     * searches for listings based on lease month
+     * @param listings a list of registered listings
+     * @param leaseMonthsLower the min month the user is willing to lease for 
+     * @param leaseMonthsUpper the max month the user is willing to lease for 
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByLeaseMonths(ArrayList<Listing> listings, int leaseMonthsLower, int leaseMonthsUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -122,7 +141,13 @@ public class ListingQuery {
         return ret;
     }
 
-
+    /**
+     * searches for the listing based on range of square footage
+     * @param listings a list of registered listings
+     * @param squareFootageLower the min square footage the user is willing to live in
+     * @param squareFootageUpper the max square footage the user is willing to live in
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsBySquareFootage(ArrayList<Listing> listings, double squareFootageLower, double squareFootageUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -134,6 +159,12 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings that allow pets
+     * @param listings the list of registered listings
+     * @param petsAllowed if the user is willing to live with pets
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByPetsAllowed(ArrayList<Listing> listings, boolean petsAllowed) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -144,6 +175,12 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings that have a washer
+     * @param listings the list of registered listings
+     * @param hasWasher if the user wants a washer or not
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByHasWasher(ArrayList<Listing> listings, boolean hasWasher) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing: listings) {
@@ -154,6 +191,12 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings that have a dryer
+     * @param listings the list of registered listings
+     * @param hasDryer if the user want a dryer or not
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByHasDryer(ArrayList<Listing> listings, boolean hasDryer) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing: listings) {
@@ -164,6 +207,11 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings available for sublease
+     * @param listings the list of registered listings
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByIsSublease(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -174,6 +222,12 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings that include utilities in payment
+     * @param listings the list of registered listings
+     * @param utilitiesIncluded if the user want included utilities
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByUtilitiesIncluded(ArrayList<Listing> listings, boolean utilitiesIncluded) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -184,6 +238,13 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searches for listings that include the number of bedrooms wanted
+     * @param listings the list of registered listings
+     * @param numBedroomsLower the min number of bedrooms wanted by the user
+     * @param numBedroomsUpper the max number of bedrooms wanted by the user
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByNumBedrooms(ArrayList<Listing> listings, int numBedroomsLower, int numBedroomsUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -195,6 +256,13 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searched for listings that include the number of bathrooms wanted
+     * @param listings the list of registered listings
+     * @param numBathroomsLower the min number of bedrooms wanted by the user
+     * @param numBathroomsUpper the max number of bedrooms wanted by the user
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByNumBathrooms(ArrayList<Listing> listings, int numBathroomsLower, int numBathroomsUpper) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
     	for (Listing listing : listings) {
@@ -206,6 +274,12 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searched for listings that have a shuttle or not
+     * @param listings the list of registered listings
+     * @param hasShuttle if the user wants to have a shuttle available
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByHasShuttle(ArrayList<Listing> listings, boolean hasShuttle) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
@@ -216,6 +290,11 @@ public class ListingQuery {
         return ret;
     }
 
+    /**
+     * searched for listings that are available
+     * @param listings the list of registered listings
+     * @return listings that match the search requirements
+     */
     public ArrayList<Listing> getListingsByAvailable(ArrayList<Listing> listings) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
