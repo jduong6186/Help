@@ -6,10 +6,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.Date;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 public class Lease {
 	
-	public String generateLease() {
+	public void generateLease() {
 		String readSentence;
 		String readWord = "";
 		String[] acceptWord;
@@ -47,19 +49,21 @@ public class Lease {
 						acceptWord[i] = "1051 Southern Dr.";
 					} else if(acceptWord[i].equals("<DAMAGE_COST>.")) {
 						acceptWord[i] = "$500";
-					} else if(acceptWord[i].equals("<TENANT_1>")) {
-						acceptWord[i] = "Johnathon Duong";
 					}
 					readWord += " " + acceptWord[i];
 				}
 				readWord += "\n";
 					
 			}
+			File file = new File();
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter writer = new BufferedWriter(fw);
+			fw.write(readWord);
+			fw.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
-		return readWord;
 		
 	}
 	
