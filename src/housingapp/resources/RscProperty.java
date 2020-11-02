@@ -27,9 +27,12 @@ public class RscProperty {
                 for (int i=0; i<propertiesJSON.size(); i++) {
                     JSONObject propertyJSON = (JSONObject) propertiesJSON.get(i);
                     UUID propertyId = UUID.fromString((String) propertyJSON.get(SysConst.PROPERTY_ID));
+                    UUID landlordId = UUID.fromString((String) propertyJSON.get("landlordId"));
                     String name = (String) propertyJSON.get(SysConst.PROPERTY_NAME);
                     String address = (String) propertyJSON.get(SysConst.PROPERTY_ADDRESS);
+                    String zipCode = (String) propertyJSON.get("zipCode");
                     double distanceToCampus = (double) propertyJSON.get(SysConst.PROPERTY_DISTANCE_TO_CAMPUS);
+                    double damagesCost = (double) propertyJSON.get("damagesCost");
                     boolean furnished = (boolean) propertyJSON.get("furnished");
                     boolean petsAllowed = (boolean) propertyJSON.get("petsAllowed");
                     boolean hasPool = (boolean) propertyJSON.get("hasPool");
@@ -51,8 +54,8 @@ public class RscProperty {
                     }
 
                     // append property to properties
-                    properties.add(new Property(propertyId, name, address, distanceToCampus, furnished, petsAllowed, hasPool,
-                            hasGym, hasFreeWifi, ratings, listings));
+                    properties.add(new Property(propertyId, landlordId, name, address, zipCode, distanceToCampus, damagesCost,
+                            furnished, petsAllowed, hasPool, hasGym, hasFreeWifi, ratings, listings));
                 }
             }
             return properties;
@@ -83,9 +86,12 @@ public class RscProperty {
         // top-level attributes
         JSONObject propertyJSON = new JSONObject();
         propertyJSON.put(SysConst.PROPERTY_ID, property.getId().toString());
+        propertyJSON.put("landlordId", property.getLandlordId().toString());
         propertyJSON.put(SysConst.PROPERTY_NAME, property.getName());
         propertyJSON.put(SysConst.PROPERTY_ADDRESS, property.getAddress());
+        propertyJSON.put("zipCode", property.getZipCode());
         propertyJSON.put(SysConst.PROPERTY_DISTANCE_TO_CAMPUS, property.getDistanceToCampus());
+        propertyJSON.put("damagesCost", property.getDamagesCost());
         propertyJSON.put("furnished", property.isFurnished());
         propertyJSON.put("petsAllowed", property.petsAllowed());
         propertyJSON.put("hasPool", property.hasPool());

@@ -799,8 +799,15 @@ public class HousingAppDriver {
                     	System.out.print("Address: ");
                     	String address = keyboardInput.nextLine();
 
+                    	System.out.print("Zip code: ");
+                    	String zipCode = keyboardInput.nextLine();
+
                     	System.out.print("Distance to campus (km): ");
                     	double distanceToCampus = keyboardInput.nextDouble();
+                    	keyboardInput.nextLine();
+
+                    	System.out.print("Damages cost cap: $");
+                    	double damagesCost = keyboardInput.nextDouble();
                     	keyboardInput.nextLine();
 
                     	System.out.print("Furnished (y/n): ");
@@ -824,8 +831,8 @@ public class HousingAppDriver {
                     	keyboardInput.nextLine();
 
                     	// create property and add to resource manager
-                    	Property newProperty = new Property(propertyName, address, distanceToCampus, furnished, petsAllowed,
-                                hasPool, hasGym, hasFreeWifi);
+                    	Property newProperty = new Property(currSession.getUserId(), propertyName, address, zipCode,
+                                distanceToCampus, damagesCost, furnished, petsAllowed, hasPool, hasGym, hasFreeWifi);
                     	rm.addProperty(newProperty);
 
                     	// append property to user and update user in resource manager
