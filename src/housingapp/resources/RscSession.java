@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
-
+/**
+class that deals with reading and writing JSON files for the Sessions
+*/
 public class RscSession {
 
     public static ArrayList<Session> getSessions() {
@@ -58,7 +60,9 @@ public class RscSession {
             return null;
         }
     }
-
+    /**
+    writes Sessions to a JSON file
+    */
     public static void writeSessions() {
         ResourceManager rm = ResourceManager.getInstance();
         ArrayList<Session> sessions = rm.getSessions();
@@ -75,7 +79,9 @@ public class RscSession {
             e.printStackTrace();
         }
     }
-
+    /**
+    reads in Session JSON file
+    */
     public static JSONObject getSessionJSON(Session session) {
         JSONObject sessionJSON = new JSONObject();
         sessionJSON.put(SysConst.SESSION_TOKEN, session.getToken().toString());
