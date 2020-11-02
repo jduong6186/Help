@@ -11,7 +11,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
-
+/**
+class that deals with reading a writing JSON files for the properties
+*/
 public class RscProperty {
 
     public static ArrayList<Property> getProperties() {
@@ -64,7 +66,9 @@ public class RscProperty {
             return null;
         }
     }
-
+    /**
+    writes property ArrayList and parses it into a JSON file
+    */
     public static void writeProperties() {
         ResourceManager rm = ResourceManager.getInstance();
         ArrayList<Property> properties = rm.getProperties();
@@ -81,7 +85,9 @@ public class RscProperty {
             e.printStackTrace();
         }
     }
-
+    /**
+    gets and reads in property JSON file
+    */
     public static JSONObject getPropertyJSON(Property property) {
         // top-level attributes
         JSONObject propertyJSON = new JSONObject();
