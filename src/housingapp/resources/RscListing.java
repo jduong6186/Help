@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-// todo: replace hard-coded strings with consts
-
+/**
+class dealing with the reading and writing of JSON files for the listings
+*/
 public class RscListing {
 
     public static Map<String, ArrayList<Listing>> getListings() {
@@ -102,7 +103,9 @@ public class RscListing {
             return null;
         }
     }
-
+    /**
+    writes listing ArrayList and parses it into a JSON file
+    */
     public static void writeListings() {
         ResourceManager rm = ResourceManager.getInstance();
         ArrayList<Listing> apartments = rm.getApartments();
@@ -137,7 +140,9 @@ public class RscListing {
             e.printStackTrace();
         }
     }
-
+    /**
+    gets and reads Apartment's JSON file
+    */
     public static JSONObject getApartmentJSON(Apartment listing) {
         JSONObject listingJSON = new JSONObject();
         listingJSON.put(SysConst.LISTING_ID, listing.getId().toString());
@@ -161,7 +166,9 @@ public class RscListing {
 
         return listingJSON;
     }
-
+    /**
+    gets and reads in Townhouse's JSON file
+    */
     public static JSONObject getTownhouseJSON(Townhouse listing) {
         JSONObject listingJSON = new JSONObject();
         listingJSON.put(SysConst.LISTING_ID, listing.getId().toString());
