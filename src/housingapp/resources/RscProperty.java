@@ -23,29 +23,37 @@ public class RscProperty {
             JSONArray propertiesJSON = (JSONArray) parser.parse(reader);
 
             // parse individual property objects from JSONArray
-            for (int i=0; i<propertiesJSON.size(); i++) {
-                JSONObject propertyJSON = (JSONObject) propertiesJSON.get(i);
-                UUID propertyId = UUID.fromString((String) propertyJSON.get(SysConst.PROPERTY_ID));
-                String name = (String) propertyJSON.get(SysConst.PROPERTY_NAME);
-                String address = (String) propertyJSON.get(SysConst.PROPERTY_ADDRESS);
-                double distanceToCampus = (double) propertyJSON.get(SysConst.PROPERTY_DISTANCE_TO_CAMPUS);
+            if (propertiesJSON != null) {
+                for (int i=0; i<propertiesJSON.size(); i++) {
+                    JSONObject propertyJSON = (JSONObject) propertiesJSON.get(i);
+                    UUID propertyId = UUID.fromString((String) propertyJSON.get(SysConst.PROPERTY_ID));
+                    String name = (String) propertyJSON.get(SysConst.PROPERTY_NAME);
+                    String address = (String) propertyJSON.get(SysConst.PROPERTY_ADDRESS);
+                    double distanceToCampus = (double) propertyJSON.get(SysConst.PROPERTY_DISTANCE_TO_CAMPUS);
+                    boolean furnished = (boolean) propertyJSON.get("furnished");
+                    boolean petsAllowed = (boolean) propertyJSON.get("petsAllowed");
+                    boolean hasPool = (boolean) propertyJSON.get("hasPool");
+                    boolean hasGym = (boolean) propertyJSON.get("hasGym");
+                    boolean hasFreeWifi = (boolean) propertyJSON.get("hasFreeWifi");
 
-                // get rating ids
-                JSONArray ratingsJSON = (JSONArray) propertyJSON.get(SysConst.PROPERTY_RATINGS);
-                ArrayList<UUID> ratings = new ArrayList<UUID>();
-                for (int j=0; j<ratingsJSON.size(); j++) {
-                    ratings.add(UUID.fromString((String) ratingsJSON.get(j)));
+                    // get rating ids
+                    JSONArray ratingsJSON = (JSONArray) propertyJSON.get(SysConst.PROPERTY_RATINGS);
+                    ArrayList<UUID> ratings = new ArrayList<UUID>();
+                    for (int j=0; j<ratingsJSON.size(); j++) {
+                        ratings.add(UUID.fromString((String) ratingsJSON.get(j)));
+                    }
+
+                    // get listing ids
+                    JSONArray listingsJSON = (JSONArray) propertyJSON.get(SysConst.PROPERTY_LISTINGS);
+                    ArrayList<UUID> listings = new ArrayList<UUID>();
+                    for (int j=0; j<listingsJSON.size(); j++) {
+                        listings.add(UUID.fromString((String) listingsJSON.get(j)));
+                    }
+
+                    // append property to properties
+                    properties.add(new Property(propertyId, name, address, distanceToCampus, furnished, petsAllowed, hasPool,
+                            hasGym, hasFreeWifi, ratings, listings));
                 }
-
-                // get listing ids
-                JSONArray listingsJSON = (JSONArray) propertyJSON.get(SysConst.PROPERTY_LISTINGS);
-                ArrayList<UUID> listings = new ArrayList<UUID>();
-                for (int j=0; j<listingsJSON.size(); j++) {
-                    listings.add(UUID.fromString((String) listingsJSON.get(j)));
-                }
-
-                // append property to properties
-                properties.add(new Property(propertyId, name, address, distanceToCampus, ratings, listings));
             }
             return properties;
         } catch (Exception e) {
@@ -58,8 +66,10 @@ public class RscProperty {
         ResourceManager rm = ResourceManager.getInstance();
         ArrayList<Property> properties = rm.getProperties();
         JSONArray propertiesJSON = new JSONArray();
-        for (int i=0; i<properties.size(); i++) {
-            propertiesJSON.add(getPropertyJSON(properties.get(i)));
+        if (properties != null) {
+            for (int i=0; i<properties.size(); i++) {
+                propertiesJSON.add(getPropertyJSON(properties.get(i)));
+            }
         }
         try (FileWriter writer = new FileWriter(SysConst.PROPERTIES_DATA_FILE)) {
             writer.write(propertiesJSON.toJSONString());
@@ -76,20 +86,29 @@ public class RscProperty {
         propertyJSON.put(SysConst.PROPERTY_NAME, property.getName());
         propertyJSON.put(SysConst.PROPERTY_ADDRESS, property.getAddress());
         propertyJSON.put(SysConst.PROPERTY_DISTANCE_TO_CAMPUS, property.getDistanceToCampus());
+        propertyJSON.put("furnished", property.isFurnished());
+        propertyJSON.put("petsAllowed", property.petsAllowed());
+        propertyJSON.put("hasPool", property.hasPool());
+        propertyJSON.put("hasGym", property.hasGym());
+        propertyJSON.put("hasFreeWifi", property.hasFreeWifi());
 
         // array of ratings UUIDs
         JSONArray ratingsJSON = new JSONArray();
         ArrayList<UUID> ratings = property.getRatings();
-        for (int i=0; i<ratings.size(); i++) {
-            ratingsJSON.add(ratings.get(i).toString());
+        if (ratings != null) {
+            for (int i=0; i<ratings.size(); i++) {
+                ratingsJSON.add(ratings.get(i).toString());
+            }
         }
         propertyJSON.put(SysConst.PROPERTY_RATINGS, ratingsJSON);
 
         // array of listings UUIDs
         JSONArray listingsJSON = new JSONArray();
         ArrayList<UUID> listings = property.getListings();
-        for (int i=0; i<listings.size(); i++) {
-            listingsJSON.add(listings.get(i).toString());
+        if (listings != null) {
+            for (int i=0; i<listings.size(); i++) {
+                listingsJSON.add(listings.get(i).toString());
+            }
         }
         propertyJSON.put(SysConst.PROPERTY_LISTINGS, listingsJSON);
 

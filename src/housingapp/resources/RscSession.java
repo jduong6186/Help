@@ -26,29 +26,31 @@ public class RscSession {
             JSONArray sessionsJSON = (JSONArray) parser.parse(reader);
 
             // parse individual session objects from JSONArray
-            for (int i=0; i<sessionsJSON.size(); i++) {
-                JSONObject sessionJSON = (JSONObject) sessionsJSON.get(i);
-                UUID token = UUID.fromString((String) sessionJSON.get(SysConst.SESSION_TOKEN));
-                UUID userId = UUID.fromString((String) sessionJSON.get(SysConst.SESSION_USER_ID));
-                String expirationStr = (String) sessionJSON.get(SysConst.SESSION_EXPIRATION);
-                // yyyy-mm-dd HH:mm:ss
-                String[] expirationParts = expirationStr.split("T");
-                String expirationDateStr = expirationParts[0];
-                String expirationTimeStr = expirationParts[1];
+            if (sessionsJSON != null) {
+                for (int i=0; i<sessionsJSON.size(); i++) {
+                    JSONObject sessionJSON = (JSONObject) sessionsJSON.get(i);
+                    UUID token = UUID.fromString((String) sessionJSON.get(SysConst.SESSION_TOKEN));
+                    UUID userId = UUID.fromString((String) sessionJSON.get(SysConst.SESSION_USER_ID));
+                    String expirationStr = (String) sessionJSON.get(SysConst.SESSION_EXPIRATION);
+                    // yyyy-mm-dd HH:mm:ss
+                    String[] expirationParts = expirationStr.split("T");
+                    String expirationDateStr = expirationParts[0];
+                    String expirationTimeStr = expirationParts[1];
 
-                String[] expirationDateParts = expirationDateStr.split("-");
-                int expirationYear = Integer.parseInt(expirationDateParts[0]);
-                int expirationMonth = Integer.parseInt(expirationDateParts[1]);
-                int expirationDay = Integer.parseInt(expirationDateParts[2]);
+                    String[] expirationDateParts = expirationDateStr.split("-");
+                    int expirationYear = Integer.parseInt(expirationDateParts[0]);
+                    int expirationMonth = Integer.parseInt(expirationDateParts[1]);
+                    int expirationDay = Integer.parseInt(expirationDateParts[2]);
 
-                String[] expirationTimeParts = expirationTimeStr.split(":");
-                int expirationHour = Integer.parseInt(expirationTimeParts[0]);
-                int expirationMinute = Integer.parseInt(expirationTimeParts[1]);
-                int expirationSecond = (int) Math.floor(Double.parseDouble(expirationTimeParts[2]));
+                    String[] expirationTimeParts = expirationTimeStr.split(":");
+                    int expirationHour = Integer.parseInt(expirationTimeParts[0]);
+                    int expirationMinute = Integer.parseInt(expirationTimeParts[1]);
+                    int expirationSecond = (int) Math.floor(Double.parseDouble(expirationTimeParts[2]));
 
-                LocalDateTime expiration = LocalDateTime.of(LocalDate.of(expirationYear, expirationMonth, expirationDay), LocalTime.of(expirationHour, expirationMinute, expirationSecond));
-                // append session to sessions
-                sessions.add(new Session(token, userId, expiration));
+                    LocalDateTime expiration = LocalDateTime.of(LocalDate.of(expirationYear, expirationMonth, expirationDay), LocalTime.of(expirationHour, expirationMinute, expirationSecond));
+                    // append session to sessions
+                    sessions.add(new Session(token, userId, expiration));
+                }
             }
             return sessions;
         } catch (Exception e) {
@@ -61,8 +63,10 @@ public class RscSession {
         ResourceManager rm = ResourceManager.getInstance();
         ArrayList<Session> sessions = rm.getSessions();
         JSONArray sessionsJSON = new JSONArray();
-        for (int i=0; i<sessions.size(); i++) {
-            sessionsJSON.add(getSessionJSON(sessions.get(i)));
+        if (sessions != null) {
+            for (int i=0; i<sessions.size(); i++) {
+                sessionsJSON.add(getSessionJSON(sessions.get(i)));
+            }
         }
         try (FileWriter writer = new FileWriter(SysConst.SESSIONS_DATA_FILE)) {
             writer.write(sessionsJSON.toJSONString());

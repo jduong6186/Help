@@ -12,11 +12,11 @@ public class Townhouse extends Listing {
     private boolean hasFence;
 
     public Townhouse(UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
-                     boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
-                     boolean hasShuttle, boolean available, boolean hasGarage, boolean hasDriveway, boolean hasYard,
+                     boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                     boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer, boolean hasGarage, boolean hasDriveway, boolean hasYard,
                      boolean hasFence) {
-        super(ListingType.TOWNHOUSE, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
-                numBedrooms, numBathrooms, hasShuttle, available);
+        super(ListingType.TOWNHOUSE, propertyId, description, price, leaseMonths, squareFootage, isSublease, utilitiesIncluded,
+                numBedrooms, numBathrooms, hasShuttle, available, hasWasher, hasDryer);
         this.hasGarage = hasGarage;
         this.hasDriveway = hasDriveway;
         this.hasYard = hasYard;
@@ -24,11 +24,11 @@ public class Townhouse extends Listing {
     }
 
     public Townhouse(UUID id, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
-                     boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
-                     boolean hasShuttle, boolean available, boolean hasGarage, boolean hasDriveway, boolean hasYard,
+                     boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                     boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer, boolean hasGarage, boolean hasDriveway, boolean hasYard,
                      boolean hasFence) {
-        super(id, ListingType.TOWNHOUSE, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
-                numBedrooms, numBathrooms, hasShuttle, available);
+        super(id, ListingType.TOWNHOUSE, propertyId, description, price, leaseMonths, squareFootage, isSublease, utilitiesIncluded,
+                numBedrooms, numBathrooms, hasShuttle, available, hasWasher, hasDryer);
         this.hasGarage = hasGarage;
         this.hasDriveway = hasDriveway;
         this.hasYard = hasYard;

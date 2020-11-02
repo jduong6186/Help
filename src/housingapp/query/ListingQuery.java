@@ -137,7 +137,7 @@ public class ListingQuery {
     public ArrayList<Listing> getListingsByPetsAllowed(ArrayList<Listing> listings, boolean petsAllowed) {
         ArrayList<Listing> ret = new ArrayList<Listing>();
         for (Listing listing : listings) {
-            if (listing.petsAllowed() == petsAllowed) {
+            if (rm.getPropertyById(listing.getPropertyId()).petsAllowed() == petsAllowed) {
                 ret.add(listing);
             }
         }

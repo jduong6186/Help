@@ -14,17 +14,18 @@ public abstract class Listing {
     private double price;
     private int leaseMonths;
     private double squareFootage;
-    private boolean petsAllowed;
     private boolean isSublease;
     private boolean utilitiesIncluded;
     private int numBedrooms;
     private int numBathrooms;
     private boolean hasShuttle;
     private boolean available;
+    private boolean hasWasher;
+    private boolean hasDryer;
 
     public Listing(ListingType type, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
-                   boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
-                   boolean hasShuttle, boolean available) {
+                   boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                   boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer) {
         this.id = UUID.randomUUID();
         this.type = type;
         this.propertyId = propertyId;
@@ -32,18 +33,19 @@ public abstract class Listing {
         this.price = price;
         this.leaseMonths = leaseMonths;
         this.squareFootage = squareFootage;
-        this.petsAllowed = petsAllowed;
         this.isSublease = isSublease;
         this.utilitiesIncluded = utilitiesIncluded;
         this.numBedrooms = numBedrooms;
         this.numBathrooms = numBathrooms;
         this.hasShuttle = hasShuttle;
         this.available = available;
+        this.hasWasher = hasWasher;
+        this.hasDryer = hasDryer;
     }
 
     public Listing(UUID id, ListingType type, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
-                   boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
-                   boolean hasShuttle, boolean available) {
+                   boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                   boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer) {
         this.id = id;
         this.type = type;
         this.propertyId = propertyId;
@@ -51,13 +53,14 @@ public abstract class Listing {
         this.price = price;
         this.leaseMonths = leaseMonths;
         this.squareFootage = squareFootage;
-        this.petsAllowed = petsAllowed;
         this.isSublease = isSublease;
         this.utilitiesIncluded = utilitiesIncluded;
         this.numBedrooms = numBedrooms;
         this.numBathrooms = numBathrooms;
         this.hasShuttle = hasShuttle;
         this.available = available;
+        this.hasWasher = hasWasher;
+        this.hasDryer = hasDryer;
     }
 
     public UUID getId() {
@@ -88,10 +91,6 @@ public abstract class Listing {
         return this.squareFootage;
     }
 
-    public boolean petsAllowed() {
-        return this.petsAllowed;
-    }
-
     public boolean isSublease() {
         return this.isSublease;
     }
@@ -116,6 +115,14 @@ public abstract class Listing {
         return this.available;
     }
 
+    public boolean hasWasher() {
+        return this.hasWasher;
+    }
+
+    public boolean hasDryer() {
+        return this.hasDryer;
+    }
+
     public void updatePropertyId(UUID propertyId) {
         this.propertyId = propertyId;
     }
@@ -134,10 +141,6 @@ public abstract class Listing {
 
     public void updateSquareFootage(double squareFootage) {
         this.squareFootage = squareFootage;
-    }
-
-    public void updatePetsAllowed(boolean petsAllowed) {
-        this.petsAllowed = petsAllowed;
     }
 
     public void updateIsSublease(boolean isSublease) {
@@ -164,17 +167,46 @@ public abstract class Listing {
         this.available = isAvailable;
     }
 
+    public void updateHasWasher(boolean hasWasher) {
+        this.hasWasher = hasWasher;
+    }
+
+    public void updateHasDryer(boolean hasDryer) {
+        this.hasDryer = hasDryer;
+    }
+
     public String getDetails() {
         ResourceManager rm = ResourceManager.getInstance();
+        Property parentProperty = rm.getPropertyById(this.propertyId);
         String detailsStr = String.format("-----\nListing at %s\n-----\n", rm.getPropertyById(this.propertyId).getName());
         detailsStr += "Price: $" + this.price + "\n";
         detailsStr += this.numBedrooms + " bedrooms, " + this.numBathrooms + " bathrooms\n";
         detailsStr += this.leaseMonths + " month lease\n";
         detailsStr += this.squareFootage + " square feet\n";
-        if (this.petsAllowed) {
+        if (parentProperty.isFurnished()) {
+            detailsStr += "Furnished\n";
+        } else {
+            detailsStr += "*NOT* furnished\n";
+        }
+        if (parentProperty.petsAllowed()) {
             detailsStr += "Pets *are* allowed\n";
         } else {
             detailsStr += "Pets *are not* allowed\n";
+        }
+        if (parentProperty.hasPool()) {
+            detailsStr += "*Has* pool\n";
+        } else {
+            detailsStr += "*Does not have* pool\n";
+        }
+        if (parentProperty.hasGym()) {
+            detailsStr += "*Has* gym\n";
+        } else {
+            detailsStr += "*Does not have* gym\n";
+        }
+        if (parentProperty.hasFreeWifi()) {
+            detailsStr += "Free Wifi provided\n";
+        } else {
+            detailsStr += "Free Wifi *NOT* provided\n";
         }
         if (this.isSublease) {
             detailsStr += "Sublease*\n";
@@ -188,6 +220,16 @@ public abstract class Listing {
             detailsStr += "Shuttle service offered\n";
         } else {
             detailsStr += "No shuttle service offered\n";
+        }
+        if (this.hasWasher) {
+            detailsStr += "*Has* washer\n";
+        } else {
+            detailsStr += "*Does not have* washer\n";
+        }
+        if (this.hasDryer) {
+            detailsStr += "*Has* dryer\n";
+        } else {
+            detailsStr += "*Does not have* dryer\n";
         }
         return detailsStr;
     }

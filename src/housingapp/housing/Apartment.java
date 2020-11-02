@@ -10,19 +10,19 @@ public class Apartment extends Listing {
     private boolean hasParking;
 
     public Apartment(UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
-                     boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
-                     boolean hasShuttle, boolean available, String apartmentNumber, boolean hasParking) {
-        super(ListingType.APARTMENT, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
-                numBedrooms, numBathrooms, hasShuttle, available);
+                     boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                     boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer, String apartmentNumber, boolean hasParking) {
+        super(ListingType.APARTMENT, propertyId, description, price, leaseMonths, squareFootage, isSublease, utilitiesIncluded,
+                numBedrooms, numBathrooms, hasShuttle, available, hasWasher, hasDryer);
         this.apartmentNumber = apartmentNumber;
         this.hasParking = hasParking;
     }
 
     public Apartment(UUID id, UUID propertyId, String description, double price, int leaseMonths, double squareFootage,
-                     boolean petsAllowed, boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
-                     boolean hasShuttle, boolean available, String apartmentNumber, boolean hasParking) {
-        super(id, ListingType.APARTMENT, propertyId, description, price, leaseMonths, squareFootage, petsAllowed, isSublease, utilitiesIncluded,
-                numBedrooms, numBathrooms, hasShuttle, available);
+                     boolean isSublease, boolean utilitiesIncluded, int numBedrooms, int numBathrooms,
+                     boolean hasShuttle, boolean available, boolean hasWasher, boolean hasDryer, String apartmentNumber, boolean hasParking) {
+        super(id, ListingType.APARTMENT, propertyId, description, price, leaseMonths, squareFootage, isSublease, utilitiesIncluded,
+                numBedrooms, numBathrooms, hasShuttle, available, hasWasher, hasDryer);
         this.apartmentNumber = apartmentNumber;
         this.hasParking = hasParking;
     }

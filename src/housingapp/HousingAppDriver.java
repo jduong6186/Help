@@ -73,8 +73,11 @@ public class HousingAppDriver {
                         break;
                     case SIGN_UP:
                         System.out.print("Select an account type, 'student' or 'property manager': ");
-                        String accountType = keyboardInput.next();
-                        keyboardInput.nextLine();
+                        String accountType = keyboardInput.nextLine();
+
+                        if (!accountType.equalsIgnoreCase("student") && !accountType.equalsIgnoreCase("property manager")) {
+                            throw new InvalidInputException();
+                        }
 
                         System.out.print("First name: ");
                         String firstName = keyboardInput.next();
@@ -96,7 +99,7 @@ public class HousingAppDriver {
                         String newPassword = keyboardInput.next();
                         keyboardInput.nextLine();
 
-                        if (accountType.toLowerCase().equals("student")) {
+                        if (accountType.equalsIgnoreCase("student")) {
                             System.out.print("Do you have pets (y/n): ");
                             boolean hasPets = keyboardInput.next().toLowerCase().equals("y");
                             keyboardInput.nextLine();
@@ -122,10 +125,9 @@ public class HousingAppDriver {
                             currUserType = UserType.STUDENT;
                             currSession = rm.login(newEmail, newPassword);
                             System.out.println("Student user registered.");
-                        } else if (accountType.toLowerCase().equals("property manager")) {
+                        } else if (accountType.equalsIgnoreCase("property manager")) {
                             System.out.print("Office address: ");
-                            String officeAddress = keyboardInput.next();
-                            keyboardInput.nextLine();
+                            String officeAddress = keyboardInput.nextLine();
 
                             rm.addPropertyManager(new PropertyManager(firstName, lastName, phone, newEmail, newPassword,
                                     officeAddress));
@@ -389,17 +391,23 @@ public class HousingAppDriver {
                         keyboardInput.nextLine();
 
                         UUID propertyId = promptListingPropertyId();
+                        if (propertyId == null) {
+                            System.out.println("Couldn't find given property. Please register the property first.");
+                            currFlow = Flow.DASHBOARD;
+                            continue;
+                        }
                         String description = promptListingDescription();
                         double price = promptListingPrice();
                         int leaseMonths = promptListingLeaseMonths();
                         double squareFootage = promptListingSquareFootage();
-                        boolean petsAllowed = promptListingPetsAllowed();
                         boolean isSublease = promptListingIsSublease();
                         boolean utilitiesIncluded = promptListingUtilitiesIncluded();
                         int numBedrooms = promptListingNumBedrooms();
                         int numBathrooms = promptListingNumBathrooms();
                         boolean hasShuttle = promptListingHasShuttle();
                         boolean available = promptListingAvailable();
+                        boolean hasWasher = promptListingHasWasher();
+                        boolean hasDryer = promptListingHasDryer();
 
                         if (listingTypeStr.equalsIgnoreCase("apartment")) {
                             String apartmentNumber = promptApartmentNumber();
@@ -407,14 +415,23 @@ public class HousingAppDriver {
 
                             // add new apartment to rm
                             Apartment newApartment = new Apartment(propertyId, description, price, leaseMonths, squareFootage,
-                                    petsAllowed, isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
-                                    hasShuttle, available, apartmentNumber, hasParking);
+                                    isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
+                                    hasShuttle, available, hasWasher, hasDryer, apartmentNumber, hasParking);
                             rm.addApartment(newApartment);
 
                             // associate new apartment with property
                             Property parentProperty = rm.getPropertyById(propertyId);
                             parentProperty.associateListing(newApartment.getId());
                             rm.updateProperty(propertyId, parentProperty);
+
+                            // associate new apartment with listing user
+                            User listingUser = rm.getUserById(currSession.getUserId());
+                            listingUser.associateListing(newApartment.getId());
+                            if (currUserType == UserType.PROPERTY_MANAGER) {
+                                rm.updatePropertyManager(currSession.getUserId(), (PropertyManager) listingUser);
+                            } else {
+                                rm.updateStudent(currSession.getUserId(), (Student) listingUser);
+                            }
 
                             System.out.println("Apartment listing created.");
                         } else if (listingTypeStr.equalsIgnoreCase("townhouse")) {
@@ -425,14 +442,23 @@ public class HousingAppDriver {
 
                             // add new townhouse to rm
                             Townhouse newTownhouse = new Townhouse(propertyId, description, price, leaseMonths, squareFootage,
-                                    petsAllowed, isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
-                                    hasShuttle, available, hasGarage, hasDriveway, hasYard, hasFence);
+                                    isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
+                                    hasShuttle, available, hasWasher, hasDryer, hasGarage, hasDriveway, hasYard, hasFence);
                             rm.addTownhouse(newTownhouse);
 
                             // associate new townhouse with property
                             Property parentProperty = rm.getPropertyById(propertyId);
                             parentProperty.associateListing(newTownhouse.getId());
                             rm.updateProperty(propertyId, parentProperty);
+
+                            // associate new townhouse with listing user
+                            User listingUser = rm.getUserById(currSession.getUserId());
+                            listingUser.associateListing(newTownhouse.getId());
+                            if (currUserType == UserType.PROPERTY_MANAGER) {
+                                rm.updatePropertyManager(currSession.getUserId(), (PropertyManager) listingUser);
+                            } else {
+                                rm.updateStudent(currSession.getUserId(), (Student) listingUser);
+                            }
 
                             System.out.println("Townhouse listing created.");
                         } else {
@@ -449,7 +475,7 @@ public class HousingAppDriver {
 
                             System.out.println(apartmentToEdit.getDetails());
 
-                            System.out.print("Select an attribute to edit, type 'DELETE' to delete, or press ENTER to return to dashboard:\nProperty\nDescription\nPrice\nLease months\nSquare footage\nPets allowed\nIs sublease\nUtilities included\nNum bedrooms\nNum bathrooms\nHas shuttle\nAvailable\nApartment number\nHas parking\nSelection: ");
+                            System.out.print("Select an attribute to edit, type 'DELETE' to delete, or press ENTER to return to dashboard:\nProperty\nDescription\nPrice\nLease months\nSquare footage\nIs sublease\nUtilities included\nNum bedrooms\nNum bathrooms\nHas shuttle\nAvailable\nApartment number\nHas parking\nSelection: ");
                             String attributeToEdit = keyboardInput.nextLine();
 
                             if (attributeToEdit.isEmpty()) {
@@ -482,10 +508,6 @@ public class HousingAppDriver {
                                 double newListingSquareFootage = promptListingSquareFootage();
                                 apartmentToEdit.updateSquareFootage(newListingSquareFootage);
                                 System.out.println("Square footage attribute updated.");
-                            } else if (attributeToEdit.equalsIgnoreCase("pets allowed")) {
-                                boolean newListingPetsAllowed = promptListingPetsAllowed();
-                                apartmentToEdit.updatePetsAllowed(newListingPetsAllowed);
-                                System.out.println("Pets allowed attribute updated.");
                             } else if (attributeToEdit.equalsIgnoreCase("is sublease")) {
                                 boolean newListingIsSublease = promptListingIsSublease();
                                 apartmentToEdit.updateIsSublease(newListingIsSublease);
@@ -526,7 +548,7 @@ public class HousingAppDriver {
 
                             System.out.println(townhouseToEdit.getDetails());
 
-                            System.out.println("Select an attribute to edit, type 'DELETE' to delete, or press ENTER to return to dashboard:\nProperty\nDescription\nPrice\nLease months\nSquare footage\nPets allowed\nIs sublease\nUtilities included\nNum bedrooms\nNum bathrooms\nHas shuttle\nAvailable\nHas garage\nHas driveway\nHas yard\nHas fence");
+                            System.out.println("Select an attribute to edit, type 'DELETE' to delete, or press ENTER to return to dashboard:\nProperty\nDescription\nPrice\nLease months\nSquare footage\nIs sublease\nUtilities included\nNum bedrooms\nNum bathrooms\nHas shuttle\nAvailable\nHas garage\nHas driveway\nHas yard\nHas fence");
                             String attributeToEdit = keyboardInput.nextLine();
 
                             if (attributeToEdit.isEmpty()) {
@@ -567,11 +589,6 @@ public class HousingAppDriver {
                                     double newListingSquareFootage = promptListingSquareFootage();
                                     townhouseToEdit.updateSquareFootage(newListingSquareFootage);
                                     System.out.println("Square footage attribute updated.");
-                                    break;
-                                case "pets allowed":
-                                    boolean newListingPetsAllowed = promptListingPetsAllowed();
-                                    townhouseToEdit.updatePetsAllowed(newListingPetsAllowed);
-                                    System.out.println("Pets allowed attribute updated.");
                                     break;
                                 case "is sublease":
                                     boolean newListingIsSublease = promptListingIsSublease();
@@ -786,8 +803,29 @@ public class HousingAppDriver {
                     	double distanceToCampus = keyboardInput.nextDouble();
                     	keyboardInput.nextLine();
 
+                    	System.out.print("Furnished (y/n): ");
+                    	boolean furnished = keyboardInput.next().equalsIgnoreCase("y");
+                    	keyboardInput.nextLine();
+
+                    	System.out.print("Pets allowed (y/n): ");
+                    	boolean petsAllowed = keyboardInput.next().equalsIgnoreCase("y");
+                    	keyboardInput.nextLine();
+
+                    	System.out.print("Has pool (y/n): ");
+                    	boolean hasPool = keyboardInput.next().equalsIgnoreCase("y");
+                    	keyboardInput.nextLine();
+
+                    	System.out.print("Has gym (y/n): ");
+                    	boolean hasGym = keyboardInput.next().equalsIgnoreCase("y");
+                    	keyboardInput.nextLine();
+
+                    	System.out.print("Has free Wifi (y/n): ");
+                    	boolean hasFreeWifi = keyboardInput.next().equalsIgnoreCase("y");
+                    	keyboardInput.nextLine();
+
                     	// create property and add to resource manager
-                    	Property newProperty = new Property(propertyName, address, distanceToCampus);
+                    	Property newProperty = new Property(propertyName, address, distanceToCampus, furnished, petsAllowed,
+                                hasPool, hasGym, hasFreeWifi);
                     	rm.addProperty(newProperty);
 
                     	// append property to user and update user in resource manager
@@ -805,6 +843,7 @@ public class HousingAppDriver {
                 currFlow = Flow.HOME;
                 System.out.println(e.getMessage());
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
         }
@@ -848,9 +887,13 @@ public class HousingAppDriver {
     private static UUID promptListingPropertyId() {
         System.out.println("-----\nFill in the following listing details\n-----");
         System.out.print("Location (property) name: ");
-        String propertyName = keyboardInput.next();
-        keyboardInput.nextLine();
-        return rm.getPropertyByName(propertyName).getId();
+        String propertyName = keyboardInput.nextLine();
+        Property foundProperty = rm.getPropertyByName(propertyName);
+        if (foundProperty != null) {
+            return foundProperty.getId();
+        } else {
+            return null;
+        }
     }
 
     private static String promptListingDescription() {
@@ -926,6 +969,20 @@ public class HousingAppDriver {
         boolean available = keyboardInput.next().toLowerCase().equals("y");
         keyboardInput.nextLine();
         return available;
+    }
+
+    private static boolean promptListingHasWasher() {
+        System.out.print("Has washer (y/n): ");
+        boolean hasWasher = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return hasWasher;
+    }
+
+    private static boolean promptListingHasDryer() {
+        System.out.print("Has dryer (y/n): ");
+        boolean hasDryer = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return hasDryer;
     }
 
     private static int promptRatingStars() {

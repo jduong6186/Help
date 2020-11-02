@@ -82,15 +82,19 @@ public class RscRating {
         // first, populate propertyRatings JSONArray
         ArrayList<Rating> propertyRatings = rm.getPropertyRatings();
         JSONArray propertyRatingsJSON = new JSONArray();
-        for (int i=0; i<propertyRatings.size(); i++) {
-            propertyRatingsJSON.add(getPropertyRatingJSON((PropertyRating) propertyRatings.get(i)));
+        if (propertyRatings != null) {
+            for (int i=0; i<propertyRatings.size(); i++) {
+                propertyRatingsJSON.add(getPropertyRatingJSON((PropertyRating) propertyRatings.get(i)));
+            }
         }
 
         // second, populate studentRatings JSONArray
         ArrayList<Rating> studentRatings = rm.getStudentRatings();
         JSONArray studentRatingsJSON = new JSONArray();
-        for (int i=0; i<studentRatings.size(); i++) {
-            studentRatingsJSON.add(getStudentRatingJSON((StudentRating) studentRatings.get(i)));
+        if (studentRatings != null) {
+            for (int i=0; i<studentRatings.size(); i++) {
+                studentRatingsJSON.add(getStudentRatingJSON((StudentRating) studentRatings.get(i)));
+            }
         }
 
         // third, create ratingsJSON object

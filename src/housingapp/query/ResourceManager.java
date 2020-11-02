@@ -286,6 +286,7 @@ public class ResourceManager {
         students.add(student);
         users.add(student);
         userMap.put(SysConst.STUDENT_USERS, students);
+        userEmailMap.put(student.getEmail(), student);
         RscUser.writeUsers();
     }
 
@@ -293,6 +294,7 @@ public class ResourceManager {
         propertyManagers.add(propertyManager);
         users.add(propertyManager);
         userMap.put(SysConst.PROPERTY_MANAGER_USERS, propertyManagers);
+        userEmailMap.put(propertyManager.getEmail(), propertyManager);
         RscUser.writeUsers();
     }
 
@@ -389,9 +391,9 @@ public class ResourceManager {
         for (int i=0; i<students.size(); i++) {
             User curr = students.get(i);
             if (curr.getId().equals(studentId)) {
-                userMap.get(SysConst.STUDENT_USERS).remove(curr);
                 users.remove(curr);
                 students.remove(i);
+                userMap.put(SysConst.STUDENT_USERS, students);
                 return;
             }
         }
@@ -401,9 +403,9 @@ public class ResourceManager {
         for (int i=0; i<propertyManagers.size(); i++) {
             User curr = propertyManagers.get(i);
             if (curr.getId().equals(propertyManagerId)) {
-                userMap.get(SysConst.PROPERTY_MANAGER_USERS).remove(curr);
                 users.remove(curr);
                 propertyManagers.remove(i);
+                userMap.put(SysConst.PROPERTY_MANAGER_USERS, propertyManagers);
                 return;
             }
         }

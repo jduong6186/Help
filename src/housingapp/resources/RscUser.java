@@ -33,90 +33,94 @@ public class RscUser {
             JSONArray propertyManagersJSON = (JSONArray) usersFileJSON.get(SysConst.PROPERTY_MANAGER_USERS);
 
             // parse students list
-            for (int i=0; i<studentsJSON.size(); i++) {
-                JSONObject studentJSON = (JSONObject) studentsJSON.get(i);
-                UUID userId = UUID.fromString((String) studentJSON.get(SysConst.USER_ID));
-                String firstName = (String) studentJSON.get(SysConst.USER_FIRST_NAME);
-                String lastName = (String) studentJSON.get(SysConst.USER_LAST_NAME);
-                String phone = (String) studentJSON.get(SysConst.USER_PHONE);
-                String email = (String) studentJSON.get(SysConst.USER_EMAIL);
-                String password = (String) studentJSON.get(SysConst.USER_PASSWORD);
+            if (studentsJSON != null) {
+                for (int i=0; i<studentsJSON.size(); i++) {
+                    JSONObject studentJSON = (JSONObject) studentsJSON.get(i);
+                    UUID userId = UUID.fromString((String) studentJSON.get(SysConst.USER_ID));
+                    String firstName = (String) studentJSON.get(SysConst.USER_FIRST_NAME);
+                    String lastName = (String) studentJSON.get(SysConst.USER_LAST_NAME);
+                    String phone = (String) studentJSON.get(SysConst.USER_PHONE);
+                    String email = (String) studentJSON.get(SysConst.USER_EMAIL);
+                    String password = (String) studentJSON.get(SysConst.USER_PASSWORD);
 
-                // student-unique attributes
-                boolean hasPets = (boolean) studentJSON.get(SysConst.STUDENT_USER_HAS_PETS);
-                double priceRangeLower = (double) studentJSON.get(SysConst.STUDENT_USER_PRICE_RANGE_LOWER);
-                double priceRangeUpper = (double) studentJSON.get(SysConst.STUDENT_USER_PRICE_RANGE_UPPER);
-                double maxTravelDistance = (double) studentJSON.get(SysConst.STUDENT_USER_MAX_TRAVEL_DISTANCE);
-                int minRoommates = ((Long) studentJSON.get(SysConst.STUDENT_USER_MIN_ROOMMATES)).intValue();
-                int maxRoommates = ((Long) studentJSON.get(SysConst.STUDENT_USER_MAX_ROOMMATES)).intValue();
+                    // student-unique attributes
+                    boolean hasPets = (boolean) studentJSON.get(SysConst.STUDENT_USER_HAS_PETS);
+                    double priceRangeLower = (double) studentJSON.get(SysConst.STUDENT_USER_PRICE_RANGE_LOWER);
+                    double priceRangeUpper = (double) studentJSON.get(SysConst.STUDENT_USER_PRICE_RANGE_UPPER);
+                    double maxTravelDistance = (double) studentJSON.get(SysConst.STUDENT_USER_MAX_TRAVEL_DISTANCE);
+                    int minRoommates = ((Long) studentJSON.get(SysConst.STUDENT_USER_MIN_ROOMMATES)).intValue();
+                    int maxRoommates = ((Long) studentJSON.get(SysConst.STUDENT_USER_MAX_ROOMMATES)).intValue();
 
-                // parse ratings UUID array
-                JSONArray ratingsJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_RATINGS);
-                ArrayList<UUID> ratings = new ArrayList<UUID>();
-                if (ratingsJSON != null) {
-                    for (int j=0; j<ratingsJSON.size(); j++) {
-                        ratings.add((UUID) ratingsJSON.get(j));
+                    // parse ratings UUID array
+                    JSONArray ratingsJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_RATINGS);
+                    ArrayList<UUID> ratings = new ArrayList<UUID>();
+                    if (ratingsJSON != null) {
+                        for (int j=0; j<ratingsJSON.size(); j++) {
+                            ratings.add((UUID) ratingsJSON.get(j));
+                        }
                     }
-                }
 
-                // parse listing favorites UUID array
-                JSONArray listingFavoritesJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_LISTING_FAVORITES);
-                ArrayList<UUID> listingFavorites = new ArrayList<UUID>();
-                if (listingFavoritesJSON != null) {
-                    for (int j=0; j<listingFavoritesJSON.size(); j++) {
-                        listingFavorites.add(UUID.fromString((String) listingFavoritesJSON.get(j)));
+                    // parse listing favorites UUID array
+                    JSONArray listingFavoritesJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_LISTING_FAVORITES);
+                    ArrayList<UUID> listingFavorites = new ArrayList<UUID>();
+                    if (listingFavoritesJSON != null) {
+                        for (int j=0; j<listingFavoritesJSON.size(); j++) {
+                            listingFavorites.add(UUID.fromString((String) listingFavoritesJSON.get(j)));
+                        }
                     }
-                }
 
-                // get listing ids from attribute
-                JSONArray listingsJSON = (JSONArray) studentJSON.get(SysConst.USER_LISTINGS);
-                ArrayList<UUID> listings = new ArrayList<UUID>();
-                if (listingsJSON != null) {
-                    for (int j=0; j<listingsJSON.size(); j++) {
-                        listings.add(UUID.fromString((String) listingsJSON.get(j)));
+                    // get listing ids from attribute
+                    JSONArray listingsJSON = (JSONArray) studentJSON.get(SysConst.USER_LISTINGS);
+                    ArrayList<UUID> listings = new ArrayList<UUID>();
+                    if (listingsJSON != null) {
+                        for (int j=0; j<listingsJSON.size(); j++) {
+                            listings.add(UUID.fromString((String) listingsJSON.get(j)));
+                        }
                     }
-                }
 
-                // add student to students list;
-                students.add(new Student(userId, firstName, lastName, phone, email, password, hasPets, priceRangeLower,
-                        priceRangeUpper, maxTravelDistance, minRoommates, maxRoommates, ratings, listingFavorites, listings));
+                    // add student to students list;
+                    students.add(new Student(userId, firstName, lastName, phone, email, password, hasPets, priceRangeLower,
+                            priceRangeUpper, maxTravelDistance, minRoommates, maxRoommates, ratings, listingFavorites, listings));
+                }
             }
             users.put(SysConst.STUDENT_USERS, students);
 
             // parse property managers list
-            for (int i=0; i<propertyManagersJSON.size(); i++) {
-                JSONObject propertyManagerJSON = (JSONObject) propertyManagersJSON.get(i);
-                UUID userId = UUID.fromString((String) propertyManagerJSON.get(SysConst.USER_ID));
-                String firstName = (String) propertyManagerJSON.get(SysConst.USER_FIRST_NAME);
-                String lastName = (String) propertyManagerJSON.get(SysConst.USER_LAST_NAME);
-                String phone = (String) propertyManagerJSON.get(SysConst.USER_PHONE);
-                String email = (String) propertyManagerJSON.get(SysConst.USER_EMAIL);
-                String password = (String) propertyManagerJSON.get(SysConst.USER_PASSWORD);
+            if (propertyManagersJSON != null) {
+                for (int i=0; i<propertyManagersJSON.size(); i++) {
+                    JSONObject propertyManagerJSON = (JSONObject) propertyManagersJSON.get(i);
+                    UUID userId = UUID.fromString((String) propertyManagerJSON.get(SysConst.USER_ID));
+                    String firstName = (String) propertyManagerJSON.get(SysConst.USER_FIRST_NAME);
+                    String lastName = (String) propertyManagerJSON.get(SysConst.USER_LAST_NAME);
+                    String phone = (String) propertyManagerJSON.get(SysConst.USER_PHONE);
+                    String email = (String) propertyManagerJSON.get(SysConst.USER_EMAIL);
+                    String password = (String) propertyManagerJSON.get(SysConst.USER_PASSWORD);
 
-                // property manager-unique attributes
-                String officeAddress = (String) propertyManagerJSON.get(SysConst.PROPERTY_MANAGER_USER_OFFICE_ADDRESS);
+                    // property manager-unique attributes
+                    String officeAddress = (String) propertyManagerJSON.get(SysConst.PROPERTY_MANAGER_USER_OFFICE_ADDRESS);
 
-                // get listing ids from attribute
-                JSONArray listingsJSON = (JSONArray) propertyManagerJSON.get(SysConst.USER_LISTINGS);
-                ArrayList<UUID> listings = new ArrayList<UUID>();
-                if (listingsJSON != null) {
-                    for (int j=0; j<listingsJSON.size(); j++) {
-                        listings.add((UUID) listingsJSON.get(j));
+                    // get listing ids from attribute
+                    JSONArray listingsJSON = (JSONArray) propertyManagerJSON.get(SysConst.USER_LISTINGS);
+                    ArrayList<UUID> listings = new ArrayList<UUID>();
+                    if (listingsJSON != null) {
+                        for (int j=0; j<listingsJSON.size(); j++) {
+                            listings.add(UUID.fromString((String) listingsJSON.get(j)));
+                        }
                     }
-                }
 
-                // parse properties UUID array
-                JSONArray propertiesJSON = (JSONArray) propertyManagerJSON.get(SysConst.PROPERTY_MANAGER_USER_PROPERTIES);
-                ArrayList<UUID> properties = new ArrayList<UUID>();
-                if (propertiesJSON != null) {
-                    for (int j=0; j<propertiesJSON.size(); j++) {
-                        properties.add((UUID) propertiesJSON.get(j));
+                    // parse properties UUID array
+                    JSONArray propertiesJSON = (JSONArray) propertyManagerJSON.get(SysConst.PROPERTY_MANAGER_USER_PROPERTIES);
+                    ArrayList<UUID> properties = new ArrayList<UUID>();
+                    if (propertiesJSON != null) {
+                        for (int j=0; j<propertiesJSON.size(); j++) {
+                            properties.add(UUID.fromString((String) propertiesJSON.get(j)));
+                        }
                     }
-                }
 
-                // add property manager to property managers list;
-                propertyManagers.add(new PropertyManager(userId, firstName, lastName, phone, email, password, officeAddress,
-                        listings, properties));
+                    // add property manager to property managers list;
+                    propertyManagers.add(new PropertyManager(userId, firstName, lastName, phone, email, password, officeAddress,
+                            listings, properties));
+                }
             }
             users.put(SysConst.PROPERTY_MANAGER_USERS, propertyManagers);
 
