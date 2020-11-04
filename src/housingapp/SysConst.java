@@ -77,6 +77,7 @@ public class SysConst {
     public static final String CMD_VIEW_FAVORITES = "view_favorites";
     public static final String CMD_VIEW_MY_LISTINGS = "view_my_listings";
     public static final String CMD_VIEW_MY_REVIEWS = "view_my_reviews";
+    public static final String CMD_VIEW_MY_PROPERTY_REVIEWS = "view_my_property_reviews";
     public static final String CMD_CREATE_LISTING = "create_listing";
     public static final String CMD_CREATE_REVIEW = "create_review";
     public static final String CMD_VIEW_PROFILE = "view_profile";

@@ -8,7 +8,6 @@ import housingapp.housing.Townhouse;
 import housingapp.query.ListingQuery;
 import housingapp.query.ResourceManager;
 import housingapp.rating.PropertyRating;
-import housingapp.rating.Rating;
 import housingapp.rating.StudentRating;
 import housingapp.user.PropertyManager;
 import housingapp.user.Student;
@@ -39,7 +38,7 @@ public class HousingAppDriver {
             try {
                 switch (currFlow) {
                     case HOME:
-                        System.out.println("Select an option:\n(1) Log in\n(2) Sign up\n(3) Continue as guest");
+                        System.out.println("Select an option:\n(1) Log in\n(2) Sign up\n(3) Continue as guest\n(4) Quit");
                         input = keyboardInput.nextLine();
                         switch (input) {
                             case "1":
@@ -51,6 +50,9 @@ public class HousingAppDriver {
                             case "3":
                                 currUserType = UserType.GUEST;
                                 currFlow = Flow.DASHBOARD;
+                                break;
+                            case "4":
+                                running = false;
                                 break;
                             default:
                                 throw new InvalidInputException();
@@ -80,12 +82,10 @@ public class HousingAppDriver {
                         }
 
                         System.out.print("First name: ");
-                        String firstName = keyboardInput.next();
-                        keyboardInput.nextLine();
+                        String firstName = keyboardInput.nextLine();
 
                         System.out.print("Last name: ");
-                        String lastName = keyboardInput.next();
-                        keyboardInput.nextLine();
+                        String lastName = keyboardInput.nextLine();
 
                         System.out.print("Phone number: ");
                         String phone = keyboardInput.next();
@@ -151,10 +151,11 @@ public class HousingAppDriver {
                                         SysConst.CMD_VIEW_FAVORITES, SysConst.CMD_VIEW_MY_LISTINGS, SysConst.CMD_VIEW_MY_REVIEWS,
                                         SysConst.CMD_CREATE_LISTING, SysConst.CMD_CREATE_REVIEW, SysConst.CMD_VIEW_PROFILE, SysConst.CMD_LOG_OUT));
                             } else if (currUserType == UserType.PROPERTY_MANAGER) {
-                                System.out.println(String.format("Select an option:\n(%s) Search listings\n(%s) View my listings\n(%s)" +
-                                                " View my reviews\n(%s) Create a listing\n(%s) Register a property\n(%s) Create a review\n(%s)" +
-                                                " View profile\n(%s) Log out", SysConst.CMD_SEARCH_LISTINGS, SysConst.CMD_VIEW_MY_LISTINGS, SysConst.CMD_VIEW_MY_REVIEWS,
-                                        SysConst.CMD_CREATE_LISTING, SysConst.CMD_REGISTER_PROPERTY, SysConst.CMD_CREATE_REVIEW, SysConst.CMD_VIEW_PROFILE, SysConst.CMD_LOG_OUT));
+                                System.out.println(String.format("Select an option:\n(%s) Search listings\n(%s) View my listings\n" +
+                                                "(%s) Create a listing\n(%s) Register a property\n(%s) View my property reviews\n(%s) Create a review\n(%s)" +
+                                                " View profile\n(%s) Log out", SysConst.CMD_SEARCH_LISTINGS, SysConst.CMD_VIEW_MY_LISTINGS,
+                                        SysConst.CMD_CREATE_LISTING, SysConst.CMD_REGISTER_PROPERTY, SysConst.CMD_VIEW_MY_PROPERTY_REVIEWS,
+                                        SysConst.CMD_CREATE_REVIEW, SysConst.CMD_VIEW_PROFILE, SysConst.CMD_LOG_OUT));
                             } else if (currUserType == UserType.GUEST) {
                                 System.out.println(String.format("Select an option:\n(%s) Search listings\n(%s) Return home", SysConst.CMD_SEARCH_LISTINGS, SysConst.CMD_LOG_OUT));
                             } else {
@@ -182,7 +183,7 @@ public class HousingAppDriver {
                                     }
                                     break;
                                 case SysConst.CMD_VIEW_MY_REVIEWS:
-                                    if (currUserType != UserType.GUEST) {
+                                    if (currUserType == UserType.STUDENT) {
                                         currFlow = Flow.VIEW_MY_REVIEWS;
                                     } else {
                                         throw new InvalidPermissionException();
@@ -212,6 +213,13 @@ public class HousingAppDriver {
                                 case SysConst.CMD_REGISTER_PROPERTY:
                                     if (currUserType == UserType.PROPERTY_MANAGER) {
                                         currFlow = Flow.REGISTER_PROPERTY;
+                                    } else {
+                                        throw new InvalidPermissionException();
+                                    }
+                                    break;
+                                case SysConst.CMD_VIEW_MY_PROPERTY_REVIEWS:
+                                    if (currUserType == UserType.PROPERTY_MANAGER) {
+                                        currFlow = Flow.VIEW_MY_PROPERTY_REVIEWS;
                                     } else {
                                         throw new InvalidPermissionException();
                                     }
@@ -251,6 +259,7 @@ public class HousingAppDriver {
                                 if (currUserType == UserType.STUDENT) {
                                     currListingSearchResults = query.getListingsByRecommended((Student) rm.getUserById(currSession.getUserId()));
                                     printSearchResults(currListingSearchResults);
+                                    currListingSearchResults = null;
                                 } else {
                                     throw new InvalidPermissionException();
                                 }
@@ -258,14 +267,20 @@ public class HousingAppDriver {
                             case SysConst.CMD_SEARCH_LISTINGS_BY_PROPERTY:
                                 System.out.print("Enter a property to search: ");
                                 String propertyName = keyboardInput.nextLine();
-                                UUID propertyId = rm.getPropertyByName(propertyName).getId();
+                                Property property = rm.getPropertyByName(propertyName);
+                                if (property == null) {
+                                    System.out.println("Invalid property name.");
+                                    throw new InvalidInputException();
+                                }
+                                UUID propertyId = property.getId();
 
                                 currListingSearchResults = query.getListingsByProperty(currListingSearchResults, propertyId);
                                 printSearchResults(currListingSearchResults);
+                                currListingSearchResults = null;
                                 break;
                             case SysConst.CMD_SEARCH_LISTINGS_BY_PARAMETERS:
                                 System.out.println("Select a parameter to set, or press ENTER to search using current parameters:");
-                                System.out.println(String.format("(%s) Price\n(%s) Lease duration\n(%s) Square footage\n(%s) Pet policy\n(%s) Utilities\n(%s) Number of bedrooms\n(%s) Number of bathrooms\n(%s) Shuttle service\n(cmd_set_search_param_has_washer) Has washer\n(cmd_set_search_param_has_dryer) Has dryer",
+                                System.out.println(String.format("(%s) Price\n(%s) Lease duration\n(%s) Square footage\n(%s) Pet policy\n(%s) Utilities\n(%s) Number of bedrooms\n(%s) Number of bathrooms\n(%s) Shuttle service\n(set_search_param_has_washer) Has washer\n(set_search_param_has_dryer) Has dryer",
                                         SysConst.CMD_SET_SEARCH_PARAM_PRICE, SysConst.CMD_SET_SEARCH_PARAM_LEASE_DURATION, SysConst.CMD_SET_SEARCH_PARAM_SQUARE_FOOTAGE, SysConst.CMD_SET_SEARCH_PARAM_PET_POLICY, SysConst.CMD_SET_SEARCH_PARAM_UTILITIES,
                                         SysConst.CMD_SET_SEARCH_PARAM_NUM_BEDROOMS, SysConst.CMD_SET_SEARCH_PARAM_NUM_BATHROOMS, SysConst.CMD_SET_SEARCH_PARAM_SHUTTLE_SERVICE));
                                 input = keyboardInput.nextLine();
@@ -351,7 +366,7 @@ public class HousingAppDriver {
                                         System.out.println("Shuttle service param updated.");
                                         currFlow = Flow.SEARCH_LISTINGS;
                                         break;
-                                    case "cmd_set_search_param_has_washer":
+                                    case "set_search_param_has_washer":
                                         System.out.print("Has washer (y/n): ");
                                         boolean hasWasher = keyboardInput.next().equalsIgnoreCase("y");
                                         keyboardInput.nextLine();
@@ -359,7 +374,7 @@ public class HousingAppDriver {
                                         System.out.println("Has washer param updated.");
                                         currFlow = Flow.SEARCH_LISTINGS;
                                         break;
-                                    case "cmd_set_search_param_has_dryer":
+                                    case "set_search_param_has_dryer":
                                         System.out.print("Has dryer (y/n): ");
                                         boolean hasDryer = keyboardInput.next().equalsIgnoreCase("y");
                                         keyboardInput.nextLine();
@@ -400,6 +415,69 @@ public class HousingAppDriver {
                         }
                         break;
                     case VIEW_MY_REVIEWS:
+                        if (currUserType != UserType.STUDENT) {
+                            throw new InvalidSessionDetailsException();
+                        }
+
+                        Student currStudent = rm.getStudentById(currSession.getUserId());
+                        if (currStudent == null) {
+                            throw new InvalidSessionDetailsException();
+                        }
+
+                        ArrayList<UUID> ratingIds = currStudent.getRatings();
+                        if (ratingIds == null) {
+                            System.out.println("No reviews to show for this user.");
+                        } else {
+                            for (UUID ratingId : ratingIds) {
+                                System.out.println(rm.getStudentRatingById(ratingId).toString());
+                            }
+                        }
+
+                        currFlow = Flow.DASHBOARD;
+                        break;
+                    case VIEW_MY_PROPERTY_REVIEWS:
+                        if (currUserType != UserType.PROPERTY_MANAGER) {
+                            throw new InvalidSessionDetailsException();
+                        }
+
+                        PropertyManager currPropertyManager = rm.getPropertyManagerById(currSession.getUserId());
+                        if (currPropertyManager == null) {
+                            throw new InvalidSessionDetailsException();
+                        }
+
+                        // prompt property manager for a property name, ensure that they are landlord on property
+                        ArrayList<UUID> properties = currPropertyManager.getProperties();
+                        System.out.print("Enter the name of a property to view reviews for: ");
+                        String propertyName = keyboardInput.nextLine();
+
+                        Property propertyToGetRatings = rm.getPropertyByName(propertyName);
+                        if (propertyToGetRatings == null) {
+                            System.out.println("Invalid property name.");
+                            throw new InvalidInputException();
+                        }
+
+                        boolean landlordVerified = false;
+                        for (UUID propertyId : properties) {
+                            if (propertyToGetRatings.getId().equals(propertyId)) {
+                                landlordVerified = true;
+                                break;
+                            }
+                        }
+
+                        if (!landlordVerified) {
+                            System.out.println("You are not listed as a landlord on this property.");
+                            throw new InvalidPermissionException();
+                        }
+
+                        ArrayList<UUID> propertyRatingIds = propertyToGetRatings.getRatings();
+                        if (propertyRatingIds == null || propertyRatingIds.size() == 0) {
+                            System.out.println("No reviews to show for this property.");
+                        } else {
+                            for (UUID propertyRatingId : propertyRatingIds) {
+                                System.out.println(rm.getPropertyRatingById(propertyRatingId).toString());
+                            }
+                        }
+
                         currFlow = Flow.DASHBOARD;
                         break;
                     case CREATE_LISTING:
@@ -426,28 +504,42 @@ public class HousingAppDriver {
                         boolean hasWasher = promptListingHasWasher();
                         boolean hasDryer = promptListingHasDryer();
 
+                        // prompt for the number of suites matching listing details
+                        System.out.print("Number of suites matching this listing: ");
+                        int numSuites = keyboardInput.nextInt();
+                        keyboardInput.nextLine();
+                        // prevent user from overloading data files
+                        if (numSuites > 100) {
+                            System.out.println("Too many suites. Reducing to 100 (max value).");
+                            numSuites = 100;
+                        }
+
                         if (listingTypeStr.equalsIgnoreCase("apartment")) {
-                            String apartmentNumber = promptApartmentNumber();
                             boolean hasParking = promptApartmentHasParking();
 
-                            // add new apartment to rm
-                            Apartment newApartment = new Apartment(propertyId, description, price, leaseMonths, squareFootage,
-                                    isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
-                                    hasShuttle, available, hasWasher, hasDryer, apartmentNumber, hasParking);
-                            rm.addApartment(newApartment);
-
-                            // associate new apartment with property
                             Property parentProperty = rm.getPropertyById(propertyId);
-                            parentProperty.associateListing(newApartment.getId());
-                            rm.updateProperty(propertyId, parentProperty);
-
-                            // associate new apartment with listing user
                             User listingUser = rm.getUserById(currSession.getUserId());
-                            listingUser.associateListing(newApartment.getId());
-                            if (currUserType == UserType.PROPERTY_MANAGER) {
-                                rm.updatePropertyManager(currSession.getUserId(), (PropertyManager) listingUser);
-                            } else {
-                                rm.updateStudent(currSession.getUserId(), (Student) listingUser);
+
+                            for (int i=0; i<numSuites; i++) {
+                                String apartmentNumber = promptApartmentNumber();
+
+                                // add new apartment to rm
+                                Apartment newApartment = new Apartment(propertyId, description, price, leaseMonths, squareFootage,
+                                        isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
+                                        hasShuttle, available, hasWasher, hasDryer, apartmentNumber, hasParking);
+                                rm.addApartment(newApartment);
+
+                                // associate new apartment with property
+                                parentProperty.associateListing(newApartment.getId());
+                                rm.updateProperty(propertyId, parentProperty);
+
+                                // associate new apartment with listing user
+                                listingUser.associateListing(newApartment.getId());
+                                if (currUserType == UserType.PROPERTY_MANAGER) {
+                                    rm.updatePropertyManager(currSession.getUserId(), (PropertyManager) listingUser);
+                                } else {
+                                    rm.updateStudent(currSession.getUserId(), (Student) listingUser);
+                                }
                             }
 
                             System.out.println("Apartment listing created.");
@@ -457,24 +549,27 @@ public class HousingAppDriver {
                             boolean hasYard = promptTownhouseHasYard();
                             boolean hasFence = promptTownhouseHasFence();
 
-                            // add new townhouse to rm
-                            Townhouse newTownhouse = new Townhouse(propertyId, description, price, leaseMonths, squareFootage,
-                                    isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
-                                    hasShuttle, available, hasWasher, hasDryer, hasGarage, hasDriveway, hasYard, hasFence);
-                            rm.addTownhouse(newTownhouse);
-
-                            // associate new townhouse with property
                             Property parentProperty = rm.getPropertyById(propertyId);
-                            parentProperty.associateListing(newTownhouse.getId());
-                            rm.updateProperty(propertyId, parentProperty);
-
-                            // associate new townhouse with listing user
                             User listingUser = rm.getUserById(currSession.getUserId());
-                            listingUser.associateListing(newTownhouse.getId());
-                            if (currUserType == UserType.PROPERTY_MANAGER) {
-                                rm.updatePropertyManager(currSession.getUserId(), (PropertyManager) listingUser);
-                            } else {
-                                rm.updateStudent(currSession.getUserId(), (Student) listingUser);
+
+                            for (int i=0; i<numSuites; i++) {
+                                // add new townhouse to rm
+                                Townhouse newTownhouse = new Townhouse(propertyId, description, price, leaseMonths, squareFootage,
+                                        isSublease, utilitiesIncluded, numBedrooms, numBathrooms,
+                                        hasShuttle, available, hasWasher, hasDryer, hasGarage, hasDriveway, hasYard, hasFence);
+                                rm.addTownhouse(newTownhouse);
+
+                                // associate new townhouse with property
+                                parentProperty.associateListing(newTownhouse.getId());
+                                rm.updateProperty(propertyId, parentProperty);
+
+                                // associate new townhouse with listing user
+                                listingUser.associateListing(newTownhouse.getId());
+                                if (currUserType == UserType.PROPERTY_MANAGER) {
+                                    rm.updatePropertyManager(currSession.getUserId(), (PropertyManager) listingUser);
+                                } else {
+                                    rm.updateStudent(currSession.getUserId(), (Student) listingUser);
+                                }
                             }
 
                             System.out.println("Townhouse listing created.");
@@ -503,7 +598,16 @@ public class HousingAppDriver {
                                 boolean deletionConfirmed = promptConfirmDeletion();
                                 if (deletionConfirmed) {
                                     rm.removeApartment(apartmentToEdit.getId());
-                                    // todo: remove listing from parent user as well
+                                    User listingCreator = rm.getUserById(currSession.getUserId());
+                                    listingCreator.removeListing(apartmentToEdit.getId());
+                                    if (currUserType == UserType.STUDENT) {
+                                        rm.updateStudent(listingCreator.getId(), (Student) listingCreator);
+                                    } else if (currUserType == UserType.PROPERTY_MANAGER) {
+                                        rm.updatePropertyManager(listingCreator.getId(), (PropertyManager) listingCreator);
+                                    } else {
+                                        throw new InvalidPermissionException();
+                                    }
+                                    currFlow = Flow.DASHBOARD;
                                 }
                             } else if (attributeToEdit.equalsIgnoreCase("property")) {
                                 UUID newListingPropertyId = promptListingPropertyId();
@@ -579,7 +683,16 @@ public class HousingAppDriver {
                                     boolean deletionConfirmed = promptConfirmDeletion();
                                     if (deletionConfirmed) {
                                         rm.removeTownhouse(townhouseToEdit.getId());
-                                        // todo: remove listing from parent user as well
+                                        User listingCreator = rm.getUserById(currSession.getUserId());
+                                        listingCreator.removeListing(townhouseToEdit.getId());
+                                        if (currUserType == UserType.STUDENT) {
+                                            rm.updateStudent(listingCreator.getId(), (Student) listingCreator);
+                                        } else if (currUserType == UserType.PROPERTY_MANAGER) {
+                                            rm.updatePropertyManager(listingCreator.getId(), (PropertyManager) listingCreator);
+                                        } else {
+                                            throw new InvalidPermissionException();
+                                        }
+                                        currFlow = Flow.DASHBOARD;
                                     }
                                     break;
                                 case "property":
@@ -665,9 +778,14 @@ public class HousingAppDriver {
                         }
                         break;
                     case CREATE_REVIEW:
-                        // todo: set currTarget UUID in preceding flow (likely 'view listing details' or 'view student details'?)
                         if (currUserType == UserType.STUDENT) {
-                            Property propertyToReview = rm.getPropertyById(currTarget);
+                            System.out.print("Enter a name of property to review: ");
+                            String propertyToReviewName = keyboardInput.nextLine();
+                            Property propertyToReview = rm.getPropertyByName(propertyToReviewName);
+                            if (propertyToReview == null) {
+                                System.out.println("Invalid property name.");
+                                throw new InvalidInputException();
+                            }
                             //String propertyToReviewName = propertyToReview.getName();
 
                             int stars = promptRatingStars();
@@ -686,7 +804,15 @@ public class HousingAppDriver {
 
                             System.out.println("Property review created.");
                         } else if (currUserType == UserType.PROPERTY_MANAGER) {
-                            Student studentToReview = rm.getStudentById(currTarget);
+                            System.out.print("Student to review first name: ");
+                            String studentFirstName = keyboardInput.nextLine();
+                            System.out.print("Student to review last name: ");
+                            String studentLastName = keyboardInput.nextLine();
+                            Student studentToReview = rm.getStudentByName(studentFirstName, studentLastName);
+                            if (studentToReview == null) {
+                                System.out.println("Invalid student name.");
+                                throw new InvalidInputException();
+                            }
                             //String studentToReviewName = studentToReview.getFirstName() + " " + studentToReview.getLastName();
 
                             int stars = promptRatingStars();
@@ -707,84 +833,137 @@ public class HousingAppDriver {
                             currFlow = Flow.DASHBOARD;
                             throw new InvalidPermissionException();
                         }
-                        break;
-                    case EDIT_REVIEW:
-                        Rating ratingToEdit = rm.getRatingById(currTarget);
-                        RatingType ratingToEditType = ratingToEdit.getType();
-
-                        if (ratingToEditType == RatingType.PROPERTY_RATING) {
-                            // cast to PropertyRating
-                            PropertyRating propertyRatingToEdit = (PropertyRating) ratingToEdit;
-
-                            if (currUserType != UserType.STUDENT) {
-                                throw new InvalidPermissionException();
-                            }
-                            System.out.println("Select an attribute to edit or press ENTER to return to dashboard:\nOverall rating\nComment\nValue rating\nManagement rating\nNeighborhood rating");
-                            String attributeSelection = keyboardInput.nextLine();
-
-                            switch (attributeSelection) {
-                                case SysConst.CMD_ENTER:
-                                    rm.updatePropertyRating(propertyRatingToEdit.getId(), propertyRatingToEdit);
-                                    currFlow = Flow.DASHBOARD;
-                                    break;
-                                case "Overall rating":
-                                    propertyRatingToEdit.setStars(promptRatingStars());
-                                    break;
-                                case "Comment":
-                                    propertyRatingToEdit.setComment(promptRatingComment());
-                                    break;
-                                case "Value rating":
-                                    propertyRatingToEdit.setValueStars(promptPropertyRatingValueStars());
-                                    break;
-                                case "Management rating":
-                                    propertyRatingToEdit.setManagementStars(promptPropertyRatingManagementStars());
-                                    break;
-                                case "Neighborhood rating":
-                                    propertyRatingToEdit.setNeighborhoodStars(promptPropertyRatingNeighborhoodStars());
-                                    break;
-                                default:
-                                    throw new InvalidInputException();
-                            }
-                        } else if (ratingToEditType == RatingType.STUDENT_RATING) {
-                            // cast to StudentRating
-                            StudentRating studentRatingToEdit = (StudentRating) ratingToEdit;
-
-                            if (currUserType != UserType.PROPERTY_MANAGER) {
-                                throw new InvalidPermissionException();
-                            }
-                            System.out.println("Select an attribute to edit or press ENTER to return to dashboard:\nOverall rating\nComment\nNum late payments\nDamages value");
-                            String attributeSelection = keyboardInput.nextLine();
-
-                            switch (attributeSelection) {
-                                case SysConst.CMD_ENTER:
-                                    rm.updateStudentRating(studentRatingToEdit.getId(), studentRatingToEdit);
-                                    currFlow = Flow.DASHBOARD;
-                                    break;
-                                case "Overall rating":
-                                    studentRatingToEdit.setStars(promptRatingStars());
-                                    break;
-                                case "Comment":
-                                    studentRatingToEdit.setComment(promptRatingComment());
-                                    break;
-                                case "Num late payments":
-                                    studentRatingToEdit.setNumLatePayments(promptStudentRatingNumLatePayments());
-                                    break;
-                                case "Damages value":
-                                    studentRatingToEdit.setDamagesValue(promptStudentRatingDamagesValue());
-                                    break;
-                                default:
-                                    throw new InvalidInputException();
-                            }
-                        } else {
-                            throw new UnexpectedException("Invalid rating type: " + ratingToEditType.name());
-                        }
+                        currFlow = Flow.DASHBOARD;
                         break;
                     case VIEW_PROFILE:
+                        if (currUserType == UserType.STUDENT) {
+                            Student studentToViewProfile = rm.getStudentById(currSession.getUserId());
+
+                            System.out.println("-----\nProfile details\n-----");
+                            System.out.println(studentToViewProfile.toString());
+
+                            System.out.print("Enter an attribute to modify, or press ENTER to return to dashboard: ");
+                            String attributeToModify = keyboardInput.nextLine();
+
+                            if (attributeToModify.isEmpty()) {
+                                currFlow = Flow.DASHBOARD;
+                                continue;
+                            } else if (attributeToModify.equalsIgnoreCase("first name")) {
+                                System.out.print("Enter a new first name: ");
+                                String newFirstName = keyboardInput.nextLine();
+                                studentToViewProfile.updateFirstName(newFirstName);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to first name saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("last name")) {
+                                System.out.print("Enter a new last name: ");
+                                String newLastName = keyboardInput.nextLine();
+                                studentToViewProfile.updateLastName(newLastName);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to last name saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("phone")) {
+                                System.out.print("Enter a new phone number: ");
+                                String newPhone = keyboardInput.nextLine();
+                                studentToViewProfile.updatePhone(newPhone);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to phone number saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("email")) {
+                                System.out.print("Enter a new email: ");
+                                newEmail = keyboardInput.nextLine();
+                                studentToViewProfile.updateEmail(newEmail);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to email saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("has pets")) {
+                                System.out.print("Do you have pets (y/n): ");
+                                boolean newHasPets = keyboardInput.next().equalsIgnoreCase("y");
+                                keyboardInput.nextLine();
+                                studentToViewProfile.updateHasPets(newHasPets);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to has pets saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("lower price range")) {
+                                System.out.print("Enter a new lower price range: ");
+                                double newPriceRangeLower = keyboardInput.nextDouble();
+                                keyboardInput.nextLine();
+                                studentToViewProfile.updatePriceRangeLower(newPriceRangeLower);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to lower price range saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("upper price range")) {
+                                System.out.print("Enter a new lower price upper: ");
+                                double newPriceRangeUpper = keyboardInput.nextDouble();
+                                keyboardInput.nextLine();
+                                studentToViewProfile.updatePriceRangeUpper(newPriceRangeUpper);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to upper price range saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("min roommates")) {
+                                System.out.print("Enter a new min roommates: ");
+                                int newMinRoommates = keyboardInput.nextInt();
+                                keyboardInput.nextLine();
+                                studentToViewProfile.updateMinRoommates(newMinRoommates);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to min roommates saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("max roommates")) {
+                                System.out.print("Enter a new max roommates: ");
+                                int newMaxRoommates = keyboardInput.nextInt();
+                                keyboardInput.nextLine();
+                                studentToViewProfile.updateMaxRoommates(newMaxRoommates);
+                                rm.updateStudent(studentToViewProfile.getId(), studentToViewProfile);
+                                System.out.println("Changes to max roommates saved.");
+                            } else {
+                                throw new InvalidInputException();
+                            }
+                        } else if (currUserType == UserType.PROPERTY_MANAGER) {
+                            PropertyManager propertyManagerToViewProfile = rm.getPropertyManagerById(currSession.getUserId());
+
+                            System.out.println("-----\nProfile details\n-----");
+                            System.out.println(propertyManagerToViewProfile.toString());
+
+                            System.out.print("Enter an attribute to modify, or press ENTER to save changes: ");
+                            String attributeToModify = keyboardInput.nextLine();
+
+                            if (attributeToModify.isEmpty()) {
+                                currFlow = Flow.DASHBOARD;
+                                continue;
+                            } else if (attributeToModify.equalsIgnoreCase("first name")) {
+                                System.out.print("Enter a new first name: ");
+                                String newFirstName = keyboardInput.nextLine();
+                                propertyManagerToViewProfile.updateFirstName(newFirstName);
+                                rm.updatePropertyManager(propertyManagerToViewProfile.getId(), propertyManagerToViewProfile);
+                                System.out.println("Changes to first name saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("last name")) {
+                                System.out.print("Enter a new last name: ");
+                                String newLastName = keyboardInput.nextLine();
+                                propertyManagerToViewProfile.updateLastName(newLastName);
+                                rm.updatePropertyManager(propertyManagerToViewProfile.getId(), propertyManagerToViewProfile);
+                                System.out.println("Changes to last name saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("phone")) {
+                                System.out.print("Enter a new phone number: ");
+                                String newPhone = keyboardInput.nextLine();
+                                propertyManagerToViewProfile.updatePhone(newPhone);
+                                rm.updatePropertyManager(propertyManagerToViewProfile.getId(), propertyManagerToViewProfile);
+                                System.out.println("Changes to phone number saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("email")) {
+                                System.out.print("Enter a new email: ");
+                                newEmail = keyboardInput.nextLine();
+                                propertyManagerToViewProfile.updateEmail(newEmail);
+                                rm.updatePropertyManager(propertyManagerToViewProfile.getId(), propertyManagerToViewProfile);
+                                System.out.println("Changes to email saved.");
+                            } else if (attributeToModify.equalsIgnoreCase("office address")) {
+                                System.out.print("Enter a new office address: ");
+                                String newOfficeAddress = keyboardInput.nextLine();
+                                propertyManagerToViewProfile.updateOfficeAddress(newOfficeAddress);
+                                rm.updatePropertyManager(propertyManagerToViewProfile.getId(), propertyManagerToViewProfile);
+                                System.out.println("Changes to office address saved.");
+                            } else {
+                                throw new InvalidInputException();
+                            }
+                        } else {
+                            currFlow = Flow.DASHBOARD;
+                            throw new InvalidPermissionException();
+                        }
                         break;
                     case VIEW_FAVORITES:
                         if (currUserType == UserType.STUDENT) {
-                            Student currStudent = rm.getStudentById(currSession.getUserId());
-                            ArrayList<UUID> listingFavorites = currStudent.getListingFavorites();
+                            Student studentToViewFavorites = rm.getStudentById(currSession.getUserId());
+                            ArrayList<UUID> listingFavorites = studentToViewFavorites.getListingFavorites();
                             System.out.println("-----\nYour favorites list\n-----");
                             for (int i=0; i<listingFavorites.size(); i++) {
                                 int lineNum = i+1;
@@ -794,8 +973,8 @@ public class HousingAppDriver {
                             boolean showingFavorites = true;
                             while (showingFavorites) {
                                 System.out.print("Enter a listing favorite number to view details, or press ENTER to return to dashboard: ");
-                                input = keyboardInput.next();
-                                keyboardInput.nextLine();
+                                input = keyboardInput.nextLine();
+
                                 if (input.equals(SysConst.CMD_ENTER)) {
                                     currFlow = Flow.DASHBOARD;
                                     showingFavorites = false;
@@ -820,7 +999,7 @@ public class HousingAppDriver {
                         break;
                     case REGISTER_PROPERTY:
                     	System.out.print("Name of the property: ");
-                    	String propertyName = keyboardInput.nextLine();
+                    	String propertyToRegisterName = keyboardInput.nextLine();
 
                     	System.out.print("Address: ");
                     	String address = keyboardInput.nextLine();
@@ -857,14 +1036,14 @@ public class HousingAppDriver {
                     	keyboardInput.nextLine();
 
                     	// create property and add to resource manager
-                    	Property newProperty = new Property(currSession.getUserId(), propertyName, address, zipCode,
+                    	Property newProperty = new Property(currSession.getUserId(), propertyToRegisterName, address, zipCode,
                                 distanceToCampus, damagesCost, furnished, petsAllowed, hasPool, hasGym, hasFreeWifi);
                     	rm.addProperty(newProperty);
 
                     	// append property to user and update user in resource manager
-                    	PropertyManager currPropertyManager = rm.getPropertyManagerById(currSession.getUserId());
-                    	currPropertyManager.associateProperty(newProperty.getId());
-                    	rm.updatePropertyManager(currPropertyManager.getId(), currPropertyManager);
+                    	PropertyManager parentPropertyManager = rm.getPropertyManagerById(currSession.getUserId());
+                    	parentPropertyManager.associateProperty(newProperty.getId());
+                    	rm.updatePropertyManager(parentPropertyManager.getId(), parentPropertyManager);
 
                     	System.out.println("Property registered.");
                     	currFlow = Flow.DASHBOARD;
@@ -913,6 +1092,16 @@ public class HousingAppDriver {
                 int listingIndex = Integer.parseInt(input) - 1;
                 Listing targetListing = searchResults.get(listingIndex);
                 System.out.println(targetListing.getDetails());
+
+                if (currUserType == UserType.STUDENT) {
+                    boolean addToFavorites = promptListingAddToFavorites();
+                    if (addToFavorites) {
+                        Student currStudent = rm.getStudentById(currSession.getUserId());
+                        currStudent.associateListingFavorite(targetListing.getId());
+                        rm.updateStudent(currStudent.getId(), currStudent);
+                    }
+                }
+
                 boolean generateLease = promptListingGenerateLease();
                 if (generateLease) {
                     if (currUserType != UserType.GUEST) {
@@ -927,6 +1116,13 @@ public class HousingAppDriver {
                 }
             }
         }
+    }
+
+    private static boolean promptListingAddToFavorites() {
+        System.out.print("Would you like to add this listing to your favorites (y/n)? ");
+        boolean addToFavorites = keyboardInput.next().equalsIgnoreCase("y");
+        keyboardInput.nextLine();
+        return addToFavorites;
     }
 
     private static UUID promptListingPropertyId() {

@@ -54,11 +54,11 @@ public class RscUser {
                     int maxRoommates = ((Long) studentJSON.get(SysConst.STUDENT_USER_MAX_ROOMMATES)).intValue();
 
                     // parse ratings UUID array
-                    JSONArray ratingsJSON = (JSONArray) studentJSON.get(SysConst.STUDENT_USER_RATINGS);
+                    JSONArray ratingsJSON = (JSONArray) studentJSON.get("ratings");
                     ArrayList<UUID> ratings = new ArrayList<UUID>();
                     if (ratingsJSON != null) {
                         for (int j=0; j<ratingsJSON.size(); j++) {
-                            ratings.add((UUID) ratingsJSON.get(j));
+                            ratings.add(UUID.fromString((String) ratingsJSON.get(j)));
                         }
                     }
 
@@ -198,7 +198,7 @@ public class RscUser {
                 ratingsJSON.add(ratings.get(i).toString());
             }
         }
-        studentJSON.put(SysConst.STUDENT_USER_RATINGS, ratingsJSON);
+        studentJSON.put("ratings", ratingsJSON);
 
         // array of listing favorite UUIDs
         JSONArray listingFavoritesJSON = new JSONArray();

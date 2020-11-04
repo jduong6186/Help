@@ -48,6 +48,8 @@ public class Property {
         this.hasPool = hasPool;
         this.hasGym = hasGym;
         this.hasFreeWifi = hasFreeWifi;
+        this.ratings = new ArrayList<UUID>();
+        this.listings = new ArrayList<UUID>();
     }
 
     /**

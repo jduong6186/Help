@@ -31,8 +31,8 @@ public class RscRating {
             JSONObject ratingsFileJSON = (JSONObject) parser.parse(reader);
 
             // pull students and property managers lists from file
-            JSONArray propertyRatingsJSON = (JSONArray) ratingsFileJSON.get(SysConst.PROPERTY_RATINGS);
-            JSONArray studentRatingsJSON = (JSONArray) ratingsFileJSON.get(SysConst.STUDENT_USER_RATINGS);
+            JSONArray propertyRatingsJSON = (JSONArray) ratingsFileJSON.get("propertyRatings");
+            JSONArray studentRatingsJSON = (JSONArray) ratingsFileJSON.get("studentRatings");
 
             // parse property ratings list
             if (propertyRatingsJSON != null) {
@@ -50,7 +50,7 @@ public class RscRating {
                     // add property rating to propertyRatings list;
                     propertyRatings.add(new PropertyRating(ratingId, stars, comment, valueStars, managementStars, neighborhoodStars));
                 }
-                ratings.put(SysConst.PROPERTY_RATINGS, propertyRatings);
+                ratings.put("propertyRatings", propertyRatings);
             }
 
             // parse student ratings list
@@ -68,7 +68,7 @@ public class RscRating {
                     // add student rating to studentRatings list;
                     studentRatings.add(new StudentRating(ratingId, stars, comment, numLatePayments, damagesValue));
                 }
-                ratings.put(SysConst.STUDENT_USER_RATINGS, studentRatings);
+                ratings.put("studentRatings", studentRatings);
             }
 
             return ratings;
@@ -103,8 +103,8 @@ public class RscRating {
 
         // third, create ratingsJSON object
         JSONObject ratingsJSON = new JSONObject();
-        ratingsJSON.put(SysConst.PROPERTY_RATINGS, propertyRatingsJSON);
-        ratingsJSON.put(SysConst.STUDENT_USER_RATINGS, studentRatingsJSON);
+        ratingsJSON.put("propertyRatings", propertyRatingsJSON);
+        ratingsJSON.put("studentRatings", studentRatingsJSON);
 
         // last, write to data file
         try (FileWriter writer = new FileWriter(SysConst.RATINGS_DATA_FILE)) {

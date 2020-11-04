@@ -23,112 +23,148 @@ public class PropertyManager extends User {
 	    this.officeAddress = officeAddress;
 	    this.properties = properties;
     }
+
     /**
     returns UUID
     */
     public UUID getId() {
 	    return super.getId();
     }
+
     /**
     returns type
     */
     public UserType getType() {
 		return super.getType();
 	}
+
     /**
     returns first name
     */
     public String getFirstName() {
 	    return super.getFirstName();
     }
+
     /**
     returns last name
     */
     public String getLastName() {
 	    return super.getLastName();
     }
+
     /**
     returns phone number
     */
     public String getPhone() {
 	    return super.getPhone();
     }
+
     /**
     returns email
     */
     public String getEmail() {
 	    return super.getEmail();
     }
+
     /**
     returns password
     */
     public String getPassword() {
 	    return super.getPassword();
     }
+
     /**
     returns listings
     */
     public ArrayList<UUID> getListings() {
         return super.getListings();
     }
+
 	/**
 	returns the office address
 	*/
 	public String getOfficeAddress() {
 		return this.officeAddress;
 	}
+
 	/**
 	returns the property
 	*/
 	public ArrayList<UUID> getProperties() {
 		return this.properties;
 	}
+
     /**
     updates the first name of the user
     */
 	public void updateFirstName(String firstName) {
 	    super.updateFirstName(firstName);
     }
+
     /**
     updates the last name of the user
     */
 	public void updateLastName(String lastName) {
 	    super.updateLastName(lastName);
     }
+
     /**
     updates the phone number of the user
     */
 	public void updatePhone(String phone) {
 	    super.updatePhone(phone);
     }
+
     /**
     updates the email of the user
     */
 	public void updateEmail(String email) {
 	    super.updateEmail(email);
     }
-    	/**
+
+	/**
+	 * officeAddress mutator
+	 * @param officeAddress office address of property manager
+	 */
+	public void updateOfficeAddress(String officeAddress) {
+		this.officeAddress = officeAddress;
+	}
+
+    /**
 	adds a listing
 	*/
 	public void associateListing(UUID listingId) {
 	    super.associateListing(listingId);
     }
+
 	/**
 	removes a listing
 	*/
 	public void removeListing(UUID listingId) {
 	    super.removeListing(listingId);
     }
+
 	/**
 	adds a property
 	*/
 	public void associateProperty(UUID propertyId) {
 	    this.properties.add(propertyId);
 	}
+
 	/**
-	removes a propert
+	removes a property
 	*/
 	public void removeProperty(UUID propertyId) {
 	    this.properties.remove(propertyId);
     }
+
+	/**
+	 * returns property manager details as string
+	 */
+	@Override
+	public String toString() {
+		String details = super.toString();
+		details += "Office address: " + officeAddress;
+		return details;
+	}
 }

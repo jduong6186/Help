@@ -3,7 +3,7 @@ package housingapp;
 public enum Flow {
 
     HOME, LOG_IN, SIGN_UP, DASHBOARD, // generic
-    SEARCH_LISTINGS, VIEW_MY_LISTINGS, VIEW_MY_REVIEWS, CREATE_LISTING, CREATE_REVIEW, VIEW_PROFILE, EDIT_LISTING, EDIT_REVIEW, // all user types
-    VIEW_FAVORITES, // students only
-    REGISTER_PROPERTY // property managers only
+    SEARCH_LISTINGS, VIEW_MY_LISTINGS, CREATE_LISTING, CREATE_REVIEW, VIEW_PROFILE, EDIT_LISTING, // all user types
+    VIEW_FAVORITES, VIEW_MY_REVIEWS, // students only
+    REGISTER_PROPERTY, VIEW_MY_PROPERTY_REVIEWS // property managers only
 }

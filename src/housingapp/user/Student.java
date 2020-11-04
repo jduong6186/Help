@@ -40,8 +40,16 @@ public class Student extends User {
         this.maxTravelDistance = maxTravelDistance;
         this.minRoommates = minRoommates;
         this.maxRoommates = maxRoommates;
-        this.ratings = ratings;
-        this.listingFavorites = listingFavorites;
+        if (ratings != null) {
+            this.ratings = ratings;
+        } else {
+            this.ratings = new ArrayList<UUID>();
+        }
+        if (listingFavorites != null) {
+            this.listingFavorites = listingFavorites;
+        } else {
+            this.listingFavorites = new ArrayList<UUID>();
+        }
     }
     /**
     text
@@ -234,5 +242,19 @@ public class Student extends User {
     */
     public void removeListing(UUID listingId) {
         super.removeListing(listingId);
+    }
+
+    /**
+     * returns student details as string
+     */
+    @Override
+    public String toString() {
+        String details = super.toString();
+        details += "Has pets: " + hasPets + "\n";
+        details += "Lower price range: " + priceRangeLower + "\n";
+        details += "Upper price range: " + priceRangeUpper + "\n";
+        details += "Min roommates: " + minRoommates + "\n";
+        details += "Max roommates: " + maxRoommates;
+        return details;
     }
 }

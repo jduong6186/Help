@@ -58,23 +58,52 @@ public class ResourceManager {
      */
     public ResourceManager() {
         this.userMap = RscUser.getUsers();
-        this.students = userMap.get(SysConst.STUDENT_USERS);
-        this.propertyManagers = userMap.get(SysConst.PROPERTY_MANAGER_USERS);
+        if (this.userMap != null) {
+            this.students = userMap.get(SysConst.STUDENT_USERS);
+            this.propertyManagers = userMap.get(SysConst.PROPERTY_MANAGER_USERS);
+        }
         this.users = new ArrayList<User>();
-        this.users.addAll(students);
-        this.users.addAll(propertyManagers);
+        if (this.students == null) {
+            this.students = new ArrayList<User>();
+        } else {
+            this.users.addAll(students);
+        }
+        if (this.propertyManagers == null) {
+            this.propertyManagers = new ArrayList<User>();
+        } else {
+            this.users.addAll(propertyManagers);
+        }
 
         this.properties = RscProperty.getProperties();
+        if (this.properties == null) {
+            this.properties = new ArrayList<Property>();
+        }
 
         this.listingMap = RscListing.getListings();
-        this.apartments = listingMap.get("apartments");
-        this.townhouses = listingMap.get("townhouses");
+        if (this.listingMap != null) {
+            this.apartments = listingMap.get("apartments");
+            this.townhouses = listingMap.get("townhouses");
+        }
+        if (this.apartments == null) {
+            this.apartments = new ArrayList<Listing>();
+        }
+        if (this.townhouses == null) {
+            this.townhouses = new ArrayList<Listing>();
+        }
 
         this.sessions = RscSession.getSessions();
 
         this.ratingMap = RscRating.getRatings();
-        this.propertyRatings = ratingMap.get(SysConst.PROPERTY_RATINGS);
-        this.studentRatings = ratingMap.get(SysConst.STUDENT_USER_RATINGS);
+        if (this.ratingMap != null) {
+            this.propertyRatings = ratingMap.get("propertyRatings");
+            this.studentRatings = ratingMap.get("studentRatings");
+        }
+        if (propertyRatings == null) {
+            this.propertyRatings = new ArrayList<Rating>();
+        }
+        if (studentRatings == null) {
+            this.studentRatings = new ArrayList<Rating>();
+        }
         //this.ratings = this.propertyRatings;
         //this.ratings.addAll(studentRatings);
 
@@ -239,6 +268,15 @@ public class ResourceManager {
     public Student getStudentById(UUID studentId) {
         for (User student : students) {
             if (student.getId().equals(studentId)) {
+                return (Student) student;
+            }
+        }
+        return null;
+    }
+
+    public Student getStudentByName(String firstName, String lastName) {
+        for (User student : students) {
+            if (student.getFirstName().equalsIgnoreCase(firstName) && student.getLastName().equalsIgnoreCase(lastName)) {
                 return (Student) student;
             }
         }
@@ -493,7 +531,7 @@ public class ResourceManager {
     public void addPropertyRating(PropertyRating propertyRating) {
         propertyRatings.add(propertyRating);
         //ratings.add(propertyRating);
-        ratingMap.put(SysConst.PROPERTY_RATINGS, propertyRatings);
+        ratingMap.put("propertyRatings", propertyRatings);
         RscRating.writeRatings();
     }
 
@@ -504,7 +542,7 @@ public class ResourceManager {
     public void addStudentRating(StudentRating studentRating) {
         studentRatings.add(studentRating);
         //ratings.add(studentRating);
-        ratingMap.put(SysConst.STUDENT_USER_RATINGS, studentRatings);
+        ratingMap.put("studentRatings", studentRatings);
         RscRating.writeRatings();
     }
 
@@ -668,7 +706,7 @@ public class ResourceManager {
             if (curr.getId().equals(propertyRatingId)) {
                 //ratings.remove(curr);
                 propertyRatings.remove(i);
-                ratingMap.put(SysConst.PROPERTY_RATINGS, propertyRatings);
+                ratingMap.put("propertyRatings", propertyRatings);
                 return;
             }
         }
@@ -684,7 +722,7 @@ public class ResourceManager {
             if (curr.getId().equals(studentRatingId)) {
                 //ratings.remove(curr);
                 studentRatings.remove(i);
-                ratingMap.put(SysConst.STUDENT_USER_RATINGS, studentRatings);
+                ratingMap.put("studentRatings", studentRatings);
                 return;
             }
         }

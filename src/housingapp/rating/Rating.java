@@ -77,4 +77,12 @@ public abstract class Rating {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    /**
+     * returns details str for generic rating (invoked by sub-classes)
+     */
+    @Override
+    public String toString() {
+        return "Overall rating: " + this.stars;
+    }
 }

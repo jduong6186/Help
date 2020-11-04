@@ -1,8 +1,1 @@
-{
-  "studentRatings": [
-
-  ],
-  "propertyRatings": [
-
-  ]
-}
+{"studentRatings":[{"numLatePayments":3,"damagesValue":50.0,"comment":"several damages and late payments","id":"92e15bd9-59ed-44c0-9efc-310d74cbe085","stars":2}],"propertyRatings":[{"valueStars":4,"comment":"excellent place to live","id":"9e255a61-1ce3-4f84-9da6-1596173dda4b","stars":5,"neighborhoodStars":5,"managementStars":4}]}
