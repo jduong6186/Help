@@ -5,11 +5,24 @@ import housingapp.UserType;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * describes property manager user type
+ */
+
 public class PropertyManager extends User {
 	
 	private String officeAddress;
 	private ArrayList<UUID> properties;
-	
+
+	/**
+	 * constructor for instantiating property manager at runtime
+	 * @param firstName user's first name
+	 * @param lastName user's last name
+	 * @param phone phone number
+	 * @param email email address
+	 * @param password password (hashed in constructor)
+	 * @param officeAddress office address of property manager
+	 */
 	public PropertyManager(String firstName, String lastName, String phone, String email, String password,
                            String officeAddress) {
 		super(UserType.PROPERTY_MANAGER, firstName, lastName, phone, email, password);
@@ -17,6 +30,18 @@ public class PropertyManager extends User {
 		this.properties = new ArrayList<UUID>();
 	}
 
+	/**
+	 * constructor for instantiating property manager from JSON input
+	 * @param id property manager UUID
+	 * @param firstName user's first name
+	 * @param lastName user's last name
+	 * @param phone phone number
+	 * @param email email address
+	 * @param password bcrypt password hash
+	 * @param officeAddress office address of property manager
+	 * @param listings array list of listings created by property manager
+	 * @param properties array list of properties registered by property manager
+	 */
 	public PropertyManager(UUID id, String firstName, String lastName, String phone, String email, String password,
                            String officeAddress, ArrayList<UUID> listings, ArrayList<UUID> properties) {
 	    super(id, UserType.PROPERTY_MANAGER, firstName, lastName, phone, email, password, listings);

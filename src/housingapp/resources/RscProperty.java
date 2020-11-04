@@ -11,11 +11,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
+
 /**
-class that deals with reading a writing JSON files for the properties
-*/
+ * handles JSON read/write functionality for property resources
+ */
+
 public class RscProperty {
 
+    /**
+     * reads properties from properties.json data file, returns an array list of properties
+     */
     public static ArrayList<Property> getProperties() {
         ArrayList<Property> properties = new ArrayList<Property>();
         try {
@@ -70,9 +75,10 @@ public class RscProperty {
             return null;
         }
     }
+
     /**
-    writes property ArrayList and parses it into a JSON file
-    */
+     * writes updated properties from resource manager to properties.json data file
+     */
     public static void writeProperties() {
         ResourceManager rm = ResourceManager.getInstance();
         ArrayList<Property> properties = rm.getProperties();
@@ -89,9 +95,11 @@ public class RscProperty {
             e.printStackTrace();
         }
     }
+
     /**
-    gets and reads in property JSON file
-    */
+     * constructs JSON representation of property
+     * @param property instance of a property
+     */
     public static JSONObject getPropertyJSON(Property property) {
         // top-level attributes
         JSONObject propertyJSON = new JSONObject();

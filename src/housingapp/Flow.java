@@ -1,5 +1,9 @@
 package housingapp;
 
+/**
+ * enum of all flows in the driver (the different "screens" of the application)
+ */
+
 public enum Flow {
 
     HOME, LOG_IN, SIGN_UP, DASHBOARD, // generic

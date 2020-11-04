@@ -2,6 +2,10 @@ package housingapp.errors;
 
 import housingapp.SysConst;
 
+/**
+ * exception thrown when user provides invalid input
+ */
+
 public class InvalidInputException extends Exception {
 
     public InvalidInputException() {

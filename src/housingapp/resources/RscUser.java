@@ -15,11 +15,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 /**
-class deals with reading and writing user information to JSON files
-*/
+ * handles JSON read/write functionality for user resources
+ */
+
 public class RscUser {
 
+    /**
+     * reads users from users.json data file, returns a map of userType:users
+     */
     public static Map<String, ArrayList<User>> getUsers() {
         Map<String, ArrayList<User>> users = new HashMap<String, ArrayList<User>>();
         ArrayList<User> students = new ArrayList<User>();
@@ -132,9 +137,10 @@ public class RscUser {
             return null;
         }
     }
+
     /**
-    writes user information to a JSON file
-    */
+     * writes updated users from resource manager to users.json data file
+     */
     public static void writeUsers() {
         ResourceManager rm = ResourceManager.getInstance();
 
@@ -169,9 +175,11 @@ public class RscUser {
             e.printStackTrace();
         }
     }
+
     /**
-    takes in student JSON file
-    */
+     * constructs JSON object for student
+     * @param student instance of student user
+     */
     public static JSONObject getStudentJSON(Student student) {
         // top-level attributes
         JSONObject studentJSON = new JSONObject();
@@ -223,9 +231,11 @@ public class RscUser {
         // return completed JSON obj
         return studentJSON;
     }
+
     /**
-    takes in property manager's JSON file
-    */
+     * constructs JSON object for propertyManager
+     * @param propertyManager instance of propertyManager user
+     */
     public static JSONObject getPropertyManagerJSON(PropertyManager propertyManager) {
         // top-level attributes
         JSONObject propertyManagerJSON = new JSONObject();

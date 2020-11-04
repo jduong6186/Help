@@ -5,6 +5,10 @@ import housingapp.UserType;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * describes abstract user type
+ */
+
 public abstract class User {
 
     private final UUID id;

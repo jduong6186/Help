@@ -17,10 +17,14 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
-class dealing with the reading and writing of JSON files for the listings
-*/
+ * handles JSON read/write functionality for listing resources
+ */
+
 public class RscListing {
 
+    /**
+     * reads listings from listings.json data file, returns a map of listingType:listings
+     */
     public static Map<String, ArrayList<Listing>> getListings() {
         Map<String, ArrayList<Listing>> listings = new HashMap<String, ArrayList<Listing>>();
         ArrayList<Listing> apartments = new ArrayList<Listing>();
@@ -103,9 +107,10 @@ public class RscListing {
             return null;
         }
     }
+
     /**
-    writes listing ArrayList and parses it into a JSON file
-    */
+     * writes updated listings from resource manager to listings.json data file
+     */
     public static void writeListings() {
         ResourceManager rm = ResourceManager.getInstance();
         ArrayList<Listing> apartments = rm.getApartments();
@@ -140,9 +145,11 @@ public class RscListing {
             e.printStackTrace();
         }
     }
+
     /**
-    gets and reads Apartment's JSON file
-    */
+     * constructs JSON representation of apartment
+     * @param listing instance of apartment listing
+     */
     public static JSONObject getApartmentJSON(Apartment listing) {
         JSONObject listingJSON = new JSONObject();
         listingJSON.put(SysConst.LISTING_ID, listing.getId().toString());
@@ -166,9 +173,11 @@ public class RscListing {
 
         return listingJSON;
     }
+
     /**
-    gets and reads in Townhouse's JSON file
-    */
+     * constructs JSON representation of townhouse
+     * @param listing instance of townhouse listing
+     */
     public static JSONObject getTownhouseJSON(Townhouse listing) {
         JSONObject listingJSON = new JSONObject();
         listingJSON.put(SysConst.LISTING_ID, listing.getId().toString());

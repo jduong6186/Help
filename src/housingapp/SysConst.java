@@ -1,5 +1,9 @@
 package housingapp;
 
+/**
+ * statically accessible constants
+ */
+
 public class SysConst {
 
     // user constants

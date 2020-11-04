@@ -4,17 +4,24 @@ import housingapp.RatingType;
 import java.util.UUID;
 
 /**
-child class of ratings for the property manager's rating
-*/
+ * describes a property rating
+ */
+
 public class PropertyRating extends Rating {
 
     private int valueStars;
     private int managementStars;
     private int neighborhoodStars;
 
+
     /**
-    constructor
-    */
+     * constructor for instantiating propertyRating at runtime
+     * @param stars overall rating in stars 1-5
+     * @param comment additional comments by rating user
+     * @param valueStars value rating of property 1-5
+     * @param managementStars management rating of property 1-5
+     * @param neighborhoodStars neighborhood rating of property 1-5
+     */
     public PropertyRating(int stars, String comment, int valueStars, int managementStars, int neighborhoodStars) {
         super(RatingType.PROPERTY_RATING, stars, comment);
         setValueStars(valueStars);
@@ -22,9 +29,16 @@ public class PropertyRating extends Rating {
         setNeighborhoodStars(neighborhoodStars);
     }
 
+
     /**
-    UUID constructor
-    */
+     * constructor for instantiating propertyRating from JSON input file
+     * @param id UUID of property rating
+     * @param stars overall rating in stars 1-5
+     * @param comment additional comments by rating user
+     * @param valueStars value rating of property 1-5
+     * @param managementStars management rating of property 1-5
+     * @param neighborhoodStars neighborhood rating of property 1-5
+     */
     public PropertyRating(UUID id, int stars, String comment, int valueStars, int managementStars, int neighborhoodStars) {
         super(id, RatingType.PROPERTY_RATING, stars, comment);
         setValueStars(valueStars);

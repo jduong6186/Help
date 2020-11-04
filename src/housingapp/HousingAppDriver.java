@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * driver class, split into flows which contain logical for proceeding to adjacent flows in the application
+ */
+
 public class HousingAppDriver {
 
     private static Scanner keyboardInput = new Scanner(System.in);
@@ -599,7 +603,6 @@ public class HousingAppDriver {
                             String attributeToEdit = keyboardInput.nextLine();
 
                             if (attributeToEdit.isEmpty()) {
-                                System.out.println("it was empty");
                                 rm.updateApartment(currTarget, apartmentToEdit);
                                 currFlow = Flow.DASHBOARD;
                             } else if (attributeToEdit.equalsIgnoreCase("delete")) {

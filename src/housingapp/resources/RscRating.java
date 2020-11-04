@@ -15,11 +15,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 /**
-class that deals with reading and writing JSON files for the ratings
-*/
+ * handles JSON read/write functionality for rating resources
+ */
+
 public class RscRating {
 
+    /**
+     * reads ratings from ratings.json data file, returns a map of ratingType:ratings
+     */
     public static Map<String, ArrayList<Rating>> getRatings() {
         Map<String, ArrayList<Rating>> ratings = new HashMap<String, ArrayList<Rating>>();
         ArrayList<Rating> propertyRatings = new ArrayList<Rating>();
@@ -77,9 +82,10 @@ public class RscRating {
             return null;
         }
     }
+
     /**
-    writes the Ratings ArrayList to a JSON file
-    */
+     * writes updated ratings from resource manager to ratings.json data file
+     */
     public static void writeRatings() {
         ResourceManager rm = ResourceManager.getInstance();
 
@@ -114,9 +120,11 @@ public class RscRating {
             e.printStackTrace();
         }
     }
+
     /**
-    gets Property Rating JSON file and reads it in
-    */
+     * constructs JSON representation of propertyRating
+     * @param propertyRating instance of a propertyRating
+     */
     public static JSONObject getPropertyRatingJSON(PropertyRating propertyRating) {
         JSONObject propertyRatingJSON = new JSONObject();
         propertyRatingJSON.put(SysConst.RATING_ID, propertyRating.getId().toString());
@@ -129,9 +137,11 @@ public class RscRating {
 
         return propertyRatingJSON;
     }
+
     /**
-    gets Student Rating JSON file and reads it in
-    */
+     * constructs JSON representation of studentRating
+     * @param studentRating instance of a studentRating
+     */
     public static JSONObject getStudentRatingJSON(StudentRating studentRating) {
         JSONObject studentRatingJSON = new JSONObject();
         studentRatingJSON.put(SysConst.RATING_ID, studentRating.getId().toString());

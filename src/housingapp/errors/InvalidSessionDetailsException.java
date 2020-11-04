@@ -2,6 +2,10 @@ package housingapp.errors;
 
 import housingapp.SysConst;
 
+/**
+ * exception thrown when user's session has expired or contains invalid details
+ */
+
 public class InvalidSessionDetailsException extends Exception {
 
     public InvalidSessionDetailsException() {

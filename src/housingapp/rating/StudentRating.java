@@ -4,25 +4,37 @@ import housingapp.RatingType;
 import java.util.UUID;
 
 /**
-class that deals with handling information about the StudentRatings
-*/
+ * describes a student rating
+ */
+
 public class StudentRating extends Rating {
 
     private int numLatePayments;
     private double damagesValue;
 
+
     /**
-    constructor
-    */
+     * constructor for instantiating studentRating at runtime
+     * @param stars overall rating in stars 1-5
+     * @param comment additional comments by rating user
+     * @param numLatePayments number of late payments made by student
+     * @param damagesValue value of damages caused by student
+     */
     public StudentRating(int stars, String comment, int numLatePayments, double damagesValue) {
         super(RatingType.STUDENT_RATING, stars, comment);
         setNumLatePayments(numLatePayments);
         setDamagesValue(damagesValue);
     }
 
+
     /**
-    constructor for UUID
-    */
+     * constructor for instantiating studentRating from JSON input file
+     * @param id UUID of studentRating
+     * @param stars overall rating in stars 1-5
+     * @param comment additional comments by rating user
+     * @param numLatePayments number of late payments made by student
+     * @param damagesValue value of damages caused by student
+     */
     public StudentRating(UUID id, int stars, String comment, int numLatePayments, double damagesValue) {
         super (id, RatingType.STUDENT_RATING, stars, comment);
         setNumLatePayments(numLatePayments);

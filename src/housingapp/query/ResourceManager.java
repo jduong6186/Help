@@ -51,7 +51,6 @@ public class ResourceManager {
     private Map<String, ArrayList<Rating>> ratingMap;
     private ArrayList<Rating> propertyRatings;
     private ArrayList<Rating> studentRatings;
-    //private ArrayList<Rating> ratings;
 
     /**
      * Constructor for resource manager class
@@ -104,8 +103,6 @@ public class ResourceManager {
         if (studentRatings == null) {
             this.studentRatings = new ArrayList<Rating>();
         }
-        //this.ratings = this.propertyRatings;
-        //this.ratings.addAll(studentRatings);
 
         this.userEmailMap = new HashMap<String, User>();
         this.sessionMap = new HashMap<UUID, Session>();
@@ -240,12 +237,6 @@ public class ResourceManager {
         return studentRatings;
     }
 
-    /*
-    public ArrayList<Rating> getRatings() {
-        return ratings;
-    }
-     */
-
     // target accessors
     /**
      * Used to get a specific user
@@ -311,7 +302,6 @@ public class ResourceManager {
         return null;
     }
 
-    // todo: implement regex search for property name
     /**
      * Searches through registered properties and matches by name searched
      * @param propertyName user entered name of the property they are looking for
@@ -530,7 +520,6 @@ public class ResourceManager {
      */
     public void addPropertyRating(PropertyRating propertyRating) {
         propertyRatings.add(propertyRating);
-        //ratings.add(propertyRating);
         ratingMap.put("propertyRatings", propertyRatings);
         RscRating.writeRatings();
     }
@@ -541,7 +530,6 @@ public class ResourceManager {
      */
     public void addStudentRating(StudentRating studentRating) {
         studentRatings.add(studentRating);
-        //ratings.add(studentRating);
         ratingMap.put("studentRatings", studentRatings);
         RscRating.writeRatings();
     }

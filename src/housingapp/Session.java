@@ -3,6 +3,10 @@ package housingapp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * sessions used for validating user's past login by mapping a temporary unique token to user's ID
+ */
+
 public class Session {
 
     private final UUID token;

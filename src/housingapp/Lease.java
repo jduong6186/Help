@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Date;
 
+/**
+ * facilitates dynamic lease generation via lease template and user-generated arguments
+ */
+
 public class Lease {
 	
 	public static void generateLease(User landlord, User tenant, int numBed, int numBath, String propertyAddress,

@@ -2,6 +2,10 @@ package housingapp.errors;
 
 import housingapp.SysConst;
 
+/**
+ * exception thrown when user fails login attempt
+ */
+
 public class InvalidLoginException extends Exception {
 
     public InvalidLoginException() {
