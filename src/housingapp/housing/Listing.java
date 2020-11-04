@@ -269,6 +269,7 @@ public abstract class Listing {
         detailsStr += this.numBedrooms + " bedrooms, " + this.numBathrooms + " bathrooms\n";
         detailsStr += this.leaseMonths + " month lease\n";
         detailsStr += this.squareFootage + " square feet\n";
+        detailsStr += parentProperty.getDistanceToCampus() + "km from campus\n";
         if (parentProperty.isFurnished()) {
             detailsStr += "Furnished\n";
         } else {

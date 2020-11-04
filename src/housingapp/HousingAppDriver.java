@@ -290,6 +290,14 @@ public class HousingAppDriver {
                                         printSearchResults(currListingSearchResults);
                                         currListingSearchResults = null;
                                         break;
+                                    case "set_search_param_max_travel_distance":
+                                        System.out.print("Max travel distance to campus (km): ");
+                                        double maxTravelDistance = keyboardInput.nextDouble();
+                                        keyboardInput.nextLine();
+                                        currListingSearchResults = query.getListingsByMaxTravelDistance(currListingSearchResults, maxTravelDistance);
+                                        System.out.println("Max travel distance search param updated.");
+                                        currFlow = Flow.SEARCH_LISTINGS;
+                                        break;
                                     case SysConst.CMD_SET_SEARCH_PARAM_PRICE:
                                         double[] priceRange = promptPriceRange();
                                         double priceRangeLower = priceRange[0];
@@ -987,9 +995,30 @@ public class HousingAppDriver {
                                     if (generateLease) {
                                         Property parentProperty = rm.getPropertyById(targetListing.getPropertyId());
                                         PropertyManager landlord = rm.getPropertyManagerById(parentProperty.getLandlordId());
+
+                                        // prompt user to search for any cosigners on lease
+                                        System.out.print("How many co-signers will be on the lease: ");
+                                        int numCosigners = keyboardInput.nextInt();
+                                        keyboardInput.nextLine();
+                                        ArrayList<User> cosigners = new ArrayList<User>();
+                                        for (int i=0; i<numCosigners; i++) {
+                                            int currCosignerNum = i+1;
+                                            System.out.print("First name of cosigner " + currCosignerNum + ": ");
+                                            String cosignerFirstName = keyboardInput.nextLine();
+                                            System.out.print("Last name of cosigner " + currCosignerNum + ": ");
+                                            String cosignerLastName = keyboardInput.nextLine();
+
+                                            Student cosigner = rm.getStudentByName(cosignerFirstName, cosignerLastName);
+                                            if (cosigner == null) {
+                                                System.out.println("No student with that name exists in the system.");
+                                                throw new InvalidInputException();
+                                            }
+                                            cosigners.add(cosigner);
+                                        }
+
                                         Lease.generateLease(landlord, rm.getUserById(currSession.getUserId()), targetListing.getNumBedrooms(),
                                                 targetListing.getNumBathrooms(), parentProperty.getAddress(), parentProperty.getZipCode(),
-                                                targetListing.getLeaseMonths(), targetListing.getPrice(), landlord.getOfficeAddress(), parentProperty.getDamagesCost());
+                                                targetListing.getLeaseMonths(), targetListing.getPrice(), landlord.getOfficeAddress(), parentProperty.getDamagesCost(), cosigners);
                                     }
                                 }
                             }
@@ -1072,7 +1101,7 @@ public class HousingAppDriver {
         return new double[] {priceRangeLower, priceRangeUpper};
     }
 
-    private static void printSearchResults(ArrayList<Listing> searchResults) {
+    private static void printSearchResults(ArrayList<Listing> searchResults) throws InvalidInputException {
         // print each listing that fits given search params
         System.out.println("-----\nSearch Results\n-----");
         for (int i=0; i<searchResults.size(); i++) {
@@ -1107,9 +1136,30 @@ public class HousingAppDriver {
                     if (currUserType != UserType.GUEST) {
                         Property parentProperty = rm.getPropertyById(targetListing.getPropertyId());
                         PropertyManager landlord = rm.getPropertyManagerById(parentProperty.getLandlordId());
+
+                        // prompt user to search for any cosigners on lease
+                        System.out.print("How many co-signers will be on the lease: ");
+                        int numCosigners = keyboardInput.nextInt();
+                        keyboardInput.nextLine();
+                        ArrayList<User> cosigners = new ArrayList<User>();
+                        for (int i=0; i<numCosigners; i++) {
+                            int currCosignerNum = i+1;
+                            System.out.print("First name of cosigner " + currCosignerNum + ": ");
+                            String cosignerFirstName = keyboardInput.nextLine();
+                            System.out.print("Last name of cosigner " + currCosignerNum + ": ");
+                            String cosignerLastName = keyboardInput.nextLine();
+
+                            Student cosigner = rm.getStudentByName(cosignerFirstName, cosignerLastName);
+                            if (cosigner == null) {
+                                System.out.println("No student with that name exists in the system.");
+                                throw new InvalidInputException();
+                            }
+                            cosigners.add(cosigner);
+                        }
+
                         Lease.generateLease(landlord, rm.getUserById(currSession.getUserId()), targetListing.getNumBedrooms(),
                                 targetListing.getNumBathrooms(), parentProperty.getAddress(), parentProperty.getZipCode(),
-                                targetListing.getLeaseMonths(), targetListing.getPrice(), landlord.getOfficeAddress(), parentProperty.getDamagesCost());
+                                targetListing.getLeaseMonths(), targetListing.getPrice(), landlord.getOfficeAddress(), parentProperty.getDamagesCost(), cosigners);
                     } else {
                         System.out.println("You must sign in to generate lease paperwork.");
                     }

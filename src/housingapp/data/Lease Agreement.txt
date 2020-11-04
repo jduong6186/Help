@@ -15,15 +15,3 @@ Subject to the terms and conditions stated below the parties agree as follows:
 6. Damages. Charges will be billed to the client for damaged property, up to <DAMAGE_COST>.
 
 7. Signatures
-
-
---------------
-<TENANT_1>
-
-
-
-
---------------
-<LANDLORD>
-
-

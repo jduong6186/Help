@@ -1,20 +1,22 @@
-This Lease Agreement is made and entered on 11/04/2020 by and between Andrew Eldridge and Zac St
+This Lease Agreement is made and entered on 11/04/2020 by and between Johnny PropertyManager and Zac St, Mary Gorham
 
 Subject to the terms and conditions stated below the parties agree as follows:
 
 1. Landlord Tenant Act. This Rental Agreement is governed by the South Carolina Residential Landlord and Tenant Act.
 
-2. Property. Landlord, in consideration of the lease payments provided in this agreement, leases to Tenant a house with 1 bedrooms and 1 bathrooms, located at 500 Alexander Rd South Carolina 29169 No other portion of the building wherein the Property is located is included unless expressly provided for in this agreement.
+2. Property. Landlord, in consideration of the lease payments provided in this agreement, leases to Tenant a house with 2 bedrooms and 2 bathrooms, located at 543 livesc st South Carolina 29208 No other portion of the building wherein the Property is located is included unless expressly provided for in this agreement.
 
 3. Term. The Tenant will continue to pay rent from 2020-11-04 to 2021-08-04
 
-4. Rent. The Tenant will pay 800.0 each month on the first of the month.
+4. Rent. The Tenant will pay 600.0 each month on the first of the month.
 
-5. Payment should be sent to: 215 Spencer Pl
+5. Payment should be sent to: 123 street dr
 
-6. Damages. Charges will be billed to the client for damaged property, up to 300.0
+6. Damages. Charges will be billed to the client for damaged property, up to 500.0
 
 7. Signatures
+
+
 
 
 --------------
@@ -24,6 +26,10 @@ Zac St
 
 
 --------------
-Andrew Eldridge
+Mary Gorham
 
 
+
+
+--------------
+Johnny PropertyManager

@@ -6,13 +6,15 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Date;
 
 public class Lease {
 	
 	public static void generateLease(User landlord, User tenant, int numBed, int numBath, String propertyAddress,
-							  String propertyZip, int leaseMonths, double price, String officeAddress, double damagesCost) {
+									 String propertyZip, int leaseMonths, double price, String officeAddress, double damagesCost,
+									 ArrayList<User> cosigners) {
 		String leaseStr = "";
 		try {
 			File leaseTemplate = new File("src/housingapp/data/Lease Agreement.txt");
@@ -27,8 +29,12 @@ public class Lease {
 						currLineParts[i] = dateFormat.format(date);
 					} else if (currLineParts[i].equals("<LANDLORD>")) {
 						currLineParts[i] = landlord.getFirstName() + " " + landlord.getLastName();
-					} else if (currLineParts[i].equals("<TENANT(s)>.") || currLineParts[i].equals("<TENANT_1>")) {
-						currLineParts[i] = tenant.getFirstName() + " " + tenant.getLastName();
+					} else if (currLineParts[i].equals("<TENANT(s)>.")) {
+						String tenantsNameStr = tenant.getFirstName() + " " + tenant.getLastName();
+						for (int j=0; j<cosigners.size(); j++) {
+							tenantsNameStr += ", " + cosigners.get(j).getFirstName() + " " + cosigners.get(j).getLastName();
+						}
+						currLineParts[i] = tenantsNameStr;
 					} else if(currLineParts[i].equals("<NUM_BED>")) {
 						currLineParts[i] = String.valueOf(numBed);
 					} else if(currLineParts[i].equals("<NUM_BATH>")) {
@@ -55,6 +61,14 @@ public class Lease {
 				}
 				leaseStr += "\n";
 			}
+
+			// append signature section to lease file
+			leaseStr += "\n\n\n\n--------------\n" + tenant.getFirstName() + " " + tenant.getLastName() + "\n";
+			for (int i=0; i<cosigners.size(); i++) {
+				leaseStr += "\n\n\n\n--------------\n" + cosigners.get(i).getFirstName() + " " + cosigners.get(i).getLastName() + "\n";
+			}
+			leaseStr += "\n\n\n\n--------------\n" + landlord.getFirstName() + " " + landlord.getLastName() + "\n";
+
 			// write to data file
 			File writeFile = new File("src/housingapp/data/lease.txt");
 			if (!writeFile.exists()) {
