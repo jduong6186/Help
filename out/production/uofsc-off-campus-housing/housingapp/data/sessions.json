@@ -1,12 +1,1 @@
-[
-  {
-    "token": "e6eaa882-c680-43b0-955c-0f72d567c800",
-    "userId": "8316bf45-1cf2-4bd7-a559-61cb36ff0e47",
-    "expiration": "2020-10-27T23:59:59"
-  },
-  {
-    "token": "b7ba680b-0cd2-45ed-bda7-e714ba8a3927",
-    "userId": "839b887e-d40f-477b-a374-4c134da4e66c",
-    "expiration": "2020-10-27T22:49:10"
-  }
-]
+[{"expiration":"2020-11-01T21:50:09.575784800","userId":"d87bde87-0e07-4f07-b7a0-603e210993d3","token":"9098cffb-6040-4d7a-a8cd-76750302af8c"}]
