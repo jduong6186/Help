@@ -3,6 +3,8 @@ package tests;
 import housingapp.housing.Apartment;
 import housingapp.housing.Property;
 import housingapp.housing.Townhouse;
+import housingapp.rating.PropertyRating;
+import housingapp.rating.StudentRating;
 import housingapp.user.PropertyManager;
 
 public class TestConst {
@@ -18,4 +20,6 @@ public class TestConst {
     static final Townhouse TOWNHOUSE_VALID = new Townhouse(PROPERTY_VALID.getId(), "2bed 2bath townhouse",
             2050.00, 10, 1000, false, false, 2,
             2, false, true, true, true, true, true, true, true);
+    static final PropertyRating PROPERTY_RATING_VALID = new PropertyRating(5, "good property", 5, 4, 5);
+    static final StudentRating STUDENT_RATING_VALID = new StudentRating(3, "a few late payments", 3, 0.0);
 }
