@@ -92,9 +92,18 @@ public class RscSession {
      */
     public static JSONObject getSessionJSON(Session session) {
         JSONObject sessionJSON = new JSONObject();
-        sessionJSON.put(SysConst.SESSION_TOKEN, session.getToken().toString());
-        sessionJSON.put(SysConst.SESSION_USER_ID, session.getUserId().toString());
-        sessionJSON.put(SysConst.SESSION_EXPIRATION, session.getExpiration().toString());
+        UUID sessionToken = session.getToken();
+        if (sessionToken != null) {
+            sessionJSON.put(SysConst.SESSION_TOKEN, sessionToken.toString());
+        }
+        UUID sessionUserId = session.getUserId();
+        if (sessionUserId != null) {
+            sessionJSON.put(SysConst.SESSION_USER_ID, sessionUserId.toString());
+        }
+        LocalDateTime sessionExpiration = session.getExpiration();
+        if (sessionExpiration != null) {
+            sessionJSON.put(SysConst.SESSION_EXPIRATION, sessionExpiration.toString());
+        }
         return sessionJSON;
     }
 }

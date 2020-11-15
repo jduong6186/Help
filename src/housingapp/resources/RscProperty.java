@@ -103,8 +103,14 @@ public class RscProperty {
     public static JSONObject getPropertyJSON(Property property) {
         // top-level attributes
         JSONObject propertyJSON = new JSONObject();
-        propertyJSON.put(SysConst.PROPERTY_ID, property.getId().toString());
-        propertyJSON.put("landlordId", property.getLandlordId().toString());
+        UUID propertyId = property.getId();
+        if (propertyId != null) {
+            propertyJSON.put(SysConst.PROPERTY_ID, propertyId.toString());
+        }
+        UUID landlordId = property.getLandlordId();
+        if (landlordId != null) {
+            propertyJSON.put("landlordId", landlordId.toString());
+        }
         propertyJSON.put(SysConst.PROPERTY_NAME, property.getName());
         propertyJSON.put(SysConst.PROPERTY_ADDRESS, property.getAddress());
         propertyJSON.put("zipCode", property.getZipCode());

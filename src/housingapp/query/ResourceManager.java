@@ -510,7 +510,7 @@ public class ResourceManager {
      * adds a session to the list of sessions
      * @param session session object that is to be added
      */
-    private void addSession(Session session) {
+    public void addSession(Session session) {
         sessions.add(session);
         sessionMap.put(session.getToken(), session);
         RscSession.writeSessions();
