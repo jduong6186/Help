@@ -4,6 +4,7 @@ import housingapp.housing.Listing;
 import housingapp.housing.Property;
 import housingapp.query.ResourceManager;
 import housingapp.rating.Rating;
+import housingapp.resources.RscProperty;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class PropertyTest {
     @BeforeClass
     public static void oneTimeSetup() {
 
+        RscProperty.writeProperties();
     }
 
     @AfterClass

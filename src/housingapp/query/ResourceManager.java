@@ -122,6 +122,8 @@ public class ResourceManager {
             for (Session session : sessions) {
                 sessionMap.put(session.getToken(), session);
             }
+        } else {
+            sessions = new ArrayList<Session>();
         }
     }
 
@@ -616,6 +618,7 @@ public class ResourceManager {
                 users.remove(curr);
                 students.remove(i);
                 userMap.put(SysConst.STUDENT_USERS, students);
+                RscUser.writeUsers();
                 return;
             }
         }
@@ -632,6 +635,7 @@ public class ResourceManager {
                 users.remove(curr);
                 propertyManagers.remove(i);
                 userMap.put(SysConst.PROPERTY_MANAGER_USERS, propertyManagers);
+                RscUser.writeUsers();
                 return;
             }
         }
@@ -645,6 +649,7 @@ public class ResourceManager {
         for (int i=0; i<properties.size(); i++) {
             if (properties.get(i).getId().equals(propertyId)) {
                 properties.remove(i);
+                RscProperty.writeProperties();
                 return;
             }
         }
@@ -661,6 +666,7 @@ public class ResourceManager {
                 if (curr.getId().equals(apartmentId)) {
                     apartments.remove(i);
                     listingMap.put("apartments", apartments);
+                    RscListing.writeListings();
                     return;
                 }
             }
@@ -678,6 +684,7 @@ public class ResourceManager {
                 if (curr.getId().equals(townhouseId)) {
                     townhouses.remove(i);
                     listingMap.put("townhouses", townhouses);
+                    RscListing.writeListings();
                     return;
                 }
             }
@@ -695,6 +702,7 @@ public class ResourceManager {
                 //ratings.remove(curr);
                 propertyRatings.remove(i);
                 ratingMap.put("propertyRatings", propertyRatings);
+                RscRating.writeRatings();
                 return;
             }
         }
@@ -711,8 +719,61 @@ public class ResourceManager {
                 //ratings.remove(curr);
                 studentRatings.remove(i);
                 ratingMap.put("studentRatings", studentRatings);
+                RscRating.writeRatings();
                 return;
             }
         }
+    }
+
+    /**
+     * clears all users from rm storage
+     */
+    public void clearUsers() {
+        userMap.put(SysConst.STUDENT_USERS, null);
+        userMap.put(SysConst.PROPERTY_MANAGER_USERS, null);
+        students = new ArrayList<User>();
+        propertyManagers = new ArrayList<User>();
+        users = new ArrayList<User>();
+        userEmailMap = new HashMap<String, User>();
+        RscUser.writeUsers();
+    }
+
+    /**
+     * clears all properties from rm storage
+     */
+    public void clearProperties() {
+        properties = new ArrayList<Property>();
+        RscProperty.writeProperties();
+    }
+
+    /**
+     * clears all listings from rm storage
+     */
+    public void clearListings() {
+        listingMap.put("apartments", null);
+        listingMap.put("townhouses", null);
+        apartments = new ArrayList<Listing>();
+        townhouses = new ArrayList<Listing>();
+        RscListing.writeListings();
+    }
+
+    /**
+     * clears all sessions from rm storage
+     */
+    public void clearSessions() {
+        sessionMap = new HashMap<UUID, Session>();
+        sessions = new ArrayList<Session>();
+        RscSession.writeSessions();
+    }
+
+    /**
+     * clears all ratings from rm storage
+     */
+    public void clearRatings() {
+        ratingMap.put("propertyRatings", null);
+        ratingMap.put("studentRatings", null);
+        propertyRatings = new ArrayList<Rating>();
+        studentRatings = new ArrayList<Rating>();
+        RscRating.writeRatings();
     }
 }
