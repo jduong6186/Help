@@ -455,6 +455,7 @@ public class ResourceManagerTest {
     @Test
     public void testValidLogin() {
         // attempt login with valid details
+        rm.addStudent(student);
         Session newSession = rm.login(student.getEmail(), "pass123");
         assertNotNull(newSession);
     }
@@ -462,6 +463,7 @@ public class ResourceManagerTest {
     @Test
     public void testInvalidLogin() {
         // attempt login with invalid details
+        rm.addStudent(student);
         Session newSession = rm.login(student.getEmail(), "invalidpass");
         assertNull(newSession);
     }
