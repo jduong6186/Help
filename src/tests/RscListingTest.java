@@ -5,11 +5,7 @@ import housingapp.housing.Apartment;
 import housingapp.housing.Listing;
 import housingapp.housing.Townhouse;
 import housingapp.query.ResourceManager;
-import housingapp.rating.PropertyRating;
-import housingapp.rating.Rating;
-import housingapp.rating.StudentRating;
 import housingapp.resources.RscListing;
-import housingapp.resources.RscRating;
 import org.json.simple.JSONObject;
 import org.junit.*;
 

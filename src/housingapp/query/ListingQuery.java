@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * Singleton class which queries listings using given search params
- * @authors Andrew Eldridge, John Michael Falzarano
+ * @author Andrew Eldridge, John Michael Falzarano
  */
 
 public class ListingQuery {

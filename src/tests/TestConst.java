@@ -17,14 +17,14 @@ public class TestConst {
             "", "", "");
 
     static final Student STUDENT_VALID = new Student("Andrew", "Eldridge", "1234567890",
-            "eldridga@email.sc.edu", "pass123", false, 550.00, 1000.00,
-            15.0, 0, 0);
+            "eldridga@email.sc.edu", "pass123", false, 500.00, 1000.00,
+            25.0, 0, 4);
     static final Student STUDENT_EMPTY = new Student("", "", "",
             "", "", false, 0.0, 0.0,
             0.0, 0, 0);
 
     static final Property PROPERTY_VALID = new Property(PROPERTY_MANAGER_VALID.getId(), "Cayce Cove", "215 Spencer Pl",
-            "29033", 10.5, 300.00, true, true, true,
+            "29033", 10.5, 300.00, true, false, true,
             false, true);
     static final Property PROPERTY_EMPTY = new Property(null, "", "", "", 0.0,
             0.0, false, false, false, false, false);

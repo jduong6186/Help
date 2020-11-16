@@ -1,1 +1,1 @@
-{"townhouses":[],"apartments":[]}
+{"townhouses":[],"apartments":[{"utilitiesIncluded":true,"hasParking":true,"numBathrooms":1,"numBedrooms":1,"available":true,"hasWasher":true,"description":"1bed 1bath at Cayce Cove","isSublease":false,"hasShuttle":true,"squareFootage":250.0,"price":850.75,"leaseMonths":12,"hasDryer":true,"id":"e191c415-0d79-487a-a275-77274f0b2daa","propertyId":"c6d3dbcc-44ec-466e-a43d-0ef3ba22e3a8","apartmentNumber":"123A"}]}
